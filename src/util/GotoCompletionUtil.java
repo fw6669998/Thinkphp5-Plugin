@@ -1,11 +1,13 @@
 package util;
 
+import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import config.AppConfigReferences;
 import inter.GotoCompletionContributor;
 import inter.GotoCompletionLanguageRegistrar;
 import inter.GotoCompletionRegistrar;
 import inter.GotoCompletionRegistrarParameter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,9 +29,12 @@ public class GotoCompletionUtil {
     public static Collection<GotoCompletionContributor> getContributors(final PsiElement psiElement) {
         Collection<GotoCompletionContributor> contributors = new ArrayList<>();
 
-        GotoCompletionRegistrarParameter registrar = (pattern, contributor) -> {
-            if (pattern.accepts(psiElement)) {
-                contributors.add(contributor);
+        GotoCompletionRegistrarParameter registrar = new GotoCompletionRegistrarParameter() {
+            @Override
+            public void register(@NotNull ElementPattern<? extends PsiElement> pattern, GotoCompletionContributor contributor) {
+                if (pattern.accepts(psiElement)) {
+                    contributors.add(contributor);
+                }
             }
         };
 

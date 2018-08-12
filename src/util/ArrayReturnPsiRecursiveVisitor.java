@@ -30,7 +30,7 @@ public class ArrayReturnPsiRecursiveVisitor extends PsiRecursiveElementWalkingVi
     @Override
     public void visitElement(PsiElement element) {
 
-        if(element instanceof PhpReturn) {
+        if (element instanceof PhpReturn) {
             visitPhpReturn((PhpReturn) element);
         }
 
@@ -39,7 +39,7 @@ public class ArrayReturnPsiRecursiveVisitor extends PsiRecursiveElementWalkingVi
 
     public void visitPhpReturn(PhpReturn phpReturn) {
         PsiElement arrayCreation = phpReturn.getFirstPsiChild();
-        if(arrayCreation instanceof ArrayCreationExpression) {
+        if (arrayCreation instanceof ArrayCreationExpression) {
             collectConfigKeys((ArrayCreationExpression) arrayCreation, this.arrayKeyVisitor, fileNameWithoutExtension);
         }
     }
@@ -51,18 +51,24 @@ public class ArrayReturnPsiRecursiveVisitor extends PsiRecursiveElementWalkingVi
 
     public static void collectConfigKeys(ArrayCreationExpression creationExpression, ArrayKeyVisitor arrayKeyVisitor, List<String> context) {
 
-        for(ArrayHashElement hashElement: PsiTreeUtil.getChildrenOfTypeAsList(creationExpression, ArrayHashElement.class)) {
+        List<ArrayHashElement> childrenOfTypeAsList = PsiTreeUtil.getChildrenOfTypeAsList(creationExpression, ArrayHashElement.class);
+        for (ArrayHashElement hashElement :childrenOfTypeAsList) {  //遍历文件所有元素
 
             PsiElement arrayKey = hashElement.getKey();
             PsiElement arrayValue = hashElement.getValue();
 
-            if(arrayKey instanceof StringLiteralExpression) {
+            if (arrayKey instanceof StringLiteralExpression) {  //键是数组键
 
                 List<String> myContext = new ArrayList<>(context);
+
+                //fwModify: 协助去掉文件前缀
+                if (myContext.get(0) == null)
+                    myContext.remove(0);
+
                 myContext.add(((StringLiteralExpression) arrayKey).getContents());
                 String keyName = StringUtils.join(myContext, ".");
 
-                if(arrayValue instanceof ArrayCreationExpression) {
+                if (arrayValue instanceof ArrayCreationExpression) {    //值是数组创建值
                     arrayKeyVisitor.visit(keyName, arrayKey, true);
                     collectConfigKeys((ArrayCreationExpression) arrayValue, arrayKeyVisitor, myContext);
                 } else {

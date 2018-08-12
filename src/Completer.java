@@ -18,16 +18,10 @@ public class Completer extends CompletionContributor {
         extend(CompletionType.BASIC, PlatformPatterns.psiElement(), new CompletionProvider<CompletionParameters>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters completionParameters, ProcessingContext processingContext, @NotNull CompletionResultSet completionResultSet) {
-//               testProvide(completionResultSet);
 
-//                testCheckFunction(completionParameters);
-
-//                MethodMatcher.MethodMatchParameter methodMatchParameter = testCheckMethod(completionParameters);
-//                if (methodMatchParameter != null) {
-//                    testProvide(completionResultSet);
-//                }
-
-                //todo 测试提供内容, 提供config内容
+//                System.out.println("1");
+                testProvide(completionResultSet);
+//                //todo 测试提供内容, 提供config内容
                 PsiElement psiElement = completionParameters.getOriginalPosition();
                 if (psiElement == null) {   // || !LaravelProjectComponent.isEnabled(psiElement)) {
                     return;
@@ -77,11 +71,11 @@ public class Completer extends CompletionContributor {
     //    提供提示
     public void testProvide(CompletionResultSet completionResultSet) {
         ArrayList<LookupElem> elems = new ArrayList<>();
-        elems.add(new LookupElem("aaa"));
-        elems.add(new LookupElem("bbb"));
-        elems.add(new LookupElem("ccc"));
+        elems.add(new LookupElem("aaaaa"));
+        elems.add(new LookupElem("bbbbb"));
+        elems.add(new LookupElem("ccccc"));
         completionResultSet.addAllElements(elems);
-        System.out.println(elems);
+//        System.out.println(elems);
     }
 
     //提供提示数据

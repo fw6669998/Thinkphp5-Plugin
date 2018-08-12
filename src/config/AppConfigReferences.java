@@ -1,23 +1,28 @@
 package config;
 
+import beans.ArrayKeyVisitor;
 import beans.LaravelIcons;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.lang.Language;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.util.Processor;
 import com.intellij.util.indexing.FileBasedIndex;
 import com.jetbrains.php.lang.PhpFileType;
 import com.jetbrains.php.lang.PhpLanguage;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
+import inter.GotoCompletionContributor;
 import inter.GotoCompletionLanguageRegistrar;
 import inter.GotoCompletionProvider;
 import inter.GotoCompletionRegistrarParameter;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import stub.ConfigKeyStubIndex;
 import util.*;
 
@@ -34,17 +39,21 @@ public class AppConfigReferences implements GotoCompletionLanguageRegistrar {
 
     @Override
     public void register(GotoCompletionRegistrarParameter registrar) {
-        registrar.register(PlatformPatterns.psiElement(), psiElement -> {
-            if (psiElement == null) {// || !LaravelProjectComponent.isEnabled(psiElement)) {
+        registrar.register(PlatformPatterns.psiElement(), new GotoCompletionContributor() {
+            @Nullable
+            @Override
+            public GotoCompletionProvider getProvider(@Nullable PsiElement psiElement) {
+                if (psiElement == null) {// || !LaravelProjectComponent.isEnabled(psiElement)) {
+                    return null;
+                }
+
+                PsiElement parent = psiElement.getParent();
+                if (parent != null && (PsiElementUtil.isFunctionReference(parent, "config", 0) || MethodMatcher.getMatchedSignatureWithDepth(parent, CONFIG) != null)) {
+                    return new ConfigKeyProvider(parent);
+                }
+
                 return null;
             }
-
-            PsiElement parent = psiElement.getParent();
-            if (parent != null && (PsiElementUtil.isFunctionReference(parent, "config", 0) || MethodMatcher.getMatchedSignatureWithDepth(parent, CONFIG) != null)) {
-                return new ConfigKeyProvider(parent);
-            }
-
-            return null;
         });
     }
 
@@ -59,6 +68,10 @@ public class AppConfigReferences implements GotoCompletionLanguageRegistrar {
             super(element);
         }
 
+        /**
+         * 获取提示信息
+         * @return  返回提示集合
+         */
         @NotNull
         @Override
         public Collection<LookupElement> getLookupElements() {
@@ -66,6 +79,7 @@ public class AppConfigReferences implements GotoCompletionLanguageRegistrar {
             final Collection<LookupElement> lookupElements = new ArrayList<>();
 
             CollectProjectUniqueKeys ymlProjectProcessor = new CollectProjectUniqueKeys(getProject(), ConfigKeyStubIndex.KEY);
+            //扫描文件获取key, 放入ymlProjectProcessor
             FileBasedIndex.getInstance().processAllKeys(ConfigKeyStubIndex.KEY, ymlProjectProcessor, getProject());
             for (String key : ymlProjectProcessor.getResult()) {
                 lookupElements.add(LookupElementBuilder.create(key).withIcon(LaravelIcons.CONFIG));
@@ -85,19 +99,25 @@ public class AppConfigReferences implements GotoCompletionLanguageRegistrar {
                 return targets;
             }
 
-            FileBasedIndex.getInstance().getFilesWithKey(ConfigKeyStubIndex.KEY, new HashSet<>(Collections.singletonList(contents)), virtualFile -> {
-                PsiFile psiFileTarget = PsiManager.getInstance(getProject()).findFile(virtualFile);
-                if (psiFileTarget == null) {
+            FileBasedIndex.getInstance().getFilesWithKey(ConfigKeyStubIndex.KEY, new HashSet<>(Collections.singletonList(contents)), new Processor<VirtualFile>() {
+                @Override
+                public boolean process(VirtualFile virtualFile) {
+                    PsiFile psiFileTarget = PsiManager.getInstance(ConfigKeyProvider.this.getProject()).findFile(virtualFile);
+                    if (psiFileTarget == null) {
+                        return true;
+                    }
+
+                    psiFileTarget.acceptChildren(new ArrayReturnPsiRecursiveVisitor(ConfigFileUtil.matchConfigFile(ConfigKeyProvider.this.getProject(), virtualFile).getKeyPrefix(), new ArrayKeyVisitor() {
+                        @Override
+                        public void visit(String key, PsiElement psiKey, boolean isRootElement) {
+                            if (!isRootElement && key.equals(contents)) {
+                                targets.add(psiKey);
+                            }
+                        }
+                    }));
+
                     return true;
                 }
-
-                psiFileTarget.acceptChildren(new ArrayReturnPsiRecursiveVisitor(ConfigFileUtil.matchConfigFile(getProject(), virtualFile).getKeyPrefix(), (key, psiKey, isRootElement) -> {
-                    if (!isRootElement && key.equals(contents)) {
-                        targets.add(psiKey);
-                    }
-                }));
-
-                return true;
             }, GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.allScope(getProject()), PhpFileType.INSTANCE));
 
             return targets;

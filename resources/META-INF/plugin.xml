@@ -1,6 +1,6 @@
 <idea-plugin>
-    <id>com.your.company.unique.plugin.id</id>
-    <name>Plugin display name here</name>
+    <id>testPlugin</id>
+    <name>testPlugin</name>
     <version>1.0</version>
     <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
 
@@ -27,6 +27,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
         <completion.contributor language="any" implementationClass="Completer"/>
+        <fileBasedIndex implementation="stub.ConfigKeyStubIndex"/>
     </extensions>
 
     <actions>

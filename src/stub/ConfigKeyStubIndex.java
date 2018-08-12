@@ -1,5 +1,7 @@
 package stub;
 
+import beans.ArrayKeyVisitor;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.indexing.*;
 import com.intellij.util.io.DataExternalizer;
@@ -11,7 +13,8 @@ import com.jetbrains.php.lang.psi.PhpFile;
 import gnu.trove.THashMap;
 import org.jetbrains.annotations.NotNull;
 import util.ArrayReturnPsiRecursiveVisitor;
-import util.ConfigFileUtil;
+import config.ConfigFileUtil;
+import util.Tool;
 
 import java.util.Map;
 
@@ -32,27 +35,38 @@ public class ConfigKeyStubIndex extends FileBasedIndexExtension<String, Void> {
     @NotNull
     @Override
     public DataIndexer<String, Void, FileContent> getIndexer() {
-        return fileContent -> {
-            final Map<String, Void> map = new THashMap<>();
+        return new DataIndexer<String, Void, FileContent>() {
+            @NotNull
+            @Override
+            public Map<String, Void> map(@NotNull FileContent fileContent) {
+                final Map<String, Void> map = new THashMap<>();
 
-            PsiFile psiFile = fileContent.getPsiFile();
-            if(!(psiFile instanceof PhpFile)) {
+                PsiFile psiFile = fileContent.getPsiFile();
+                if (!(psiFile instanceof PhpFile)) {
+                    return map;
+                }
+
+                //匹配文件
+                ConfigFileUtil.ConfigFileMatchResult result = ConfigFileUtil.matchConfigFile(fileContent.getProject(), fileContent.getFile());
+
+                // config/app.php
+                // config/testing/app.php
+                if (result.matches()) {
+                    //去掉前缀
+//                    psiFile.acceptChildren(new ArrayReturnPsiRecursiveVisitor(result.getKeyPrefix(), new ArrayKeyVisitor() {
+                    psiFile.acceptChildren(new ArrayReturnPsiRecursiveVisitor(null, new ArrayKeyVisitor() {
+                        @Override
+                        public void visit(String key, PsiElement psiKey, boolean isRootElement) {
+                            if (!isRootElement) {
+                                Tool.log("key:" + key);
+                                map.put(key, null);
+                            }
+                        }
+                    }));
+                }
+
                 return map;
             }
-
-            ConfigFileUtil.ConfigFileMatchResult result = ConfigFileUtil.matchConfigFile(fileContent.getProject(), fileContent.getFile());
-
-            // config/app.php
-            // config/testing/app.php
-            if(result.matches()) {
-                psiFile.acceptChildren(new ArrayReturnPsiRecursiveVisitor(result.getKeyPrefix(), (key, psiKey, isRootElement) -> {
-                    if (!isRootElement) {
-                        map.put(key, null);
-                    }
-                }));
-            }
-
-            return map;
         };
     }
 
