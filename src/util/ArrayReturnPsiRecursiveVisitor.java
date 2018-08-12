@@ -52,7 +52,7 @@ public class ArrayReturnPsiRecursiveVisitor extends PsiRecursiveElementWalkingVi
     public static void collectConfigKeys(ArrayCreationExpression creationExpression, ArrayKeyVisitor arrayKeyVisitor, List<String> context) {
 
         List<ArrayHashElement> childrenOfTypeAsList = PsiTreeUtil.getChildrenOfTypeAsList(creationExpression, ArrayHashElement.class);
-        for (ArrayHashElement hashElement :childrenOfTypeAsList) {  //遍历文件所有元素
+        for (ArrayHashElement hashElement : childrenOfTypeAsList) {  //遍历文件所有元素
 
             PsiElement arrayKey = hashElement.getKey();
             PsiElement arrayValue = hashElement.getValue();
@@ -62,7 +62,7 @@ public class ArrayReturnPsiRecursiveVisitor extends PsiRecursiveElementWalkingVi
                 List<String> myContext = new ArrayList<>(context);
 
                 //fwModify: 协助去掉文件前缀
-                if (myContext.get(0) == null)
+                if (myContext.get(0).equals(""))
                     myContext.remove(0);
 
                 myContext.add(((StringLiteralExpression) arrayKey).getContents());

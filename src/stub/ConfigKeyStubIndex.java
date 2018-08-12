@@ -52,9 +52,7 @@ public class ConfigKeyStubIndex extends FileBasedIndexExtension<String, Void> {
                 // config/app.php
                 // config/testing/app.php
                 if (result.matches()) {
-                    //去掉前缀
-//                    psiFile.acceptChildren(new ArrayReturnPsiRecursiveVisitor(result.getKeyPrefix(), new ArrayKeyVisitor() {
-                    psiFile.acceptChildren(new ArrayReturnPsiRecursiveVisitor(null, new ArrayKeyVisitor() {
+                    psiFile.acceptChildren(new ArrayReturnPsiRecursiveVisitor(result.getKeyPrefix(), new ArrayKeyVisitor() {
                         @Override
                         public void visit(String key, PsiElement psiKey, boolean isRootElement) {
                             if (!isRootElement) {

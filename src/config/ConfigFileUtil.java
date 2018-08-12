@@ -3,12 +3,17 @@ package config;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
+import util.Tool;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 匹配文件
+ */
 public class ConfigFileUtil {
-    private static final Pattern configFilePattern = Pattern.compile(".*/config/([\\w-/]+).php$");
+    //    private static final Pattern configFilePattern = Pattern.compile(".*/config/([\\w-/]+).php$");
+    private static final Pattern configFilePattern = Pattern.compile(".*/(config|application)/([\\w-/]+).php$");
 
     public static ConfigFileMatchResult matchConfigFile(Project project, VirtualFile virtualFile) {
         String path = virtualFile.getPath();
@@ -21,7 +26,11 @@ public class ConfigFileUtil {
         Matcher m = configFilePattern.matcher(path);
 
         if (m.matches()) {
-            return new ConfigFileMatchResult(true, m.group(1).replace('/', '.'));
+            String prefix2 = m.group(2).replace('/', '.');
+            //todo 兼容5.1
+            if (!prefix2.contains("database"))
+                prefix2 = "";
+            return new ConfigFileMatchResult(true, prefix2);
         } else {
             return new ConfigFileMatchResult(false, "");
         }
