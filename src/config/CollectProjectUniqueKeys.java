@@ -1,4 +1,4 @@
-package util;
+package config;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;

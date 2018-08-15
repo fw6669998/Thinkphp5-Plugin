@@ -1,4 +1,4 @@
-package util;
+package config;
 
 import beans.ArrayKeyVisitor;
 import com.intellij.psi.PsiElement;

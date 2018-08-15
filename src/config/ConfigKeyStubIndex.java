@@ -1,4 +1,4 @@
-package stub;
+package config;
 
 import beans.ArrayKeyVisitor;
 import com.intellij.psi.PsiElement;
@@ -12,7 +12,7 @@ import com.jetbrains.php.lang.PhpFileType;
 import com.jetbrains.php.lang.psi.PhpFile;
 import gnu.trove.THashMap;
 import org.jetbrains.annotations.NotNull;
-import util.ArrayReturnPsiRecursiveVisitor;
+import config.ArrayReturnPsiRecursiveVisitor;
 import config.ConfigFileUtil;
 import util.Tool;
 
@@ -56,7 +56,7 @@ public class ConfigKeyStubIndex extends FileBasedIndexExtension<String, Void> {
                         @Override
                         public void visit(String key, PsiElement psiKey, boolean isRootElement) {
                             if (!isRootElement) {
-                                Tool.log("key:" + key);
+//                                Tool.log("key:" + key);
                                 map.put(key, null);
                             }
                         }

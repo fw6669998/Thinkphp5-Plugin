@@ -23,7 +23,6 @@ import inter.GotoCompletionRegistrarParameter;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import stub.ConfigKeyStubIndex;
 import util.*;
 
 import java.util.*;
@@ -70,7 +69,8 @@ public class AppConfigReferences implements GotoCompletionLanguageRegistrar {
 
         /**
          * 获取提示信息
-         * @return  返回提示集合
+         *
+         * @return 返回提示集合
          */
         @NotNull
         @Override

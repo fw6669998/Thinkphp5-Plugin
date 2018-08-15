@@ -1,3 +1,5 @@
+package main;
+
 import beans.LookupElem;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.patterns.PlatformPatterns;

@@ -26,13 +26,15 @@
     -->
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
-        <completion.contributor language="any" implementationClass="Completer"/>
-        <fileBasedIndex implementation="stub.ConfigKeyStubIndex"/>
+        <completion.contributor language="any" implementationClass="main.Completer"/>
+        <gotoDeclarationHandler implementation="main.GotoHandler"/>
+        <fileBasedIndex implementation="config.ConfigKeyStubIndex"/>
+        <completion.contributor implementationClass="test.TestPsi"/>
     </extensions>
 
     <actions>
         <!-- Add your actions here -->
-        <action id="Test" class="Test" text="Test" description="test">
+        <action id="test.Test" class="test.Test" text="test.Test" description="test">
             <add-to-group group-id="HelpMenu" anchor="before" relative-to-action="About"/>
         </action>
     </actions>
