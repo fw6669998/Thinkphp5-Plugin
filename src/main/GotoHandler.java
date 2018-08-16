@@ -12,7 +12,7 @@ import util.GotoCompletionUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
+//跳转主入口
 public class GotoHandler implements GotoDeclarationHandler {
     @Nullable
     @Override

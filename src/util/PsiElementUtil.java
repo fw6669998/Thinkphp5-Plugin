@@ -3,6 +3,7 @@ package util;
 import beans.ParameterBag;
 import com.intellij.psi.PsiElement;
 import com.jetbrains.php.lang.psi.elements.FunctionReference;
+import com.jetbrains.php.lang.psi.elements.Method;
 import com.jetbrains.php.lang.psi.elements.ParameterList;
 import com.jetbrains.php.lang.psi.elements.ParameterListOwner;
 import org.jetbrains.annotations.NotNull;
@@ -12,20 +13,43 @@ public class PsiElementUtil {
 
     public static boolean isFunctionReference(@NotNull PsiElement psiElement, @NotNull String functionName, int parameterIndex) {
 
+
         PsiElement parameterList = psiElement.getParent();
-        if (!(parameterList instanceof ParameterList)) {
-            return false;
-        }
-        ParameterBag index = getCurrentParameterIndex(psiElement);
-        if (index == null || index.getIndex() != parameterIndex) {
-            return false;
-        }
         PsiElement functionCall = parameterList.getParent();
+        if (parameterIndex != -1) {
+            if (!(parameterList instanceof ParameterList)) {
+                return false;
+            }
+            ParameterBag index = getCurrentParameterIndex(psiElement);
+            if (index == null || index.getIndex() != parameterIndex) {
+                return false;
+            }
+        } else {
+            functionCall = psiElement;
+        }
+
         if (!(functionCall instanceof FunctionReference)) {
             return false;
         }
         return functionName.equals(((FunctionReference) functionCall).getName());
     }
+
+//    public static boolean isFunctionReference(@NotNull PsiElement psiElement, @NotNull String functionName, int parameterIndex) {
+//
+//        PsiElement parameterList = psiElement.getParent();
+//        if (!(parameterList instanceof ParameterList)) {
+//            return false;
+//        }
+//        ParameterBag index = getCurrentParameterIndex(psiElement);
+//        if (index == null || index.getIndex() != parameterIndex) {
+//            return false;
+//        }
+//        PsiElement functionCall = parameterList.getParent();
+//        if (!(functionCall instanceof FunctionReference)) {
+//            return false;
+//        }
+//        return functionName.equals(((FunctionReference) functionCall).getName());
+//    }
 
     @Nullable
     public static ParameterBag getCurrentParameterIndex(PsiElement psiElement) {
@@ -52,6 +76,17 @@ public class PsiElementUtil {
         }
 
         return null;
+    }
+
+    //获取当前方法名,
+    public static Method getMethod(PsiElement psiElement) {
+        if (psiElement == null) return null;
+        PsiElement parent = psiElement.getParent();
+        if (parent instanceof Method) {
+            return (Method) parent;
+        } else {
+            return getMethod(parent);
+        }
     }
 }
 

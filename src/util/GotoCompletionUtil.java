@@ -17,8 +17,8 @@ public class GotoCompletionUtil {
 
     private static GotoCompletionRegistrar[] CONTRIBUTORS = new GotoCompletionRegistrar[]{
             new AppConfigReferences(),
-//            new ProviderGotoCompletion(),
             new ViewReferences2(),
+//            new ProviderGotoCompletion(),
 //            new ControllerReferences(),
 //        new BladeDirectiveReferences(),
 //        new TranslationReferences(),

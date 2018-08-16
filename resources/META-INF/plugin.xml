@@ -29,13 +29,17 @@
         <completion.contributor language="any" implementationClass="main.Completer"/>
         <gotoDeclarationHandler implementation="main.GotoHandler"/>
         <fileBasedIndex implementation="config.ConfigKeyStubIndex"/>
-        <completion.contributor implementationClass="test.TestPsi"/>
+        <!--<completion.contributor id="testPsi" language="html" implementationClass="test.TestPsi"/>-->
     </extensions>
 
     <actions>
         <!-- Add your actions here -->
         <action id="test.Test" class="test.Test" text="test.Test" description="test">
             <add-to-group group-id="HelpMenu" anchor="before" relative-to-action="About"/>
+        </action>
+        <action id="GotoController" class="view.GotoController" text="Controller" description="GotoController">
+            <add-to-group group-id="EditorPopupMenu.GoTo" anchor="first"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl C"/>
         </action>
     </actions>
 </idea-plugin>

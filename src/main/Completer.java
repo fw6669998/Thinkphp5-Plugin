@@ -14,7 +14,7 @@ import util.MethodMatcher;
 import util.PsiElementUtil;
 
 import java.util.ArrayList;
-
+//代码补全主入口
 public class Completer extends CompletionContributor {
     public Completer() {
         extend(CompletionType.BASIC, PlatformPatterns.psiElement(), new CompletionProvider<CompletionParameters>() {
@@ -22,7 +22,7 @@ public class Completer extends CompletionContributor {
             protected void addCompletions(@NotNull CompletionParameters completionParameters, ProcessingContext processingContext, @NotNull CompletionResultSet completionResultSet) {
 
 //                System.out.println("1");
-                testProvide(completionResultSet);
+//                testProvide(completionResultSet);
 //                //todo 测试提供内容, 提供config内容
                 PsiElement psiElement = completionParameters.getOriginalPosition();
                 if (psiElement == null) {   // || !LaravelProjectComponent.isEnabled(psiElement)) {

@@ -27,14 +27,14 @@ public class Symfony2InterfacesUtil {
     public boolean isContainerGetCall(PsiElement e) {
         return isCallTo(e, new Method[] {
             getInterfaceMethod(e.getProject(), "\\Symfony\\Component\\DependencyInjection\\ContainerInterface", "get"),
-            getClassMethod(e.getProject(), "\\Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller", "get"),
+            getClassMethod(e.getProject(), "\\Symfony\\Bundle\\FrameworkBundle\\GotoController\\GotoController", "get"),
         });
     }
 
     public boolean isContainerGetCall(Method e) {
         return isCallTo(e, new Method[] {
             getInterfaceMethod(e.getProject(), "\\Symfony\\Component\\DependencyInjection\\ContainerInterface", "get"),
-            getClassMethod(e.getProject(), "\\Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller", "get"),
+            getClassMethod(e.getProject(), "\\Symfony\\Bundle\\FrameworkBundle\\GotoController\\GotoController", "get"),
         });
     }
 
@@ -43,9 +43,9 @@ public class Symfony2InterfacesUtil {
             getInterfaceMethod(e.getProject(), "\\Symfony\\Component\\Templating\\EngineInterface", "render"),
             getInterfaceMethod(e.getProject(), "\\Symfony\\Component\\Templating\\StreamingEngineInterface", "stream"),
             getInterfaceMethod(e.getProject(), "\\Symfony\\Bundle\\FrameworkBundle\\Templating\\EngineInterface", "renderResponse"),
-            getClassMethod(e.getProject(), "\\Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller", "render"),
-            getClassMethod(e.getProject(), "\\Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller", "renderView"),
-            getClassMethod(e.getProject(), "\\Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller", "stream"),
+            getClassMethod(e.getProject(), "\\Symfony\\Bundle\\FrameworkBundle\\GotoController\\GotoController", "render"),
+            getClassMethod(e.getProject(), "\\Symfony\\Bundle\\FrameworkBundle\\GotoController\\GotoController", "renderView"),
+            getClassMethod(e.getProject(), "\\Symfony\\Bundle\\FrameworkBundle\\GotoController\\GotoController", "stream"),
         });
     }
 
