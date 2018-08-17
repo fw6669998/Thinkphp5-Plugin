@@ -12,8 +12,10 @@ import org.jetbrains.annotations.NotNull;
 import util.GotoCompletionUtil;
 import util.MethodMatcher;
 import util.PsiElementUtil;
+import util.Tool;
 
 import java.util.ArrayList;
+
 //代码补全主入口
 public class Completer extends CompletionContributor {
     public Completer() {
@@ -21,10 +23,10 @@ public class Completer extends CompletionContributor {
             @Override
             protected void addCompletions(@NotNull CompletionParameters completionParameters, ProcessingContext processingContext, @NotNull CompletionResultSet completionResultSet) {
 
-//                System.out.println("1");
-//                testProvide(completionResultSet);
-//                //todo 测试提供内容, 提供config内容
                 PsiElement psiElement = completionParameters.getOriginalPosition();
+
+                Tool.printPsiTree(psiElement.getContainingFile());
+
                 if (psiElement == null) {   // || !LaravelProjectComponent.isEnabled(psiElement)) {
                     return;
                 }

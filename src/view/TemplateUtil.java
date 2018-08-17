@@ -63,7 +63,6 @@ public class TemplateUtil {
             if (viewDir == null) {
                 continue;
             }
-
             for (String templateRelative : templateNames) {
                 VirtualFile viewsDir = VfsUtil.findRelativeFile(templateRelative, viewDir);
                 if (viewsDir != null) {

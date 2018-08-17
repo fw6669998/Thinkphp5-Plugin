@@ -3,6 +3,7 @@ package main;
 import com.intellij.codeInsight.navigation.actions.GotoDeclarationHandler;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.psi.PsiElement;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import inter.GotoCompletionContributor;
@@ -20,13 +21,11 @@ public class GotoHandler implements GotoDeclarationHandler {
 
         //fwmodify:关闭开关
 //        if (!LaravelProjectComponent.isEnabled(psiElement)) {
-//            return new PsiElement[0];
-//        }
+//            return new PsiElement[0];}
 
         Collection<PsiElement> psiTargets = new ArrayList<PsiElement>();
 
         PsiElement parent = psiElement.getParent();
-
         for(GotoCompletionContributor contributor: GotoCompletionUtil.getContributors(psiElement)) {
             GotoCompletionProviderInterface gotoCompletionContributorProvider = contributor.getProvider(psiElement);
             if(gotoCompletionContributorProvider != null) {

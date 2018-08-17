@@ -22,12 +22,15 @@ public class ConfigFileUtil {
         if (path.startsWith(projectPath)) {
             path = path.substring(projectPath.length());
         }
-
+        //todo 兼容5.1
+//        if(path.contains("config")){
+//            return new ConfigFileMatchResult(false, "");
+//        }
         Matcher m = configFilePattern.matcher(path);
 
         if (m.matches()) {
             String prefix2 = m.group(2).replace('/', '.');
-            //todo 兼容5.1
+
             if (!prefix2.contains("database"))
                 prefix2 = "";
             return new ConfigFileMatchResult(true, prefix2);

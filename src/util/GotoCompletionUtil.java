@@ -8,6 +8,7 @@ import inter.GotoCompletionLanguageRegistrar;
 import inter.GotoCompletionRegistrar;
 import inter.GotoCompletionRegistrarParameter;
 import org.jetbrains.annotations.NotNull;
+import router.RouterReference;
 import view.ViewReferences2;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class GotoCompletionUtil {
     private static GotoCompletionRegistrar[] CONTRIBUTORS = new GotoCompletionRegistrar[]{
             new AppConfigReferences(),
             new ViewReferences2(),
+            new RouterReference(),
 //            new ProviderGotoCompletion(),
 //            new ControllerReferences(),
 //        new BladeDirectiveReferences(),
