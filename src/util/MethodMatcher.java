@@ -115,7 +115,10 @@ public class MethodMatcher {
                 return null;
             }
 
-            return new MethodMatchParameter(matchedMethodSignature, bag.getParameterBag(), bag.getParameterList().getParameters(), bag.getMethodReference());
+            return new MethodMatchParameter(matchedMethodSignature,
+                    bag.getParameterBag(),
+                    bag.getParameterList().getParameters(), 
+                    bag.getMethodReference());
         }
 
     }
