@@ -58,7 +58,7 @@ public class RouterReference implements GotoCompletionLanguageRegistrar {
                 containingFile.getName();
                 if (parent != null && (
                         MethodMatcher.getMatchedSignatureWithDepth(parent, Router, 1) != null
-                                ||(RouteUtil.isRouteFile(containingFile)&&RouteUtil.isRoutePosition(parent)))) {
+                                || (RouteUtil.isRouteFile(containingFile) && RouteUtil.isRoutePosition(parent)))) {
                     return new RouteProvider(parent);
                 }
 
@@ -99,40 +99,40 @@ public class RouterReference implements GotoCompletionLanguageRegistrar {
             return lookupElements;
         }
 
-//        @NotNull
-//        @Override
-//        public Collection<PsiElement> getPsiTargets(StringLiteralExpression element) {
-//
-//            final Set<PsiElement> targets = new HashSet<>();
-//
-//            final String contents = element.getContents();
-//            if (StringUtils.isBlank(contents)) {
-//                return targets;
-//            }
+        @NotNull
+        @Override
+        public Collection<PsiElement> getPsiTargets(StringLiteralExpression element) {
 
-//            FileBasedIndex.getInstance().getFilesWithKey(ConfigKeyStubIndex.KEY, new HashSet<>(Collections.singletonList(contents)), new Processor<VirtualFile>() {
-//                @Override
-//                public boolean process(VirtualFile virtualFile) {
-//                    PsiFile psiFileTarget = PsiManager.getInstance(config.AppConfigReferences.ConfigKeyProvider.this.getProject()).findFile(virtualFile);
-//                    if (psiFileTarget == null) {
-//                        return true;
-//                    }
-//
-//                    psiFileTarget.acceptChildren(new ArrayReturnPsiRecursiveVisitor(ConfigFileUtil.matchConfigFile(config.AppConfigReferences.ConfigKeyProvider.this.getProject(), virtualFile).getKeyPrefix(), new ArrayKeyVisitor() {
-//                        @Override
-//                        public void visit(String key, PsiElement psiKey, boolean isRootElement) {
-//                            if (!isRootElement && key.equals(contents)) {
-//                                targets.add(psiKey);
-//                            }
-//                        }
-//                    }));
-//
-//                    return true;
-//                }
-//            }, GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.allScope(getProject()), PhpFileType.INSTANCE));
-//
-//            return targets;
-//        }
-//        }
+            final Set<PsiElement> targets = new HashSet<>();
+
+            final String contents = element.getContents();
+            if (StringUtils.isBlank(contents)) {
+                return targets;
+            }
+
+            FileBasedIndex.getInstance().getFilesWithKey(RouteValStubIndex.KEY, new HashSet<>(Collections.singletonList(contents)), new Processor<VirtualFile>() {
+                @Override
+                public boolean process(VirtualFile virtualFile) {
+                    PsiFile psiFileTarget = PsiManager.getInstance(RouteProvider.this.getProject()).findFile(virtualFile);
+                    if (psiFileTarget == null) {
+                        return true;
+                    }
+
+                    psiFileTarget.acceptChildren(new PhpControllerVisitor(RouteUtil.matchControllerFile(RouteProvider.this.getProject(), virtualFile).getKeyPrefix(),
+                            new ArrayKeyVisitor() {
+                        @Override
+                        public void visit(String key, PsiElement psiKey, boolean isRootElement) {
+                            if (!isRootElement && key.equals(contents)) {
+                                targets.add(psiKey);
+                            }
+                        }
+                    }));
+
+                    return true;
+                }
+            }, GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.allScope(getProject()), PhpFileType.INSTANCE));
+
+            return targets;
+        }
     }
 }
