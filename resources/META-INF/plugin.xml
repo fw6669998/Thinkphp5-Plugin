@@ -29,6 +29,7 @@
         <completion.contributor language="any" implementationClass="main.Completer"/>
         <gotoDeclarationHandler implementation="main.GotoHandler"/>
         <fileBasedIndex implementation="config.ConfigKeyStubIndex"/>
+        <fileBasedIndex implementation="router.RouteValStubIndex"/>
         <!--<completion.contributor id="testPsi" language="html" implementationClass="test.TestPsi"/>-->
     </extensions>
 

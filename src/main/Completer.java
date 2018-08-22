@@ -25,7 +25,7 @@ public class Completer extends CompletionContributor {
 
                 PsiElement psiElement = completionParameters.getOriginalPosition();
 
-                Tool.printPsiTree(psiElement.getContainingFile());
+//                Tool.printPsiTree(psiElement.getContainingFile());
 
                 if (psiElement == null) {   // || !LaravelProjectComponent.isEnabled(psiElement)) {
                     return;

@@ -4,6 +4,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.jetbrains.php.lang.psi.elements.ArrayCreationExpression;
+import com.jetbrains.php.lang.psi.elements.impl.PhpReturnImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.debugger.values.ArrayValue;
 
@@ -12,7 +14,7 @@ import java.util.regex.Pattern;
 
 public class RouteUtil {
 
-    private static final Pattern controllerFilePattern = Pattern.compile(".*/([\\w-/]+)/controller/([\\w-/]+).php$");
+    private static final Pattern controllerFilePattern = Pattern.compile(".*/application/(\\w+)/controller/(\\w+).php$");
 
     public static Boolean isRouteFile(PsiFile file) {
         //规约: 在application 路径下,文件名为route或xxx route xxx的文件
@@ -24,6 +26,19 @@ public class RouteUtil {
             return false;
         }
         return true;
+    }
+
+    //判断当前位置是否是route的目录
+    public static Boolean isRoutePosition(PsiElement element) {
+
+        PsiElement parent1 = element.getParent().getParent();
+        if (parent1 instanceof ArrayCreationExpression) {
+            PsiElement parent2 = parent1.getParent().getParent().getParent().getParent();
+            if (parent2 instanceof PhpReturnImpl) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static Boolean isArrayValue(PsiElement element) {
