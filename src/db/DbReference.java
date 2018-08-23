@@ -1,6 +1,8 @@
 package db;
 
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.lang.Language;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
 import com.jetbrains.php.lang.PhpLanguage;
@@ -12,9 +14,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import util.MethodMatcher;
 
+import java.util.Collection;
+import java.util.Collections;
+
 public class DbReference implements GotoCompletionLanguageRegistrar {
     private static MethodMatcher.CallToSignature[] QUERY = new MethodMatcher.CallToSignature[]{
-            new MethodMatcher.CallToSignature("\\think\\Config", "get"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "delete"),
             new MethodMatcher.CallToSignature("\\think\\Config", "has"),
             new MethodMatcher.CallToSignature("\\think\\Config", "set"),
     };
@@ -34,9 +39,31 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                     return null;
                 }
                 PsiElement parent = psiElement.getParent();
-                if(parent!=null&&MethodMatcher.getMatchedSignatureWithDepth(parent,))
+                if (parent != null && MethodMatcher.getMatchedSignatureWithDepth(parent, QUERY) != null) {
+                    return new DbProvider(psiElement);
+                }
                 return null;
             }
         });
+    }
+
+    private static class DbProvider extends GotoCompletionProvider {
+        public DbProvider(PsiElement element) {
+            super(element);
+        }
+
+        @NotNull
+        @Override
+        public Collection<LookupElement> getLookupElements() {
+
+            return null;
+        }
+
+
+        @NotNull
+        public Collection<? extends PsiElement> getPsiTargets(@NotNull PsiElement psiElement, int offset, @NotNull Editor editor) {
+
+            return null;
+        }
     }
 }

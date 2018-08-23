@@ -6,13 +6,14 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/resources" type="java-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/src/temp" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="PhpStorm PS-181.5281.35" jdkType="IDEA JDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library" exported="" scope="PROVIDED">
       <library>
         <CLASSES>
-          <root url="jar://D:/Program/PhpStorm 2018.1.5/plugins/php/lib/php-openapi.jar!/" />
+          <root url="jar://C:/Program Files/JetBrains/PhpStorm 2018.1.6/plugins/php/lib/php-openapi.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -21,7 +22,7 @@
     <orderEntry type="module-library" exported="" scope="PROVIDED">
       <library>
         <CLASSES>
-          <root url="jar://D:/Program/PhpStorm 2018.1.5/plugins/php/lib/php.jar!/" />
+          <root url="jar://C:/Program Files/JetBrains/PhpStorm 2018.1.6/plugins/php/lib/php.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

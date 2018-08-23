@@ -104,7 +104,7 @@ public class MethodMatcher {
 //            if (!LaravelProjectComponent.isEnabled(psiElement)) {
 //                return null;
 //            }
-
+            //获取方法引用对象
             MethodReferenceBag bag = PhpElementsUtil.getMethodParameterReferenceBag(psiElement, this.parameterIndex);
             if(bag == null) {
                 return null;
@@ -212,6 +212,7 @@ public class MethodMatcher {
             return this;
         }
 
+//        是否是该方法
         @Nullable
         protected CallToSignature isCallTo(MethodReference methodReference) {
             Symfony2InterfacesUtil interfacesUtil = new Symfony2InterfacesUtil();
