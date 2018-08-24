@@ -156,7 +156,7 @@ public class MethodMatcher {
             if(method == null) {
                 return null;
             }
-
+            // 所有参数列表,
             PsiElement[] parameterReferences = PhpElementsUtil.getMethodParameterReferences(method, bag.getParameterBag().getIndex());
             if(parameterReferences == null || parameterReferences.length == 0) {
                 return null;

@@ -8,17 +8,15 @@ import com.intellij.database.util.DbUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.containers.JBIterable;
+import com.jetbrains.php.lang.PhpCodeUtil;
+import com.jetbrains.php.lang.psi.PhpPsiUtil;
+import com.jetbrains.php.lang.psi.elements.impl.MethodReferenceImpl;
 import util.MethodMatcher;
+import util.PhpElementsUtil;
 
 import java.util.List;
 
 public class DbTableUtil {
-
-    public static boolean isQueryFun(PsiElement element) {
-//        if ()
-            return true;
-    }
-
 
     public static JBIterable<? extends DasColumn> getColumns(Project project, String table) {
         JBIterable<? extends DasTable> tables = getTables(project);
@@ -40,5 +38,16 @@ public class DbTableUtil {
             JBIterable<? extends DasTable> tables = DasUtil.getTables(dbDataSource);
             return tables;
         }
+    }
+
+    public static String getTableName(PsiElement element){
+        PsiElement parent = element.getParent();
+        if(parent==null)return null;
+        MethodReferenceImpl parent1 = (MethodReferenceImpl) parent.getParent();
+        if(parent1==null)return null;
+//        PhpPsiUtil;
+//        PhpElementsUtil;
+        parent1.getClassReference();
+        return "";
     }
 }

@@ -6,6 +6,7 @@ import com.jetbrains.php.lang.psi.elements.FunctionReference;
 import com.jetbrains.php.lang.psi.elements.Method;
 import com.jetbrains.php.lang.psi.elements.ParameterList;
 import com.jetbrains.php.lang.psi.elements.ParameterListOwner;
+import com.jetbrains.php.lang.psi.elements.impl.PhpClassImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -86,6 +87,16 @@ public class PsiElementUtil {
             return (Method) parent;
         } else {
             return getMethod(parent);
+        }
+    }
+
+    public static PhpClassImpl getPhpClass(PsiElement psiElement) {
+        if (psiElement == null) return null;
+        PsiElement parent = psiElement.getParent();
+        if (parent instanceof PhpClassImpl) {
+            return (PhpClassImpl) parent;
+        } else {
+            return getPhpClass(parent);
         }
     }
 }

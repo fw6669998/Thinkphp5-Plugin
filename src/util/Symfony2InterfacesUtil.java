@@ -25,60 +25,60 @@ import java.util.List;
 public class Symfony2InterfacesUtil {
 
     public boolean isContainerGetCall(PsiElement e) {
-        return isCallTo(e, new Method[] {
-            getInterfaceMethod(e.getProject(), "\\Symfony\\Component\\DependencyInjection\\ContainerInterface", "get"),
-            getClassMethod(e.getProject(), "\\Symfony\\Bundle\\FrameworkBundle\\GotoController\\GotoController", "get"),
+        return isCallTo(e, new Method[]{
+                getInterfaceMethod(e.getProject(), "\\Symfony\\Component\\DependencyInjection\\ContainerInterface", "get"),
+                getClassMethod(e.getProject(), "\\Symfony\\Bundle\\FrameworkBundle\\GotoController\\GotoController", "get"),
         });
     }
 
     public boolean isContainerGetCall(Method e) {
-        return isCallTo(e, new Method[] {
-            getInterfaceMethod(e.getProject(), "\\Symfony\\Component\\DependencyInjection\\ContainerInterface", "get"),
-            getClassMethod(e.getProject(), "\\Symfony\\Bundle\\FrameworkBundle\\GotoController\\GotoController", "get"),
+        return isCallTo(e, new Method[]{
+                getInterfaceMethod(e.getProject(), "\\Symfony\\Component\\DependencyInjection\\ContainerInterface", "get"),
+                getClassMethod(e.getProject(), "\\Symfony\\Bundle\\FrameworkBundle\\GotoController\\GotoController", "get"),
         });
     }
 
     public boolean isTemplatingRenderCall(PsiElement e) {
-        return isCallTo(e, new Method[] {
-            getInterfaceMethod(e.getProject(), "\\Symfony\\Component\\Templating\\EngineInterface", "render"),
-            getInterfaceMethod(e.getProject(), "\\Symfony\\Component\\Templating\\StreamingEngineInterface", "stream"),
-            getInterfaceMethod(e.getProject(), "\\Symfony\\Bundle\\FrameworkBundle\\Templating\\EngineInterface", "renderResponse"),
-            getClassMethod(e.getProject(), "\\Symfony\\Bundle\\FrameworkBundle\\GotoController\\GotoController", "render"),
-            getClassMethod(e.getProject(), "\\Symfony\\Bundle\\FrameworkBundle\\GotoController\\GotoController", "renderView"),
-            getClassMethod(e.getProject(), "\\Symfony\\Bundle\\FrameworkBundle\\GotoController\\GotoController", "stream"),
+        return isCallTo(e, new Method[]{
+                getInterfaceMethod(e.getProject(), "\\Symfony\\Component\\Templating\\EngineInterface", "render"),
+                getInterfaceMethod(e.getProject(), "\\Symfony\\Component\\Templating\\StreamingEngineInterface", "stream"),
+                getInterfaceMethod(e.getProject(), "\\Symfony\\Bundle\\FrameworkBundle\\Templating\\EngineInterface", "renderResponse"),
+                getClassMethod(e.getProject(), "\\Symfony\\Bundle\\FrameworkBundle\\GotoController\\GotoController", "render"),
+                getClassMethod(e.getProject(), "\\Symfony\\Bundle\\FrameworkBundle\\GotoController\\GotoController", "renderView"),
+                getClassMethod(e.getProject(), "\\Symfony\\Bundle\\FrameworkBundle\\GotoController\\GotoController", "stream"),
         });
     }
 
     public boolean isTranslatorCall(PsiElement e) {
-        return isCallTo(e, new Method[] {
+        return isCallTo(e, new Method[]{
                 getInterfaceMethod(e.getProject(), "\\Symfony\\Component\\Translation\\TranslatorInterface", "trans"),
                 getInterfaceMethod(e.getProject(), "\\Symfony\\Component\\Translation\\TranslatorInterface", "transChoice"),
         });
     }
 
     public boolean isGetRepositoryCall(Method e) {
-        return isCallTo(e, new Method[] {
-            getInterfaceMethod(e.getProject(), "\\Doctrine\\Common\\Persistence\\ManagerRegistry", "getRepository"),
-            getInterfaceMethod(e.getProject(), "\\Doctrine\\Common\\Persistence\\ObjectManager", "getRepository"),
+        return isCallTo(e, new Method[]{
+                getInterfaceMethod(e.getProject(), "\\Doctrine\\Common\\Persistence\\ManagerRegistry", "getRepository"),
+                getInterfaceMethod(e.getProject(), "\\Doctrine\\Common\\Persistence\\ObjectManager", "getRepository"),
         });
     }
 
     public boolean isObjectRepositoryCall(Method e) {
-        return isCallTo(e, new Method[] {
-            getInterfaceMethod(e.getProject(), "\\Doctrine\\Common\\Persistence\\ObjectRepository", "find"),
-            getInterfaceMethod(e.getProject(), "\\Doctrine\\Common\\Persistence\\ObjectRepository", "findOneBy"),
-            getInterfaceMethod(e.getProject(), "\\Doctrine\\Common\\Persistence\\ObjectRepository", "findAll"),
-            getInterfaceMethod(e.getProject(), "\\Doctrine\\Common\\Persistence\\ObjectRepository", "findBy"),
+        return isCallTo(e, new Method[]{
+                getInterfaceMethod(e.getProject(), "\\Doctrine\\Common\\Persistence\\ObjectRepository", "find"),
+                getInterfaceMethod(e.getProject(), "\\Doctrine\\Common\\Persistence\\ObjectRepository", "findOneBy"),
+                getInterfaceMethod(e.getProject(), "\\Doctrine\\Common\\Persistence\\ObjectRepository", "findAll"),
+                getInterfaceMethod(e.getProject(), "\\Doctrine\\Common\\Persistence\\ObjectRepository", "findBy"),
         });
     }
 
     public boolean isFormBuilderFormTypeCall(PsiElement e) {
         List<Method> methods = getCallToSignatureInterfaceMethods(e, getFormBuilderInterface());
-        return isCallTo(e, methods.toArray( new Method[methods.size()]));
+        return isCallTo(e, methods.toArray(new Method[methods.size()]));
     }
 
     protected boolean isCallTo(PsiElement e, Method expectedMethod) {
-        return isCallTo(e, new Method[] { expectedMethod });
+        return isCallTo(e, new Method[]{expectedMethod});
     }
 
     protected boolean isCallTo(PsiElement e, Method[] expectedMethods) {
@@ -88,14 +88,14 @@ public class Symfony2InterfacesUtil {
     protected boolean isCallTo(Method e, Method[] expectedMethods) {
 
         PhpClass methodClass = e.getContainingClass();
-        if(methodClass == null) {
+        if (methodClass == null) {
             return false;
         }
 
         for (Method expectedMethod : expectedMethods) {
 
             // @TODO: its stuff from beginning times :)
-            if(expectedMethod == null) {
+            if (expectedMethod == null) {
                 continue;
             }
 
@@ -118,7 +118,7 @@ public class Symfony2InterfacesUtil {
 
         // resolve is also called on invalid php code like "use <xxx>"
         // so double check the method name before resolve the method
-        if(!isMatchingMethodName(methodRef, expectedMethods)) {
+        if (!isMatchingMethodName(methodRef, expectedMethods)) {
             return false;
         }
 
@@ -133,14 +133,14 @@ public class Symfony2InterfacesUtil {
         }
 
         PhpClass methodClass = method.getContainingClass();
-        if(methodClass == null) {
+        if (methodClass == null) {
             return false;
         }
 
         for (Method expectedMethod : expectedMethods) {
 
             // @TODO: its stuff from beginning times :)
-            if(expectedMethod == null) {
+            if (expectedMethod == null) {
                 continue;
             }
 
@@ -154,6 +154,7 @@ public class Symfony2InterfacesUtil {
     }
 
     /**
+     * 根据方法引用获取方法
      * Single resolve doesnt work if we have non unique class names in project context,
      * so try a multiResolve and use first matched method
      */
@@ -167,10 +168,10 @@ public class Symfony2InterfacesUtil {
         }
 
         // try multiResolve if class exists twice in project
-        if(psiReference instanceof PsiPolyVariantReference) {
-            for(ResolveResult resolveResult : ((PsiPolyVariantReference) psiReference).multiResolve(false)) {
+        if (psiReference instanceof PsiPolyVariantReference) {
+            for (ResolveResult resolveResult : ((PsiPolyVariantReference) psiReference).multiResolve(false)) {
                 PsiElement element = resolveResult.getElement();
-                if(element instanceof Method) {
+                if (element instanceof Method) {
                     return (Method) element;
                 }
             }
@@ -180,8 +181,9 @@ public class Symfony2InterfacesUtil {
     }
 
     protected boolean isMatchingMethodName(MethodReference methodRef, Method[] expectedMethods) {
+        //当前位置方法与期望方法比较
         for (Method expectedMethod : Arrays.asList(expectedMethods)) {
-            if(expectedMethod != null && expectedMethod.getName().equals(methodRef.getName())) {
+            if (expectedMethod != null && expectedMethod.getName().equals(methodRef.getName())) {
                 return true;
             }
         }
@@ -246,7 +248,7 @@ public class Symfony2InterfacesUtil {
 
         PhpClass instanceClass = PhpElementsUtil.getClassInterface(subjectClass.getProject(), expectedClass);
 
-        if(instanceClass == null) {
+        if (instanceClass == null) {
             return false;
         }
 
@@ -257,7 +259,7 @@ public class Symfony2InterfacesUtil {
     public boolean isInstanceOf(Project project, String subjectClass, String expectedClass) {
 
         PhpClass subjectPhpClass = PhpElementsUtil.getClassInterface(project, subjectClass);
-        if(subjectPhpClass == null) {
+        if (subjectPhpClass == null) {
             return false;
         }
 
@@ -291,34 +293,34 @@ public class Symfony2InterfacesUtil {
     public boolean isCallTo(PsiElement e, String ClassInterfaceName, String methodName) {
 
         // we need a full fqn name
-        if(ClassInterfaceName.contains("\\") && !ClassInterfaceName.startsWith("\\")) {
+        if (ClassInterfaceName.contains("\\") && !ClassInterfaceName.startsWith("\\")) {
             ClassInterfaceName = "\\" + ClassInterfaceName;
         }
 
-        return isCallTo(e, new Method[] {
-            getInterfaceMethod(e.getProject(), ClassInterfaceName, methodName),
-            getClassMethod(e.getProject(), ClassInterfaceName, methodName),
+        return isCallTo(e, new Method[]{
+                getInterfaceMethod(e.getProject(), ClassInterfaceName, methodName),
+                getClassMethod(e.getProject(), ClassInterfaceName, methodName),
         });
     }
 
     public boolean isCallTo(Method e, String ClassInterfaceName, String methodName) {
 
         // we need a full fqn name
-        if(ClassInterfaceName.contains("\\") && !ClassInterfaceName.startsWith("\\")) {
+        if (ClassInterfaceName.contains("\\") && !ClassInterfaceName.startsWith("\\")) {
             ClassInterfaceName = "\\" + ClassInterfaceName;
         }
 
-        return isCallTo(e, new Method[] {
-            getInterfaceMethod(e.getProject(), ClassInterfaceName, methodName),
-            getClassMethod(e.getProject(), ClassInterfaceName, methodName),
+        return isCallTo(e, new Method[]{
+                getInterfaceMethod(e.getProject(), ClassInterfaceName, methodName),
+                getClassMethod(e.getProject(), ClassInterfaceName, methodName),
         });
     }
 
     private List<Method> getCallToSignatureInterfaceMethods(PsiElement e, Collection<MethodMatcher.CallToSignature> signatures) {
         List<Method> methods = new ArrayList<Method>();
-        for(MethodMatcher.CallToSignature signature: signatures) {
+        for (MethodMatcher.CallToSignature signature : signatures) {
             Method method = getInterfaceMethod(e.getProject(), signature.getInstance(), signature.getMethod());
-            if(method != null) {
+            if (method != null) {
                 methods.add(method);
             }
         }
