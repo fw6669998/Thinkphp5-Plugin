@@ -1,37 +1,30 @@
 package db;
 
 import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.database.model.DasColumn;
 import com.intellij.lang.Language;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
-import com.jetbrains.php.PhpClassHierarchyUtils;
+import com.intellij.psi.impl.source.tree.LeafPsiElement;
+import com.intellij.util.containers.JBIterable;
 import com.jetbrains.php.PhpIndex;
-import com.jetbrains.php.codeInsight.dataFlow.reachingDefinition.PhpDFAUtil;
-import com.jetbrains.php.config.phpInfo.PhpInfoUtil;
-import com.jetbrains.php.injection.PhpInjectionUtil;
-import com.jetbrains.php.lang.PhpLangUtil;
 import com.jetbrains.php.lang.PhpLanguage;
-import com.jetbrains.php.lang.psi.PhpPsiUtil;
 import com.jetbrains.php.lang.psi.elements.*;
 import com.jetbrains.php.lang.psi.elements.impl.ArrayHashElementImpl;
-import com.jetbrains.php.lang.psi.elements.impl.MethodReferenceImpl;
 import com.jetbrains.php.lang.psi.elements.impl.PhpClassImpl;
-import com.jetbrains.php.run.PhpExecutionUtil;
 import inter.GotoCompletionContributor;
 import inter.GotoCompletionLanguageRegistrar;
 import inter.GotoCompletionProvider;
 import inter.GotoCompletionRegistrarParameter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import util.MethodMatcher;
-import util.PhpElementsUtil;
-import util.PsiElementUtil;
-import util.Symfony2InterfacesUtil;
+import util.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
+import java.util.Set;
 
 public class DbReference implements GotoCompletionLanguageRegistrar {
     private static MethodMatcher.CallToSignature[] QUERY = new MethodMatcher.CallToSignature[]{
@@ -71,24 +64,24 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                 if (psiElement == null) {
                     return null;
                 }
-                PsiElement parent = psiElement.getParent();
-                if (parent == null) return null;
-                if ((parent instanceof StringLiteralExpression && MethodMatcher.getMatchedSignatureWithDepth(parent, QUERY, 0) != null)) {
+                PsiElement param = psiElement.getParent();
+                if (param == null) return null;
+                if ((param instanceof StringLiteralExpression && MethodMatcher.getMatchedSignatureWithDepth(param, QUERY, 0) != null)) {
                     //列
-                    return new ColumnProvider(psiElement);
-                } else if (MethodMatcher.getMatchedSignatureWithDepth(parent, QUERYTABLE, 0) != null) {
+                    return new ColumnProvider(param);
+                } else if (MethodMatcher.getMatchedSignatureWithDepth(param, QUERYTABLE, 0) != null) {
                     //表
-                    return new TableProvider(psiElement);
+                    return new TableProvider(param);
                 } else {
                     //列, 数组里的列
                     try {
-                        parent = parent.getParent().getParent();
-                        if (!(parent instanceof ArrayHashElementImpl)) return null;
+                        param = param.getParent().getParent();
+                        if (!(param instanceof ArrayHashElementImpl)) return null;
                     } catch (Exception e) {
                         return null;
                     }
-                    if (MethodMatcher.getMatchedSignatureWithDepth(parent.getParent(), QUERYARR, 0) != null) {
-                        return new ColumnProvider(parent.getParent());
+                    if (MethodMatcher.getMatchedSignatureWithDepth(param.getParent(), QUERYARR, 0) != null) {
+                        return new ColumnProvider(param);
                     }
                 }
 
@@ -106,22 +99,42 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
         @Override
         public Collection<LookupElement> getLookupElements() {
             final Collection<LookupElement> lookupElements = new ArrayList<>();
-            PsiElement parent = getElement().getParent();
-            if (parent==null)return lookupElements;
-            MethodReference parent1 = (MethodReference) parent.getParent();
-            if(!(parent1 instanceof MethodReference))return lookupElements;
 
-            Symfony2InterfacesUtil.getMultiResolvedMethod(parent1);
+            PsiElement paramList = getElement().getParent();
+            if (paramList == null) return lookupElements;
+            PsiElement methodRef = paramList.getParent();
+            if (!(methodRef instanceof MethodReference)) return lookupElements;
 
-            //获取到列
-            String table = "";
-            PhpClassImpl phpClass = PsiElementUtil.getPhpClass(getElement());
+            //获取方法对象的类
+            int type = 1;
+            String tableName = "";
+            PhpClass phpClass = Util.getInstanseClass(getElement().getProject(), (MethodReference) methodRef);
             if (phpClass != null) {
                 Collection<Field> fields = phpClass.getFields();
                 for (Field item : fields) {
-                    if ("name".equals(item.getName()) || "table".equals(item.getName())) {
-                        table = item.getDefaultValuePresentation();
+                    Tool.log(item.getName() + ": " + item.getDefaultValuePresentation() + ":" + item.getDefaultValue().getText());
+                    if ("name".equals(item.getName())) {
+                        PsiElement defaultValue = item.getDefaultValue();
+                        Tool.printPsiTree(defaultValue.getParent().getParent());
+                        String name = item.getDefaultValue().getText();
+                        if (name != null && !name.isEmpty()) {
+                            tableName = name;
+                            break;
+                        }
+                    } else if ("table".equals(item.getName())) {
+                        String name = item.getDefaultValuePresentation();
+                        if (name != null && !name.isEmpty()) {
+                            type = 2;
+                            tableName = name;
+                            break;
+                        }
                     }
+                }
+            }
+            JBIterable<? extends DasColumn> columns = DbTableUtil.getColumns(getElement().getProject(), tableName, type);
+            if (columns != null) {
+                for (DasColumn item : columns) {
+                    lookupElements.add(LookupElementBuilder.create(item.getName()).withTypeText(item.getComment()));
                 }
             }
             return lookupElements;

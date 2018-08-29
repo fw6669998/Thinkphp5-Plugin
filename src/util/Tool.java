@@ -22,6 +22,7 @@ public class Tool {
         System.out.println(obj);
     }
 
+    //打印当前psiElement,及它的子类
     public static void printPsiTree(PsiElement element) {
         if (element == null) {
             return;

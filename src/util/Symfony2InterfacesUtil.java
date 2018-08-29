@@ -160,7 +160,7 @@ public class Symfony2InterfacesUtil {
      */
     @Nullable
     public static Method getMultiResolvedMethod(PsiReference psiReference) {
-
+        if (psiReference == null) return null;
         // class be unique in normal case, so try this first
         PsiElement resolvedReference = psiReference.resolve();
         if (resolvedReference instanceof Method) {

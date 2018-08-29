@@ -28,5 +28,23 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library" scope="PROVIDED">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Program Files/JetBrains/PhpStorm 2018.1.6/plugins/DatabaseTools/lib/database-openapi.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" scope="PROVIDED">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Program Files/JetBrains/PhpStorm 2018.1.6/plugins/DatabaseTools/lib/database-impl.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

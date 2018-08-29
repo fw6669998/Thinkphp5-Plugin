@@ -3,6 +3,7 @@ package util;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import config.AppConfigReferences;
+import db.DbReference;
 import inter.GotoCompletionContributor;
 import inter.GotoCompletionLanguageRegistrar;
 import inter.GotoCompletionRegistrar;
@@ -20,6 +21,7 @@ public class GotoCompletionUtil {
             new AppConfigReferences(),
             new ViewReferences2(),
             new RouterReference(),
+            new DbReference(),
 //            new ProviderGotoCompletion(),
 //            new ControllerReferences(),
 //        new BladeDirectiveReferences(),
