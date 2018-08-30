@@ -3,6 +3,7 @@ package db;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.database.model.DasColumn;
+import com.intellij.database.model.DasTable;
 import com.intellij.lang.Language;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.patterns.PlatformPatterns;
@@ -12,6 +13,7 @@ import com.intellij.util.containers.JBIterable;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.PhpLanguage;
 import com.jetbrains.php.lang.psi.elements.*;
+import com.jetbrains.php.lang.psi.elements.impl.ArrayCreationExpressionImpl;
 import com.jetbrains.php.lang.psi.elements.impl.ArrayHashElementImpl;
 import com.jetbrains.php.lang.psi.elements.impl.PhpClassImpl;
 import inter.GotoCompletionContributor;
@@ -39,7 +41,9 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
 
     private static MethodMatcher.CallToSignature[] QUERYARR = new MethodMatcher.CallToSignature[]{
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "delete"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "delete"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "update"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "update"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "insert"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "where"),
     };
@@ -68,20 +72,23 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                 if (param == null) return null;
                 if ((param instanceof StringLiteralExpression && MethodMatcher.getMatchedSignatureWithDepth(param, QUERY, 0) != null)) {
                     //列
+                    Tool.printPsiTree(param.getParent().getParent().getParent());
                     return new ColumnProvider(param);
                 } else if (MethodMatcher.getMatchedSignatureWithDepth(param, QUERYTABLE, 0) != null) {
                     //表
                     return new TableProvider(param);
                 } else {
                     //列, 数组里的列
+                    PsiElement param1 = null;
                     try {
-                        param = param.getParent().getParent();
-                        if (!(param instanceof ArrayHashElementImpl)) return null;
+                        param1 = param.getParent().getParent().getParent();
+                        Tool.printPsiTree(param1.getParent().getParent().getParent());
+                        if (!(param1 instanceof ArrayCreationExpression)) return null;
                     } catch (Exception e) {
                         return null;
                     }
-                    if (MethodMatcher.getMatchedSignatureWithDepth(param.getParent(), QUERYARR, 0) != null) {
-                        return new ColumnProvider(param);
+                    if (MethodMatcher.getMatchedSignatureWithDepth(param1, QUERYARR, 0) != null) {
+                        return new ColumnProvider(param1);
                     }
                 }
 
@@ -112,10 +119,8 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
             if (phpClass != null) {
                 Collection<Field> fields = phpClass.getFields();
                 for (Field item : fields) {
-                    Tool.log(item.getName() + ": " + item.getDefaultValuePresentation() + ":" + item.getDefaultValue().getText());
                     if ("name".equals(item.getName())) {
                         PsiElement defaultValue = item.getDefaultValue();
-                        Tool.printPsiTree(defaultValue.getParent().getParent());
                         String name = item.getDefaultValue().getText();
                         if (name != null && !name.isEmpty()) {
                             tableName = name;
@@ -134,7 +139,10 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
             JBIterable<? extends DasColumn> columns = DbTableUtil.getColumns(getElement().getProject(), tableName, type);
             if (columns != null) {
                 for (DasColumn item : columns) {
-                    lookupElements.add(LookupElementBuilder.create(item.getName()).withTypeText(item.getComment()));
+                    String comment = "";
+                    if (item.getComment() != null)
+                        comment = item.getComment();
+                    lookupElements.add(LookupElementBuilder.create(item.getName()).withTailText("   " + comment));
                 }
             }
             return lookupElements;
@@ -155,14 +163,17 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
         @NotNull
         @Override
         public Collection<LookupElement> getLookupElements() {
-//
+            final Collection<LookupElement> lookupElements = new ArrayList<>();
+            JBIterable<? extends DasTable> tables = DbTableUtil.getTables(getElement().getProject());
+            for (DasTable table:tables) {
+                lookupElements.add(LookupElementBuilder.create(table.getName()).withTailText("   " + comment));
+            }
             return null;
         }
 
 
         @NotNull
         public Collection<? extends PsiElement> getPsiTargets(@NotNull PsiElement psiElement, int offset, @NotNull Editor editor) {
-
             return null;
         }
     }
