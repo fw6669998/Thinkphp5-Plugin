@@ -1,5 +1,6 @@
 package db;
 
+import beans.ArrayMapVisitor;
 import com.intellij.database.model.DasColumn;
 import com.intellij.database.model.DasTable;
 import com.intellij.database.psi.DbDataSource;
@@ -8,16 +9,13 @@ import com.intellij.database.util.DbUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.containers.JBIterable;
-import com.jetbrains.php.lang.PhpCodeUtil;
-import com.jetbrains.php.lang.psi.PhpPsiUtil;
-import com.jetbrains.php.lang.psi.elements.impl.MethodReferenceImpl;
-import util.MethodMatcher;
-import util.PhpElementsUtil;
+import com.jetbrains.php.lang.psi.elements.Method;
+import util.*;
 
-import java.util.List;
+import java.util.*;
 
 public class DbTableUtil {
-
+    //根据模型表获取列,
     public static JBIterable<? extends DasColumn> getColumns(Project project, String table, int type) {
         if (table.isEmpty()) return null;
         table = table.replace("'", "").replace("\"", "");
@@ -45,10 +43,16 @@ public class DbTableUtil {
                 }
             }
         }
+        return null;
+    }
+
+    public static List<Column> getColumns(Project project, String table) {
+        JBIterable<? extends DasTable> tables = getTables(project);
 
         return null;
     }
 
+    //获取所有表
     public static JBIterable<? extends DasTable> getTables(Project project) {
         JBIterable<DbDataSource> dataSources = DbUtil.getDataSources(project);
         DbDataSource dbDataSource = dataSources.get(0);
@@ -60,14 +64,26 @@ public class DbTableUtil {
         }
     }
 
-    public static String getTableName(PsiElement element) {
-        PsiElement parent = element.getParent();
-        if (parent == null) return null;
-        MethodReferenceImpl parent1 = (MethodReferenceImpl) parent.getParent();
-        if (parent1 == null) return null;
-//        PhpPsiUtil;
-//        PhpElementsUtil;
-        parent1.getClassReference();
-        return "";
+//    public static String getTableName(PsiElement element) {
+//        PsiElement parent = element.getParent();
+//        if (parent == null) return null;
+//        MethodReferenceImpl parent1 = (MethodReferenceImpl) parent.getParent();
+//        if (parent1 == null) return null;
+//        parent1.getClassReference();
+//        return "";
+//    }
+
+    //    private static final Pattern aliasPattern = Pattern.compile(".*/application/(\\w+)/controller/(\\w+).php$");
+    public static Map<String, String> getAlias(PsiElement element, String contextTable) {
+        Map<String, String> alias = new HashMap<>();
+        Method method = Util.getMethod(element);
+        if (method == null) return alias;
+        method.acceptChildren(new MethodRefVisitor(new ArrayMapVisitor() {
+            @Override
+            public void visit(String key, String value) {
+                alias.put(key, value);
+            }
+        }, contextTable));
+        return alias;
     }
 }

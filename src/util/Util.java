@@ -5,8 +5,10 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.Field;
+import com.jetbrains.php.lang.psi.elements.Method;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
+import com.jetbrains.php.lang.psi.elements.impl.PhpClassImpl;
 
 import java.util.Collection;
 import java.util.Set;
@@ -21,5 +23,27 @@ public class Util {
         if (classesByFQN.size() == 0) return null;
         else
             return classesByFQN.iterator().next();
+    }
+
+    //获取当前方法名,
+    public static Method getMethod(PsiElement psiElement) {
+        if (psiElement == null) return null;
+        PsiElement parent = psiElement.getParent();
+        if (parent instanceof Method) {
+            return (Method) parent;
+        } else {
+            return getMethod(parent);
+        }
+    }
+
+    //获取当前类
+    public static PhpClassImpl getPhpClass(PsiElement psiElement) {
+        if (psiElement == null) return null;
+        PsiElement parent = psiElement.getParent();
+        if (parent instanceof PhpClassImpl) {
+            return (PhpClassImpl) parent;
+        } else {
+            return getPhpClass(parent);
+        }
     }
 }

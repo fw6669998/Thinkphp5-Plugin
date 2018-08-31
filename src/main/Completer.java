@@ -39,6 +39,7 @@ public class Completer extends CompletionContributor {
                         completionResultSet.addAllElements(
                                 formReferenceCompletionContributor.getLookupElements()
                         );
+                        completionResultSet.restartCompletionWhenNothingMatches();
                         if (parameter == null) {
                             parameter = new CompletionContributorParameter(completionParameters, processingContext, completionResultSet);
                         }
