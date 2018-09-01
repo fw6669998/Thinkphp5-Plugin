@@ -195,7 +195,6 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
             return lookupElements;
         }
 
-
         @NotNull
         public Collection<? extends PsiElement> getPsiTargets(@NotNull PsiElement psiElement, int offset, @NotNull Editor editor) {
             return null;
