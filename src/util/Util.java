@@ -1,6 +1,7 @@
 package util;
 
 import beans.Bean;
+import com.intellij.codeInsight.completion.PrefixMatcher;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.jetbrains.php.PhpIndex;
@@ -44,6 +45,21 @@ public class Util {
             return (PhpClassImpl) parent;
         } else {
             return getPhpClass(parent);
+        }
+    }
+
+    //处理前缀
+    public static String rePrefix(String prefix) {
+        String newPrefix = "";
+        int i = prefix.lastIndexOf("=");
+        int j = prefix.lastIndexOf(",");
+        int k = prefix.lastIndexOf("|");
+        int max = Math.max(k, Math.max(i, j));
+        if (max != -1) {
+            newPrefix = prefix.substring(max + 1, prefix.length());
+            return newPrefix;
+        } else {
+            return prefix;
         }
     }
 }

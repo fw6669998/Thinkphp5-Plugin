@@ -33,10 +33,10 @@ public class MethodRefVisitor extends PsiRecursiveElementWalkingVisitor {
                     PsiElement param = paramList.getChildren()[0];
                     if (param != null) {
                         if ("alias".equals(((MethodReference) element).getName()) && MethodMatcher.getMatchedSignatureWithDepth(param, alias, 0) != null) {
-                            String text = param.getText().replace("'", "");
+                            String text = param.getText().replace("'", "").replace("\"","");
                             this.visitor.visit(text, contextTable);
                         } else if ("join".equals(((MethodReference) element).getName()) && MethodMatcher.getMatchedSignatureWithDepth(param, join, 0) != null) {
-                            String text = param.getText().replace("'", "");
+                            String text = param.getText().replace("'", "").replace("\"","");
                             String[] s = text.split(" ");
                             if (s.length == 2) {    //有别名
                                 this.visitor.visit(s[1], s[0]);

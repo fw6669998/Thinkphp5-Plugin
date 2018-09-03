@@ -39,6 +39,7 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "sum"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "max"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "min"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "field"),
     };
 
     private static MethodMatcher.CallToSignature[] QUERYARR = new MethodMatcher.CallToSignature[]{
@@ -100,7 +101,7 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
         });
     }
 
-    private static class ColumnProvider extends GotoCompletionProvider {
+    public static class ColumnProvider extends GotoCompletionProvider {
         public ColumnProvider(PsiElement element) {
             super(element);
         }
@@ -129,7 +130,7 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                             break;
                         }
                     } else if ("table".equals(item.getName())) {
-                        String name = item.getDefaultValuePresentation();
+                        String name = item.getDefaultValue().getText();//item.getDefaultValuePresentation();
                         if (name != null && !name.isEmpty()) {
                             type = 2;
                             tableName = name;
@@ -160,7 +161,8 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                             String comment = "";
                             if (item.getComment() != null)
                                 comment = item.getComment();
-                            lookupElements.add(LookupElementBuilder.create(key + "." + item.getName()).withTailText("   " + comment).withTypeText("ccc"));
+                            lookupElements.add(LookupElementBuilder.create(key + "." + item.getName())
+                                    .withTailText("   " + comment));
                         }
                     }
                 }
