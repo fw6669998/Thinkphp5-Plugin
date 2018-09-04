@@ -15,6 +15,8 @@ import java.util.Collection;
 import java.util.Set;
 
 public class Util {
+
+    //获取当前引用变量的类
     public static PhpClass getInstanseClass(Project project, MethodReference methodRef) {
         Set<String> types = methodRef.getDeclaredType().getTypes();
         if (types.size() == 0) return null;
@@ -26,7 +28,16 @@ public class Util {
             return classesByFQN.iterator().next();
     }
 
-    //获取当前方法名,
+    //获取当前引用的方法
+    public static Method getRefMethod(MethodReference methodRef) {
+        PsiElement resolve = methodRef.resolve();
+        if (resolve instanceof Method) {
+            return (Method) resolve;
+        }
+        return null;
+    }
+
+    //获取当前编辑的方法
     public static Method getMethod(PsiElement psiElement) {
         if (psiElement == null) return null;
         PsiElement parent = psiElement.getParent();
@@ -37,7 +48,7 @@ public class Util {
         }
     }
 
-    //获取当前类
+    //获取当前编辑文件的类
     public static PhpClassImpl getPhpClass(PsiElement psiElement) {
         if (psiElement == null) return null;
         PsiElement parent = psiElement.getParent();

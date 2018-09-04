@@ -55,12 +55,21 @@ public class DbTableUtil {
     //获取所有表
     public static JBIterable<? extends DasTable> getTables(Project project) {
         JBIterable<DbDataSource> dataSources = DbUtil.getDataSources(project);
-        DbDataSource dbDataSource = dataSources.get(0);
-        if (dbDataSource == null) {
+        if (dataSources.size() < 1) {
             return null;
         } else {
-            JBIterable<? extends DasTable> tables = DasUtil.getTables(dbDataSource);
-            return tables;
+            DbDataSource work = null;
+            for (DbDataSource db : dataSources) {
+                if (db.getName().contains("work")) {
+                    work = db;
+                    break;
+                }
+            }
+            if (work != null) {
+                return DasUtil.getTables(work);
+            } else {
+                return DasUtil.getTables(dataSources.get(0));
+            }
         }
     }
 

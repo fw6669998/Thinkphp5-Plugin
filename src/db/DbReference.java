@@ -10,6 +10,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
+import com.intellij.util.IconUtil;
 import com.intellij.util.containers.JBIterable;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.PhpLanguage;
@@ -17,6 +18,7 @@ import com.jetbrains.php.lang.psi.elements.*;
 import com.jetbrains.php.lang.psi.elements.impl.ArrayCreationExpressionImpl;
 import com.jetbrains.php.lang.psi.elements.impl.ArrayHashElementImpl;
 import com.jetbrains.php.lang.psi.elements.impl.PhpClassImpl;
+import icons.DatabaseIcons;
 import inter.GotoCompletionContributor;
 import inter.GotoCompletionLanguageRegistrar;
 import inter.GotoCompletionProvider;
@@ -54,7 +56,9 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
     private static MethodMatcher.CallToSignature[] QUERYTABLE = new MethodMatcher.CallToSignature[]{
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "join"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "table"),
+            new MethodMatcher.CallToSignature("\\think\\Db", "table"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "name"),
+            new MethodMatcher.CallToSignature("\\think\\Db", "name"),
     };
 
     @Override
@@ -73,13 +77,13 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                 }
                 PsiElement param = psiElement.getParent();
                 if (param == null) return null;
-                if ((param instanceof StringLiteralExpression && (MethodMatcher.getMatchedSignatureWithDepth(param, QUERY, 0) != null)||
+                if ((param instanceof StringLiteralExpression && (MethodMatcher.getMatchedSignatureWithDepth(param, QUERY, 0) != null) ||
                         MethodMatcher.getMatchedSignatureWithDepth(param, new MethodMatcher.CallToSignature[]{
                                 new MethodMatcher.CallToSignature("\\think\\db\\Query", "join")}, 1) != null)
                 ) {
                     //列
                     return new ColumnProvider(param);
-                } else if (MethodMatcher.getMatchedSignatureWithDepth(param, QUERYTABLE, 0) != null) {
+                } else if (PsiElementUtil.isFunctionReference(param, "db", 0) || MethodMatcher.getMatchedSignatureWithDepth(param, QUERYTABLE, 0) != null) {
                     //表
                     return new TableProvider(param);
                 } else {
@@ -119,10 +123,15 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
             //获取方法对象的类
             int type = 1;
             String tableName = "";
+//            PsiElement resolve = ((MethodReference) methodRef).resolve();
+            //Query类
+//            PhpClassImpl phpClass = Util.getPhpClass(resolve);
+            //Model子类
             PhpClass phpClass = Util.getInstanseClass(getElement().getProject(), (MethodReference) methodRef);
             if (phpClass != null) {
                 Collection<Field> fields = phpClass.getFields();
                 for (Field item : fields) {
+//                    Tool.log(item.getName() + ": " + item.getDefaultValue().getText()+": "+item.getDefaultValuePresentation());
                     if ("name".equals(item.getName())) {
                         String name = item.getDefaultValue().getText();
                         if (name != null && !name.isEmpty()) {
@@ -147,7 +156,7 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                     String comment = "";
                     if (item.getComment() != null)
                         comment = item.getComment();
-                    lookupElements.add(LookupElementBuilder.create(item.getName()).withTailText("   " + comment));
+                    lookupElements.add(LookupElementBuilder.create(item.getName()).withTailText("   " + comment).withIcon(DatabaseIcons.Col));
                 }
             }
 
@@ -162,7 +171,7 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                             if (item.getComment() != null)
                                 comment = item.getComment();
                             lookupElements.add(LookupElementBuilder.create(key + "." + item.getName())
-                                    .withTailText("   " + comment));
+                                    .withTailText("   " + comment).withIcon(DatabaseIcons.Col));
                         }
                     }
                 }
@@ -192,7 +201,7 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                 String comment = "";
                 if (table.getComment() != null)
                     comment = table.getComment();
-                lookupElements.add(LookupElementBuilder.create(table.getName()).withTailText("   " + comment));
+                lookupElements.add(LookupElementBuilder.create(table.getName()).withTailText("   " + comment).withIcon(DatabaseIcons.Table));
             }
             return lookupElements;
         }

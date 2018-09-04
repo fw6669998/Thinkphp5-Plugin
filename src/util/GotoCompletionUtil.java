@@ -8,6 +8,7 @@ import inter.GotoCompletionContributor;
 import inter.GotoCompletionLanguageRegistrar;
 import inter.GotoCompletionRegistrar;
 import inter.GotoCompletionRegistrarParameter;
+import model.ModelReference;
 import org.jetbrains.annotations.NotNull;
 import router.RouterReference;
 import view.ViewReferences2;
@@ -22,6 +23,7 @@ public class GotoCompletionUtil {
             new ViewReferences2(),
             new RouterReference(),
             new DbReference(),
+            new ModelReference(),
 //            new ProviderGotoCompletion(),
 //            new ControllerReferences(),
 //        new BladeDirectiveReferences(),
