@@ -34,15 +34,4 @@
     <extensions defaultExtensionNs="com.jetbrains.php">
         <typeProvider3 implementation="pers.fw.tplugin.main.MyTypeProvider"/>
     </extensions>
-
-    <actions>
-        <!-- Add your actions here -->
-        <action id="pers.fw.tplugin.test.Test" class="pers.fw.tplugin.test.Test" text="pers.fw.tplugin.test.Test" description="test">
-            <add-to-group group-id="HelpMenu" anchor="before" relative-to-action="About"/>
-        </action>
-        <action id="GotoController" class="pers.fw.tplugin.view.GotoController" text="Controller" description="GotoController">
-            <add-to-group group-id="EditorPopupMenu.GoTo" anchor="first"/>
-            <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl C"/>
-        </action>
-    </actions>
 </idea-plugin>
