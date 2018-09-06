@@ -24,17 +24,21 @@ thinkPhp5 plugin
 
     提示方法$this->fetch(), view(),
     可跳转到页面(html)位置
+![img](https://github.com/fw6669998/Thinkphp5-Plugin/blob/master/img/view.png)
     
 路由
     
     使用Route::get/post/put/delete/any在任何位置提示, 
     使用return ['test' => ['in', ['method' => 'post']]]格式,在application和config目录下文件名带有route的文件中进行提示
+![img](https://github.com/fw6669998/Thinkphp5-Plugin/blob/master/img/route.png)
     
 模型
     
     提示方法model(),Loader::model(),
     使用model()方法会对分析返回值类型进行赋给变量,最终类型为实际模型类型,而不是Model类型
     支持同模块model目录下的模型,
+![img](https://github.com/fw6669998/Thinkphp5-Plugin/blob/master/img/model.png)
+![img](https://github.com/fw6669998/Thinkphp5-Plugin/blob/master/img/modelType.png)
     
 数据库
     
@@ -44,6 +48,7 @@ thinkPhp5 plugin
     如果有多条连接将需要提示的数据库连接命名为包含work的命名的连接, //重命名连接, 连接->右键->rename 
     模型变量提示根据模型类的name和table字段提供的数据匹配表,
     数据库的join,table也会提供表,进行字段提示
+![img](https://github.com/fw6669998/Thinkphp5-Plugin/blob/master/img/db.png)
 
 ## 搭建
 
@@ -55,6 +60,7 @@ thinkPhp5 plugin
         PhpStorm\plugins\php\lib\php.jar, php-openapi.jar
     附加源码:
         intellij platform平台源码地址: https://github.com/JetBrains/intellij-community
+![img](https://github.com/fw6669998/Thinkphp5-Plugin/blob/master/img/dajian.png)
     
 ## 联系方式
 
