@@ -1,23 +1,24 @@
 thinkPhp5 plugin
 ------------------------------
 
-##概览
+## 概览
 
 基于[Haehnchen/idea-php-laravel-plugin](https://github.com/Haehnchen/idea-php-laravel-plugin)
 
 用于thinkphp5.0的视图,配置,路由,数据库,模型智能提示和跳转(快捷键F3), 及模型函数(model)返回类型分析,
 大小写敏感
 
-##安装
+## 安装
 
 
 
-##使用
+## 使用
 
 配置
     
     提示方法config(),Config::get(),Config::set(),
     扫描/config和/application目录下的配置文件进行提示, 可跳转到配置文件源位置
+![img](https://github.com/fw6669998/Thinkphp5-Plugin/blob/master/img/config.png)
 
 视图
 
@@ -44,7 +45,7 @@ thinkPhp5 plugin
     模型变量提示根据模型类的name和table字段提供的数据匹配表,
     数据库的join,table也会提供表,进行字段提示
 
-##搭建
+## 搭建
 
 选择sdk:
 
@@ -55,6 +56,6 @@ thinkPhp5 plugin
     附加源码:
         intellij platform平台源码地址: https://github.com/JetBrains/intellij-community
     
-##联系方式
+## 联系方式
 
 邮箱: fw6669998@163.com
