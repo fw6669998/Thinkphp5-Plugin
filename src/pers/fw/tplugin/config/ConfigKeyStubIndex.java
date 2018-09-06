@@ -12,14 +12,9 @@ import com.jetbrains.php.lang.PhpFileType;
 import com.jetbrains.php.lang.psi.PhpFile;
 import gnu.trove.THashMap;
 import org.jetbrains.annotations.NotNull;
-import pers.fw.tplugin.config.ArrayReturnPsiRecursiveVisitor;
-import pers.fw.tplugin.config.ConfigFileUtil;
 
 import java.util.Map;
 
-/**
- * @author Daniel Espendiller <daniel@espendiller.net>
- */
 public class ConfigKeyStubIndex extends FileBasedIndexExtension<String, Void> {
 
     public static final ID<String, Void> KEY = ID.create("de.espend.idea.laravel.config_keys");

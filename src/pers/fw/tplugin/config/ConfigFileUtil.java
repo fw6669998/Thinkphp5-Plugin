@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  * 匹配文件
  */
 public class ConfigFileUtil {
-    private static final Pattern configFilePattern = Pattern.compile(".*/(config|application)/([\\w-/]+).php$");
+    private static final Pattern configFilePattern = Pattern.compile(".*/(config/([\\w-./]+)|application/([\\w-.]+)).php$");
 
     public static ConfigFileMatchResult matchConfigFile(Project project, VirtualFile virtualFile) {
         String path = virtualFile.getPath();
@@ -27,11 +27,10 @@ public class ConfigFileUtil {
         Matcher m = configFilePattern.matcher(path);
 
         if (m.matches()) {
-            String prefix2 = m.group(2).replace('/', '.');
-
-            if (!prefix2.contains("database"))
-                prefix2 = "";
-            return new ConfigFileMatchResult(true, prefix2);
+//            String prefix2 = m.group(1).replace('/', '.');
+//            if (!prefix2.contains("database"))
+//                prefix2 = "database";
+            return new ConfigFileMatchResult(true, "");
         } else {
             return new ConfigFileMatchResult(false, "");
         }

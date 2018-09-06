@@ -3,7 +3,8 @@ thinkPhp5 plugin
 ##概览
 基于[Haehnchen/idea-php-laravel-plugin](https://github.com/Haehnchen/idea-php-laravel-plugin)
 
-用于thinkphp5.0的视图,配置,路由,数据库,模型智能提示和跳转(快捷键F3), 及模型函数(model)返回类型分析
+用于thinkphp5.0的视图,配置,路由,数据库,模型智能提示和跳转(快捷键F3), 及模型函数(model)返回类型分析,
+大小写敏感
 
 ##安装
 
@@ -35,14 +36,14 @@ thinkPhp5 plugin
     配置数据源,在ide自带的数据库管理工具连接数据库,
     如果只有一条数据库连接,则该数据库为提示连接, 
     如果有多条连接将需要提示的数据库连接命名为包含work的命名的连接, //重命名连接, 连接->右键->rename 
-    模型变量提示根据模型类的name和table字段提供的字段,
+    模型变量提示根据模型类的name和table字段提供的数据匹配表,
     数据库的join,table也会提供表,进行字段提示
 
 ##搭建
 选择sdk:
 
     选择phpstrom安装目录为sdk,
-    添加java: 
+    添加jar包: 
         PhpStorm\plugins\DatabaseTools\lib\database-impl.jar,database-open.jar
         PhpStorm\plugins\php\lib\php.jar, php-openapi.jar
     附加源码:

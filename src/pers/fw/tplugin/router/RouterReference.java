@@ -105,7 +105,6 @@ public class RouterReference implements GotoCompletionLanguageRegistrar {
             if (StringUtils.isBlank(contents)) {
                 return targets;
             }
-
             FileBasedIndex.getInstance().getFilesWithKey(RouteValStubIndex.KEY, new HashSet<>(Collections.singletonList(contents)), new Processor<VirtualFile>() {
                 @Override
                 public boolean process(VirtualFile virtualFile) {

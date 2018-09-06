@@ -29,8 +29,11 @@ public class ArrayReturnPsiRecursiveVisitor extends PsiRecursiveElementWalkingVi
     @Override
     public void visitElement(PsiElement element) {
 
-        if (element instanceof PhpReturn) {
-            visitPhpReturn((PhpReturn) element);
+//        if (element instanceof PhpReturn) {
+//            visitPhpReturn((PhpReturn) element);
+//        }
+        if (element instanceof ArrayCreationExpression) {
+            collectConfigKeys((ArrayCreationExpression) element, this.arrayKeyVisitor, fileNameWithoutExtension);
         }
 
         super.visitElement(element);
