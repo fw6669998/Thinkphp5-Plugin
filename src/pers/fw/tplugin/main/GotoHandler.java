@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
+import pers.fw.tplugin.db.DbReference;
 import pers.fw.tplugin.inter.GotoCompletionContributor;
 import pers.fw.tplugin.inter.GotoCompletionProviderInterface;
 import org.jetbrains.annotations.Nullable;

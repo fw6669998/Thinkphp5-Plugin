@@ -3,14 +3,23 @@ package pers.fw.tplugin.db;
 import com.intellij.codeInsight.lookup.*;
 import com.intellij.database.model.DasColumn;
 import com.intellij.database.model.DasTable;
+import com.intellij.database.model.PsiColumn;
+import com.intellij.database.psi.DbColumn;
+import com.intellij.database.psi.DbColumnImpl;
+import com.intellij.database.psi.DbPsiManager;
+import com.intellij.database.util.DasUtil;
+import com.intellij.database.util.DbImplUtil;
+import com.intellij.database.util.DbUtil;
 import com.intellij.lang.Language;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiTarget;
 import com.intellij.util.containers.JBIterable;
 import com.jetbrains.php.lang.PhpLanguage;
 import com.jetbrains.php.lang.psi.elements.*;
 import icons.DatabaseIcons;
+import org.apache.velocity.runtime.directive.Foreach;
 import pers.fw.tplugin.inter.GotoCompletionContributor;
 import pers.fw.tplugin.inter.GotoCompletionLanguageRegistrar;
 import pers.fw.tplugin.inter.GotoCompletionProvider;
@@ -21,6 +30,7 @@ import pers.fw.tplugin.util.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 public class DbReference implements GotoCompletionLanguageRegistrar {
@@ -136,7 +146,6 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
             if (phpClass != null) {
                 Collection<Field> fields = phpClass.getFields();
                 for (Field item : fields) {
-//                    Tool.log(item.getName() + ": " + item.getDefaultValue().getText()+": "+item.getDefaultValuePresentation());
                     if ("name".equals(item.getName())) {
                         String name = item.getDefaultValue().getText();
                         if (name != null && !name.isEmpty()) {
@@ -181,14 +190,12 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                     }
                 }
             }
-
             return lookupElements;
         }
 
         @NotNull
         public Collection<? extends PsiElement> getPsiTargets(@NotNull PsiElement psiElement, int offset, @NotNull Editor editor) {
-
-            return null;
+            return new ArrayList<>();
         }
     }
 
@@ -213,7 +220,7 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
 
         @NotNull
         public Collection<? extends PsiElement> getPsiTargets(@NotNull PsiElement psiElement, int offset, @NotNull Editor editor) {
-            return null;
+            return new ArrayList<>();
         }
     }
 }

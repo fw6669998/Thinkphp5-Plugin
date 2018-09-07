@@ -26,6 +26,13 @@ public class GotoCompletionUtil {
             new ModelReference(),
     };
 
+//    private static GotoCompletionRegistrar[]  = new GotoCompletionRegistrar[]{
+//            new AppConfigReferences(),
+//            new ViewReferences2(),
+//            new RouterReference(),
+//            new ModelReference(),
+//    };
+
     public static Collection<GotoCompletionContributor> getContributors(final PsiElement psiElement) {
         Collection<GotoCompletionContributor> contributors = new ArrayList<>();
 
