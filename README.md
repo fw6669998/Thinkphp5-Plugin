@@ -62,6 +62,9 @@ thinkPhp5 plugin
         PhpStorm\plugins\php\lib\php.jar, php-openapi.jar
     附加源码:
         intellij platform平台源码地址: https://github.com/JetBrains/intellij-community
+    开发文档
+        intellij platform开发文档: http://www.jetbrains.org/intellij/sdk/docs/welcome.html
+        
 ![img](https://github.com/fw6669998/Thinkphp5-Plugin/blob/master/img/dajian.png)
     
 ## 联系方式
