@@ -85,7 +85,7 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                 if ((param instanceof StringLiteralExpression && (MethodMatcher.getMatchedSignatureWithDepth(param, QUERY, 0) != null) ||
                         MethodMatcher.getMatchedSignatureWithDepth(param, new MethodMatcher.CallToSignature[]{
                                 new MethodMatcher.CallToSignature("\\think\\db\\Query", "join")}, 1) != null)
-                ) {
+                        ) {
                     //列
                     return new ColumnProvider(param);
                 } else if (PsiElementUtil.isFunctionReference(param, "db", 0) || MethodMatcher.getMatchedSignatureWithDepth(param, QUERYTABLE, 0) != null) {
@@ -148,13 +148,13 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                 for (Field item : fields) {
                     if ("name".equals(item.getName())) {
                         String name = item.getDefaultValue().getText();
-                        if (name != null && !name.isEmpty()) {
+                        if (name != null && !name.isEmpty() && !"$name".equals(name)) {
                             tableName = name;
                             break;
                         }
                     } else if ("table".equals(item.getName())) {
                         String name = item.getDefaultValue().getText();//item.getDefaultValuePresentation();
-                        if (name != null && !name.isEmpty()) {
+                        if (name != null && !name.isEmpty() && !"$table".equals(name)) {
                             type = 2;
                             tableName = name;
                             break;
