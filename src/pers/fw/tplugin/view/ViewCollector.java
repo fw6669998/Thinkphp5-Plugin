@@ -86,10 +86,9 @@ public class ViewCollector {
                 }
 
                 String filename = VfsUtil.getRelativePath(virtualFile, templateDir, '/');
-                if (filename == null) {
+                if (filename == null||!filename.contains("/")) {
                     return true;
                 }
-
                 //fowModify:
 //                filename = BladeTemplateUtil.stripTemplateExtensions(filename);
                 filename = clearStr(filename);
@@ -110,6 +109,7 @@ public class ViewCollector {
              */
             private String clearStr(String filename) {
                 filename = filename.substring(0, filename.length() - ".html".length());
+                //如果没有module
                 String prefix = filename.substring(0, curModule.length());
                 if (curModule.equals(prefix)) {
                     int len = filename.length();
