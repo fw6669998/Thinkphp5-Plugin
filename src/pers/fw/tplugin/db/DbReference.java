@@ -43,6 +43,7 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "max"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "min"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "field"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "order"),
     };
 
     private static MethodMatcher.CallToSignature[] QUERYARR = new MethodMatcher.CallToSignature[]{
@@ -52,6 +53,7 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
             new MethodMatcher.CallToSignature("\\think\\Model", "update"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "insert"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "where"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "order"),
     };
 
     private static MethodMatcher.CallToSignature[] QUERYTABLE = new MethodMatcher.CallToSignature[]{
@@ -88,16 +90,10 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                         ) {
                     //列
                     return new ColumnProvider(param);
-                } else if (PsiElementUtil.isFunctionReference(param, "db", 0) || MethodMatcher.getMatchedSignatureWithDepth(param, QUERYTABLE, 0) != null) {
+                } else if (PsiElementUtil.isFunctionReference(param, "db", 0)
+                        || MethodMatcher.getMatchedSignatureWithDepth(param, QUERYTABLE, 0) != null) {
                     //表
                     return new TableProvider(param);
-//                }else if(arr instanceof ArrayAccessExpression){
-//                    String text = arr.getText();
-//                    if(text!=null){
-//                        if(text.startsWith("$where[")||text.startsWith("$params[")){
-//                            return new ColumnProvider(param);
-//                        }
-//                    }
                 } else {
                     //列, 数组里的列
                     PsiElement param1 = null;
