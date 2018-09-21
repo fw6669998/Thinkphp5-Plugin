@@ -35,6 +35,7 @@ public class AppConfigReferences implements GotoCompletionLanguageRegistrar {
             new MethodMatcher.CallToSignature("\\think\\Config", "set"),
             new MethodMatcher.CallToSignature("\\think\\facade\\Config", "get"),
             new MethodMatcher.CallToSignature("\\think\\facade\\Config", "set"),
+            new MethodMatcher.CallToSignature("\\think\\facade\\Config", "has"),
 //            new MethodMatcher.CallToSignature("\\Illuminate\\Config\\Repository", "setParsedKey"),
     };
 
