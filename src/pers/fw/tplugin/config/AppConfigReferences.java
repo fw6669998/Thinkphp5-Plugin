@@ -109,15 +109,16 @@ public class AppConfigReferences implements GotoCompletionLanguageRegistrar {
                         return true;
                     }
 
-                    psiFileTarget.acceptChildren(new ArrayReturnPsiRecursiveVisitor(ConfigFileUtil.matchConfigFile(ConfigKeyProvider.this.getProject(), virtualFile).getKeyPrefix(), new ArrayKeyVisitor() {
-                        @Override
-                        public void visit(String key, PsiElement psiKey, boolean isRootElement) {
-                            if (!isRootElement && key.equals(contents)) {
-                                targets.add(psiKey);
-                            }
-                        }
-                    }));
-
+                    psiFileTarget.acceptChildren(new ArrayReturnPsiRecursiveVisitor(
+                            ConfigFileUtil.matchConfigFile(ConfigKeyProvider.this.getProject(), virtualFile).getKeyPrefix(),
+                            new ArrayKeyVisitor() {
+                                @Override
+                                public void visit(String key, PsiElement psiKey, boolean isRootElement) {
+                                    if (!isRootElement && key.equals(contents)) {
+                                        targets.add(psiKey);
+                                    }
+                                }
+                            }));
                     return true;
                 }
             }, GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.allScope(getProject()), PhpFileType.INSTANCE));

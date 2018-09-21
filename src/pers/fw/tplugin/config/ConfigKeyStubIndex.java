@@ -43,14 +43,11 @@ public class ConfigKeyStubIndex extends FileBasedIndexExtension<String, Void> {
                 //匹配文件
                 ConfigFileUtil.ConfigFileMatchResult result = ConfigFileUtil.matchConfigFile(fileContent.getProject(), fileContent.getFile());
 
-                // pers.fw.tplugin.config/app.php
-                // pers.fw.tplugin.config/testing/app.php
                 if (result.matches()) {
                     psiFile.acceptChildren(new ArrayReturnPsiRecursiveVisitor(result.getKeyPrefix(), new ArrayKeyVisitor() {
                         @Override
                         public void visit(String key, PsiElement psiKey, boolean isRootElement) {
                             if (!isRootElement) {
-//                                Tool.log("key:" + key);
                                 map.put(key, null);
                             }
                         }
