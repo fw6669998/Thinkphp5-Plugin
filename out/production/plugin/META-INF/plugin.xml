@@ -5,7 +5,7 @@
     <vendor url="https://github.com/fw6669998/Thinkphp5-Plugin">Source code and tutorials/源码及教程</vendor>
     <description><![CDATA[
       <p>View, Configuration, Routing, Database, Model Intelligent Tips and Jumps (shortcut keys F3 or f12), and Model Function return type analysis for ThinkPHP 5.0</p>
-      <p>用于thinkphp5.0的视图,配置,路由,数据库,模型智能提示和跳转(快捷键F3或F12),及模型函数(model)返回类型分析</p>
+      <p>用于thinkphp5.0的视图,配置,路由,数据库,模型智能提示和跳转(快捷键Ctrl+B),及模型函数(model)返回类型分析</p>
       <p> </p>
     ]]></description>
     <change-notes><![CDATA[

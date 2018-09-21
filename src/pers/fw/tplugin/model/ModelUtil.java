@@ -18,7 +18,7 @@ public class ModelUtil {
         }
         Matcher matcher = modelFilePattern.matcher(path);
         if (matcher.matches()) {
-            return matcher.group(2);
+            return matcher.group(1)+"/"+matcher.group(2);
         } else {
             return null;
         }

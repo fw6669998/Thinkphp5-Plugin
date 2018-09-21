@@ -24,6 +24,7 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.fw.tplugin.util.PsiElementUtil;
+import pers.fw.tplugin.util.Util;
 
 import java.util.*;
 
@@ -70,7 +71,9 @@ public class ModelReference implements GotoCompletionLanguageRegistrar {
             final Collection<LookupElement> lookupElements = new ArrayList<>();
             CollectProjectUniqueKeys ymlProjectProcessor = new CollectProjectUniqueKeys(getProject(), ModelStubIndex.KEY);
             FileBasedIndex.getInstance().processAllKeys(ModelStubIndex.KEY, ymlProjectProcessor, getProject());
+            String curModule = Util.getCurTpModuleName(getElement()) + "/";
             for (String key : ymlProjectProcessor.getResult()) {    //从ymlProjectProcessor中获取结果
+                if (key.startsWith(curModule)) key = key.replace(curModule, "");
                 lookupElements.add(LookupElementBuilder.create(key).withIcon(LaravelIcons.TEMPLATE_CONTROLLER_LINE_MARKER));
             }
             return lookupElements;
@@ -82,11 +85,11 @@ public class ModelReference implements GotoCompletionLanguageRegistrar {
 //            return super.getPsiTargets(psiElement, offset, editor);
             final Set<PsiElement> targets = new HashSet<>();
 
-            final String contents = psiElement.getContents();
+            String contents = psiElement.getContents();
             if (StringUtils.isBlank(contents)) {
                 return targets;
             }
-
+            if (!contents.contains("/")) contents = Util.getCurTpModuleName(getElement()) + "/" + contents;
             FileBasedIndex.getInstance().getFilesWithKey(ModelStubIndex.KEY, new HashSet<>(Collections.singletonList(contents)),
                     new Processor<VirtualFile>() {
                         @Override
@@ -95,17 +98,6 @@ public class ModelReference implements GotoCompletionLanguageRegistrar {
                                 PsiFile psiFileTarget = PsiManager.getInstance(ModelReference.ModelProvider.this.getProject()).findFile(virtualFile);
                                 targets.add(psiFileTarget);
                             }
-
-//                    psiFileTarget.acceptChildren(new PhpControllerVisitor(RouteUtil.matchControllerFile(ModelReference.ModelProvider.this.getProject(), virtualFile).getKeyPrefix(),
-//                            new ArrayKeyVisitor() {
-//                                @Override
-//                                public void visit(String key, PsiElement psiKey, boolean isRootElement) {
-//                                    if (!isRootElement && key.equals(contents)) {
-//                                        targets.add(psiKey);
-//                                    }
-//                                }
-//                            }));
-
                             return true;
                         }
                     }, GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.allScope(getProject()), PhpFileType.INSTANCE));
