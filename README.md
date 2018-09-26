@@ -38,7 +38,6 @@ thinkPhp5 plugin
     
     提示方法model(),Loader::model(),
     使用model()方法会对分析返回值类型进行赋给变量,最终类型为实际模型类型,而不是Model类型
-    支持同模块model目录下的模型,
 ![img](https://github.com/fw6669998/Thinkphp5-Plugin/blob/master/img/model.gif)
 
 数据库
