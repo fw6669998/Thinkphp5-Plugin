@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.fw.tplugin.model.ModelStubIndex;
 import pers.fw.tplugin.util.MethodMatcher;
+import pers.fw.tplugin.util.Util;
 
 import java.util.*;
 
@@ -114,13 +115,8 @@ public class RouterReference implements GotoCompletionLanguageRegistrar {
 
             //忽略大小写
             Collection<String> allKeys = FileBasedIndex.getInstance().getAllKeys(RouteValStubIndex.KEY, getElement().getProject());
-            for (String item : allKeys) {
-                if (item.toLowerCase().equals(contents.toLowerCase())) {
-                    contents = item;
-                    break;
-                }
-            }
-            final String contents1 = contents;
+
+            final String contents1 = Util.getKeyWithCase(allKeys, contents);
 
             FileBasedIndex.getInstance().getFilesWithKey(RouteValStubIndex.KEY, new HashSet<>(Collections.singletonList(contents1)), new Processor<VirtualFile>() {
                 @Override

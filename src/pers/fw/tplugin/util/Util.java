@@ -1,5 +1,6 @@
 package pers.fw.tplugin.util;
 
+import com.intellij.util.indexing.FileBasedIndex;
 import pers.fw.tplugin.beans.Bean;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -8,6 +9,7 @@ import com.jetbrains.php.lang.psi.elements.Method;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.impl.PhpClassImpl;
+import pers.fw.tplugin.router.RouteValStubIndex;
 
 import java.util.Collection;
 import java.util.Set;
@@ -18,14 +20,14 @@ public class Util {
     public static PhpClass getInstanseClass(Project project, MethodReference methodRef) {
         Set<String> types = methodRef.getDeclaredType().getTypes();
         if (types.size() == 0) return null;
-        String classType=null;
-        for(String type : types){
-            if(type.contains("\\model\\")){
-                classType=type;
+        String classType = null;
+        for (String type : types) {
+            if (type.contains("\\model\\")) {
+                classType = type;
                 break;
             }
         }
-        if(classType==null)return null;
+        if (classType == null) return null;
         String classFQN = classType.substring(classType.indexOf("\\"), classType.indexOf("."));
         Collection<PhpClass> classesByFQN = PhpIndex.getInstance(project).getClassesByFQN(classFQN);
         if (classesByFQN.size() == 0) return null;
@@ -96,5 +98,19 @@ public class Util {
             return split[2];
         }
         return "xxx";
+    }
+
+    public static String getKeyWithCase(Collection<String> allKeys, String key) {
+        for (String item : allKeys) {
+            if (item.equals(key)) {
+                return item;
+            }
+        }
+        for (String item : allKeys) {
+            if (item.toLowerCase().equals(key.toLowerCase())) {
+                return item;
+            }
+        }
+        return key;
     }
 }

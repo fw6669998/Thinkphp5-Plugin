@@ -94,12 +94,9 @@ public class ModelReference implements GotoCompletionLanguageRegistrar {
 
             //忽略大小写
             Collection<String> allKeys = FileBasedIndex.getInstance().getAllKeys(ModelStubIndex.KEY, getElement().getProject());
-            for (String item : allKeys) {
-                if (item.toLowerCase().equals(contents.toLowerCase())) {
-                    contents = item;
-                    break;
-                }
-            }
+
+            contents = Util.getKeyWithCase(allKeys, contents);
+
             FileBasedIndex.getInstance().getFilesWithKey(ModelStubIndex.KEY, new HashSet<>(Collections.singletonList(contents)),
                     new Processor<VirtualFile>() {
                         @Override

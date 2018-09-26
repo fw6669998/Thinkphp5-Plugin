@@ -25,7 +25,7 @@
     -->
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
-        <completion.contributor language="any" implementationClass="pers.fw.tplugin.main.Completer"/>
+        <completion.contributor language="PHP" implementationClass="pers.fw.tplugin.main.Completer"/>
         <gotoDeclarationHandler implementation="pers.fw.tplugin.main.GotoHandler"/>
         <fileBasedIndex implementation="pers.fw.tplugin.config.ConfigKeyStubIndex"/>
         <fileBasedIndex implementation="pers.fw.tplugin.router.RouteValStubIndex"/>
