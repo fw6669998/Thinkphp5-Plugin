@@ -9,6 +9,7 @@ import com.jetbrains.php.lang.psi.elements.ArrayHashElement;
 import com.jetbrains.php.lang.psi.elements.PhpReturn;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.apache.commons.lang.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -70,13 +71,12 @@ public class ArrayReturnPsiRecursiveVisitor extends PsiRecursiveElementWalkingVi
                 myContext.add(((StringLiteralExpression) arrayKey).getContents());
                 String keyName = StringUtils.join(myContext, ".");
 
-                if (arrayValue instanceof ArrayCreationExpression) {    //值是数组创建值
-                    arrayKeyVisitor.visit(keyName, arrayKey, true);
+                if (arrayValue instanceof ArrayCreationExpression) {
+                    arrayKeyVisitor.visit(keyName, arrayKey, false); //数组键也收录
                     collectConfigKeys((ArrayCreationExpression) arrayValue, arrayKeyVisitor, myContext);
                 } else {
                     arrayKeyVisitor.visit(keyName, arrayKey, false);
                 }
-
             }
         }
 
