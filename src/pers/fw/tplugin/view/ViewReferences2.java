@@ -22,6 +22,7 @@ import pers.fw.tplugin.inter.GotoCompletionRegistrarParameter;
 import pers.fw.tplugin.util.MethodMatcher;
 import pers.fw.tplugin.util.PsiElementUtil;
 import pers.fw.tplugin.util.PsiElementUtils;
+import pers.fw.tplugin.util.Util;
 import pers.fw.tplugin.view.dict.TemplatePath;
 
 import java.util.ArrayList;
@@ -32,8 +33,8 @@ import java.util.Collections;
 public class ViewReferences2 implements GotoCompletionLanguageRegistrar {
     private static MethodMatcher.CallToSignature[] VIEWS = new MethodMatcher.CallToSignature[]{
             new MethodMatcher.CallToSignature("\\think\\View", "fetch"),
-            new MethodMatcher.CallToSignature("\\think\\GotoController", "fetch"),
-            new MethodMatcher.CallToSignature("\\think\\GotoController", "display"),
+            new MethodMatcher.CallToSignature("\\think\\Controller", "fetch"),
+            new MethodMatcher.CallToSignature("\\think\\Controller", "display"),
     };
 
     @Override
@@ -64,14 +65,17 @@ public class ViewReferences2 implements GotoCompletionLanguageRegistrar {
     }
 
     public boolean handlePath(PsiElement psiElement) {
-        String application = "application";
-        String projectPath = psiElement.getProject().getBasePath();//"D:\\project2\\test";
-        String currentFilePath = psiElement.getContainingFile().getVirtualFile().getPath(); //"D:\\project2\\test\\application\\index\\controller\\Index.php";
-        String[] arr = currentFilePath.replace(projectPath, "").split("/");
-        if (arr.length < 4 || !arr[1].equals(application)) {
-            return false;
-        }
-        String moduleName = arr[2];
+        // todo ensure base dir
+//        String application = "application";
+//        String projectPath = psiElement.getProject().getBasePath();//"D:\\project2\\test";
+//        String currentFilePath = psiElement.getContainingFile().getVirtualFile().getPath(); //"D:\\project2\\test\\application\\index\\controller\\Index.php";
+//        String[] arr = currentFilePath.replace(projectPath, "").split("/");
+//        if (arr.length < 4 || !arr[1].equals(application)) {
+//                return false;
+//        }
+        String application = Util.getApplicationDir(psiElement);
+//        String moduleName = arr[2];
+        String moduleName = Util.getCurTpModuleName(psiElement);
         ViewCollector.DEFAULT_TEMPLATE_PATH = new TemplatePath[]{new TemplatePath(application + "/" + moduleName + "/view", false)};
         ViewCollector.curModule = moduleName;
         return true;
@@ -122,6 +126,16 @@ public class ViewReferences2 implements GotoCompletionLanguageRegistrar {
                     contents = method.getName();
             }
 
+//            String view = getProject().getBaseDir() + "/" + Util.getApplicationDir(psiElement) + "/" + Util.getCurTpModuleName(psiElement) + "/" + "view";
+//            if (contents.indexOf("/") != -1) {  // index/test
+//                view += "/" + contents;
+//            } else if ("".equals(contents)) {   //
+////                获取当前文件
+//                view += "/" + Util.getCurFileName(psiElement) + "/" + Util.getMethod(psiElement);
+//            } else {                            // test
+//                view += "/" + Util.getCurFileName(psiElement) + "/" + contents;
+//            }
+
             // select position of click event
             int caretOffset = offset - psiElement.getTextRange().getStartOffset();
 
@@ -131,9 +145,9 @@ public class ViewReferences2 implements GotoCompletionLanguageRegistrar {
             ));
 
             // @TODO: no filesystem access in test; fake item
-            if ("test_view".equals(contents) && ApplicationManager.getApplication().isUnitTestMode()) {
-                targets.add(PsiManager.getInstance(getProject()).findDirectory(getProject().getBaseDir()));
-            }
+//            if ("test_view".equals(contents) && ApplicationManager.getApplication().isUnitTestMode()) {
+//                targets.add(PsiManager.getInstance(getProject()).findDirectory(getProject().getBaseDir()));
+//            }
 
             return targets;
         }

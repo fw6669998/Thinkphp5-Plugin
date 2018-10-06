@@ -12,20 +12,21 @@ import com.jetbrains.php.lang.psi.elements.impl.PhpClassImpl;
 import java.util.Collection;
 import java.util.Set;
 
-public class Util {
+public class
+Util {
 
     //获取当前引用变量的类
     public static PhpClass getInstanseClass(Project project, MethodReference methodRef) {
         Set<String> types = methodRef.getDeclaredType().getTypes();
         if (types.size() == 0) return null;
-        String classType=null;
-        for(String type : types){
-            if(type.contains("\\model\\")){
-                classType=type;
+        String classType = null;
+        for (String type : types) {
+            if (type.contains("\\model\\")) {
+                classType = type;
                 break;
             }
         }
-        if(classType==null)return null;
+        if (classType == null) return null;
         String classFQN = classType.substring(classType.indexOf("\\"), classType.indexOf("."));
         Collection<PhpClass> classesByFQN = PhpIndex.getInstance(project).getClassesByFQN(classFQN);
         if (classesByFQN.size() == 0) return null;
@@ -79,17 +80,12 @@ public class Util {
         }
     }
 
+
+    /**
+     * @param psiElement
+     * @return 当前的模型目录; 根据类名获取
+     */
     public static String getCurTpModuleName(PsiElement psiElement) {
-//        String path = element.getContainingFile().getVirtualFile().getPath();
-//        int application = path.lastIndexOf("application");
-//        if (application != -1) {
-//            String substring = path.substring(application, path.length());
-//            String[] split = substring.split("/");
-//            if (split.length > 1) {
-//                return split[1];
-//            }
-//        }
-//        return "xxx";
         String fqn = getPhpClass(psiElement).getFQN();
         String[] split = fqn.split("\\\\");
         if (split.length > 2) {
@@ -97,4 +93,35 @@ public class Util {
         }
         return "xxx";
     }
+
+    /**
+     * @return application的目录, 相对目录, 相对于项目的目录
+     */
+    public static String getApplicationDir(PsiElement psiElement) {
+        String application = "application";
+        String projectPath = psiElement.getProject().getBasePath();//"D:\\project2\\test";
+//        String currentFilePath = psiElement.getContainingFile().getVirtualFile().getPath(); //"D:\\project2\\test\\application\\index\\controller\\Index.php";
+        String currentFilePath = psiElement.getContainingFile().getVirtualFile().getPath(); //"D:\\project2\\test\\project\\application\\index\\controller\\Index.php";
+        String[] arr = currentFilePath.replace(projectPath, "").split("/"); // project,application,index,xxx
+        StringBuilder app = new StringBuilder();
+
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i].equals(application)) {
+                for (int j = 0; j < i; j++) {
+                    app.append(arr[j]).append("/");
+                }
+                app.append(application);
+            }
+        }
+        return app.toString();
+    }
+
+    /**
+     * @param psiElement
+     * @return 当前文件名
+     */
+    public static String getCurFileName(PsiElement psiElement) {
+        return psiElement.getContainingFile().getVirtualFile().getName();
+    }
+
 }

@@ -81,18 +81,20 @@ public class ViewCollector {
         VfsUtil.visitChildrenRecursively(templateDir, new VirtualFileVisitor() {
             @Override
             public boolean visitFile(@NotNull VirtualFile virtualFile) {
-                if (virtualFile.isDirectory() || !isTemplateFile(virtualFile)) {
+//                if (virtualFile.isDirectory() || !isTemplateFile(virtualFile)) {
+                //修改, 不匹配后缀,view下的文件全为视图文件
+                if (virtualFile.isDirectory()) {
                     return true;
                 }
 
                 String filename = VfsUtil.getRelativePath(virtualFile, templateDir, '/');
-                if (filename == null||!filename.contains("/")) {
+                if (filename == null || !filename.contains("/")) {
                     return true;
                 }
                 //fowModify:
 //                filename = BladeTemplateUtil.stripTemplateExtensions(filename);
-                filename = clearStr(filename);
-
+//                filename = clearStr(filename);
+                filename = filename.substring(0, filename.lastIndexOf("."));//去掉后缀
                 String namespace = templatePath.getNamespace();
                 if (namespace != null && StringUtils.isNotBlank(namespace)) {
                     visitor.visit(virtualFile, namespace + "::" + filename);
@@ -126,7 +128,10 @@ public class ViewCollector {
 
                 String extension = virtualFile.getExtension();
 //                if (extension != null && (extension.equalsIgnoreCase("php") || extension.equalsIgnoreCase("twig"))) {
-                if (extension != null && (extension.equalsIgnoreCase("html"))) {
+                if (extension != null && (extension.equalsIgnoreCase("html")
+                        || extension.equalsIgnoreCase("php")
+                        || extension.equalsIgnoreCase("tpl")
+                )) {
                     return true;
                 }
 

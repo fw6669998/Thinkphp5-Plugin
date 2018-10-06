@@ -19,10 +19,11 @@ public class RouteUtil {
     public static Boolean isRouteFile(PsiFile file) {
         //规约: 在application 路径下,文件名为route或xxx route xxx的文件
         String name = file.getName();
-        Project project = file.getProject();
-        String replace = name.replace(project.getBasePath() + "application/", "").replace(".php", "");
-        String route = replace.toLowerCase();
-        if (route.contains("/") || !route.contains("route")) {
+//        Project project = file.getProject();
+//        String replace = name.replace(project.getBasePath() + "application/", "").replace(".php", "");
+//        String route = replace.toLowerCase();
+//        if (route.contains("/") || !route.contains("route")) {
+        if (name.toLowerCase().contains("route")) {
             return false;
         }
         return true;
@@ -51,10 +52,7 @@ public class RouteUtil {
     public static ControllerFileMatchResult matchControllerFile(Project project, VirtualFile virtualFile) {
         String path = virtualFile.getPath();
         String projectPath = project.getBaseDir().getPath();
-
-        if (path.startsWith(projectPath)) {
-            path = path.substring(projectPath.length());
-        }
+        path = path.substring(projectPath.length());
         Matcher matcher = controllerFilePattern.matcher(path);
         if (matcher.matches()) {
             String prefix1 = matcher.group(1);
