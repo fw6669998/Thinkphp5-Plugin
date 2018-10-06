@@ -124,4 +124,19 @@ Util {
         return psiElement.getContainingFile().getVirtualFile().getName();
     }
 
+
+    public static String getKeyWithCase(Collection<String> allKeys, String key) {
+        for (String item : allKeys) {
+            if (item.equals(key)) {
+                return item;
+            }
+        }
+        for (String item : allKeys) {
+            if (item.toLowerCase().equals(key.toLowerCase())) {
+                return item;
+            }
+        }
+        return key;
+    }
+
 }
