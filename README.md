@@ -5,8 +5,8 @@ thinkPhp5 plugin
 
 基于[Haehnchen/idea-php-laravel-plugin](https://github.com/Haehnchen/idea-php-laravel-plugin)
 
-用于thinkphp5.0的视图,配置,路由,数据库,模型智能提示和跳转(快捷键Ctrl+B或者Ctrl+click), 及模型函数(model)返回类型分析,
-大小写敏感
+用于thinkphp5.0的视图,配置,路由,数据库,模型智能提示和跳转(快捷键Ctrl+B或者Ctrl+click), 及模型函数(model)返回类型分析
+
 
 ## 安装
 
@@ -38,7 +38,6 @@ thinkPhp5 plugin
     
     提示方法model(),Loader::model(),
     使用model()方法会对分析返回值类型进行赋给变量,最终类型为实际模型类型,而不是Model类型
-    支持同模块model目录下的模型,
 ![img](https://github.com/fw6669998/Thinkphp5-Plugin/blob/master/img/model.gif)
 
 数据库

@@ -24,6 +24,7 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.fw.tplugin.util.PsiElementUtil;
+import pers.fw.tplugin.util.Tool;
 import pers.fw.tplugin.util.Util;
 
 import java.util.*;
@@ -90,6 +91,12 @@ public class ModelReference implements GotoCompletionLanguageRegistrar {
                 return targets;
             }
             if (!contents.contains("/")) contents = Util.getCurTpModuleName(getElement()) + "/" + contents;
+
+            //忽略大小写
+            Collection<String> allKeys = FileBasedIndex.getInstance().getAllKeys(ModelStubIndex.KEY, getElement().getProject());
+
+            contents = Util.getKeyWithCase(allKeys, contents);
+
             FileBasedIndex.getInstance().getFilesWithKey(ModelStubIndex.KEY, new HashSet<>(Collections.singletonList(contents)),
                     new Processor<VirtualFile>() {
                         @Override

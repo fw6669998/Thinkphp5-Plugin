@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>pers.fw.tplugin</id>
     <name>Thinkphp5 Plugin</name>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <vendor url="https://github.com/fw6669998/Thinkphp5-Plugin">Source code and tutorials/源码及详细说明</vendor>
     <description><![CDATA[
       <p>View, Configuration, Routing, Database, Model Intelligent Tips and Jumps (shortcut keys F3 or f12), and Model Function return type analysis for ThinkPHP 5.0</p>
@@ -25,7 +25,7 @@
     -->
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
-        <completion.contributor language="any" implementationClass="pers.fw.tplugin.main.Completer"/>
+        <completion.contributor language="PHP" implementationClass="pers.fw.tplugin.main.Completer"/>
         <gotoDeclarationHandler implementation="pers.fw.tplugin.main.GotoHandler"/>
         <fileBasedIndex implementation="pers.fw.tplugin.config.ConfigKeyStubIndex"/>
         <fileBasedIndex implementation="pers.fw.tplugin.router.RouteValStubIndex"/>

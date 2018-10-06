@@ -24,7 +24,9 @@ import pers.fw.tplugin.inter.GotoCompletionRegistrarParameter;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pers.fw.tplugin.model.ModelStubIndex;
 import pers.fw.tplugin.util.MethodMatcher;
+import pers.fw.tplugin.util.Util;
 
 import java.util.*;
 
@@ -106,11 +108,17 @@ public class RouterReference implements GotoCompletionLanguageRegistrar {
 
             final Set<PsiElement> targets = new HashSet<>();
 
-            final String contents = element.getContents();
+            String contents = element.getContents();
             if (StringUtils.isBlank(contents)) {
                 return targets;
             }
-            FileBasedIndex.getInstance().getFilesWithKey(RouteValStubIndex.KEY, new HashSet<>(Collections.singletonList(contents)), new Processor<VirtualFile>() {
+
+            //忽略大小写
+            Collection<String> allKeys = FileBasedIndex.getInstance().getAllKeys(RouteValStubIndex.KEY, getElement().getProject());
+
+            final String contents1 = Util.getKeyWithCase(allKeys, contents);
+
+            FileBasedIndex.getInstance().getFilesWithKey(RouteValStubIndex.KEY, new HashSet<>(Collections.singletonList(contents1)), new Processor<VirtualFile>() {
                 @Override
                 public boolean process(VirtualFile virtualFile) {
                     PsiFile psiFileTarget = PsiManager.getInstance(RouteProvider.this.getProject()).findFile(virtualFile);
@@ -120,13 +128,13 @@ public class RouterReference implements GotoCompletionLanguageRegistrar {
 
                     psiFileTarget.acceptChildren(new PhpControllerVisitor(RouteUtil.matchControllerFile(RouteProvider.this.getProject(), virtualFile).getKeyPrefix(),
                             new ArrayKeyVisitor() {
-                        @Override
-                        public void visit(String key, PsiElement psiKey, boolean isRootElement) {
-                            if (!isRootElement && key.equals(contents)) {
-                                targets.add(psiKey);
-                            }
-                        }
-                    }));
+                                @Override
+                                public void visit(String key, PsiElement psiKey, boolean isRootElement) {
+                                    if (!isRootElement && key.equals(contents1)) {
+                                        targets.add(psiKey);
+                                    }
+                                }
+                            }));
 
                     return true;
                 }
