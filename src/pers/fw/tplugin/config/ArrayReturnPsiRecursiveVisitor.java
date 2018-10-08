@@ -9,6 +9,7 @@ import com.jetbrains.php.lang.psi.elements.ArrayHashElement;
 import com.jetbrains.php.lang.psi.elements.PhpReturn;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.apache.commons.lang.StringUtils;
+import pers.fw.tplugin.util.Tool;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,8 +34,10 @@ public class ArrayReturnPsiRecursiveVisitor extends PsiRecursiveElementWalkingVi
 //        if (element instanceof PhpReturn) {
 //            visitPhpReturn((PhpReturn) element);
 //        }
-        if (element instanceof ArrayCreationExpression) {
+
+        if (element instanceof ArrayCreationExpression && !(element.getParent().getParent() instanceof ArrayHashElement)) {   //如果是创建数组会进行收录, 如果是数组中的数组不能满足条件
             collectConfigKeys((ArrayCreationExpression) element, this.arrayKeyVisitor, fileNameWithoutExtension);
+            Tool.printPsiTree(element.getParent().getParent());
         }
 
         super.visitElement(element);

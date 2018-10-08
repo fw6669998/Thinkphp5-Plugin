@@ -5,10 +5,15 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.lang.Language;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.PsiManager;
+import com.intellij.psi.impl.PsiFileFactoryImpl;
+import com.intellij.psi.impl.file.PsiFileImplUtil;
 import com.jetbrains.php.lang.PhpLanguage;
 import com.jetbrains.php.lang.psi.elements.Method;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
@@ -25,6 +30,9 @@ import pers.fw.tplugin.util.PsiElementUtils;
 import pers.fw.tplugin.util.Util;
 import pers.fw.tplugin.view.dict.TemplatePath;
 
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -126,23 +134,45 @@ public class ViewReferences2 implements GotoCompletionLanguageRegistrar {
                     contents = method.getName();
             }
 
-//            String view = getProject().getBaseDir() + "/" + Util.getApplicationDir(psiElement) + "/" + Util.getCurTpModuleName(psiElement) + "/" + "view";
-//            if (contents.indexOf("/") != -1) {  // index/test
-//                view += "/" + contents;
-//            } else if ("".equals(contents)) {   //
-////                获取当前文件
-//                view += "/" + Util.getCurFileName(psiElement) + "/" + Util.getMethod(psiElement);
-//            } else {                            // test
-//                view += "/" + Util.getCurFileName(psiElement) + "/" + contents;
-//            }
+            String viewDir = getProject().getBaseDir() + Util.getApplicationDir(psiElement) + "/" + Util.getCurTpModuleName(psiElement) + "/" + "view" + "/";
+            String className = "";
+            String methodName = "";
 
-            // select position of click event
-            int caretOffset = offset - psiElement.getTextRange().getStartOffset();
+            if (contents.contains("/")) {  // index/test
+                String[] split = contents.split("/");
+                className = split[0];
+                methodName = split[1];
+            } else if ("".equals(contents)) {   //
+                className = Util.getPhpClass(psiElement).getName().toLowerCase();
+                methodName = Util.getMethod(psiElement).getName();
+            } else {                            // test
+                className = Util.getPhpClass(psiElement).getName().toLowerCase();
+                methodName = contents;
+            }
 
-            Collection<PsiElement> targets = new ArrayList<>(PsiElementUtils.convertVirtualFilesToPsiFiles(
-                    getProject(),
-                    TemplateUtil.resolveTemplate(getProject(), contents, caretOffset)
-            ));
+            String dir = viewDir + className;
+            dir = dir.replace("file:/", "");
+            File file = new File(dir);
+            File[] files = file.listFiles();
+            Collection<VirtualFile> virFiles = new ArrayList<>();
+            if (files != null)
+                for (File f : files) {
+                    if (f.isFile()) {
+                        if (f.getName().toLowerCase().startsWith(methodName.toLowerCase() + ".")) {
+                            //todo goto f
+                            VirtualFile fileByIoFile = VfsUtil.findFileByIoFile(f, false);
+                            ((ArrayList<VirtualFile>) virFiles).add(fileByIoFile);
+                        }
+                    }
+                }
+
+            Collection<PsiElement> targets = new ArrayList<>(PsiElementUtils.convertVirtualFilesToPsiFiles(getProject(), virFiles));
+
+//            int caretOffset = offset - psiElement.getTextRange().getStartOffset();
+//            Collection<PsiElement> targets = new ArrayList<>(PsiElementUtils.convertVirtualFilesToPsiFiles(
+//                    getProject(),
+//                    TemplateUtil.resolveTemplate(getProject(), contents, caretOffset)
+//            ));
 
             // @TODO: no filesystem access in test; fake item
 //            if ("test_view".equals(contents) && ApplicationManager.getApplication().isUnitTestMode()) {

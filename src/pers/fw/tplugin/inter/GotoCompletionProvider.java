@@ -5,6 +5,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -33,7 +34,7 @@ public abstract class GotoCompletionProvider implements GotoCompletionProviderIn
     }
 
     @NotNull
-    public Collection<? extends PsiElement> getPsiTargets(@NotNull PsiElement psiElement, int offset, @NotNull Editor editor) {
+    public Collection<? extends PsiElement> getPsiTargets(@NotNull PsiElement psiElement, int offset, @NotNull Editor editor){
         return Collections.emptyList();
     }
 }

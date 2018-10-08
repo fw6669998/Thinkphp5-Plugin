@@ -6,6 +6,7 @@ import com.intellij.psi.PsiElement;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
 
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Collections;
 
