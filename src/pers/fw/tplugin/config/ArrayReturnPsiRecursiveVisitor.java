@@ -36,8 +36,10 @@ public class ArrayReturnPsiRecursiveVisitor extends PsiRecursiveElementWalkingVi
 //        }
 
         if (element instanceof ArrayCreationExpression && !(element.getParent().getParent() instanceof ArrayHashElement)) {   //如果是创建数组会进行收录, 如果是数组中的数组不能满足条件
+//        if (element instanceof ArrayCreationExpression) {
             collectConfigKeys((ArrayCreationExpression) element, this.arrayKeyVisitor, fileNameWithoutExtension);
-            Tool.printPsiTree(element.getParent().getParent());
+//            Tool.printPsiTree(element.getParent().getParent());
+//            element = element.getNextSibling();
         }
 
         super.visitElement(element);

@@ -20,21 +20,21 @@ public class Tool {
 
     //打印当前psiElement,及它的子类
     public static void printPsiTree(PsiElement element) {
-        if (element == null) {
-            return;
-        }
-        level++;
-        int i = 0;
-        PsiElement[] elements = element.getChildren();
-        for (PsiElement item : elements) {
-            i++;
-            printeIndent("   ", level);
-            String s = item.getClass().getSimpleName();
-            //level+"."+i+":"+
-            System.out.println(level + " " + s);
-            printPsiTree(item);
-        }
-        level--;
+//        if (element == null) {
+//            return;
+//        }
+//        level++;
+//        int i = 0;
+//        PsiElement[] elements = element.getChildren();
+//        for (PsiElement item : elements) {
+//            i++;
+//            printeIndent("   ", level);
+//            String s = item.getClass().getSimpleName();
+//            //level+"."+i+":"+
+//            System.out.println(level + " " + s);
+//            printPsiTree(item);
+//        }
+//        level--;
     }
 
     private static int level = 0;
