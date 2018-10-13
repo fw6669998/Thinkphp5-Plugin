@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -82,11 +83,30 @@ public class MyToolWindowFactory implements ToolWindowFactory {
 
             @Override
             public void contentsChanged(@NotNull VirtualFileEvent event) {
-                String fileName = event.getFileName();
                 //todo 判断文件是否是日志文件
                 System.out.println(event.getFileName());
                 //todo 查看新增内容
+                VirtualFile file = event.getFile();
+                String extension = file.getExtension();
+                try {
+                    InputStream inputStream = file.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                    String str="";
+                    while ((str=reader.readLine())!=null){
+                        boolean b = str.startsWith("-");
+                        if(b){
+                            str = reader.readLine();
+                            if(str.startsWith("[ 2")){
+                                //处理时间行:
+                                
+                            }
+                        }
+                    }
 
+                    BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 System.out.println("chage:"+event.getFile());
             }
         });
