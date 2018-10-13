@@ -23,4 +23,5 @@ public class LaravelIcons {
     public static final Icon ROUTE = IconLoader.getIcon("/icons/route.png");
     public static final Icon TRANSLATION = IconLoader.getIcon("/icons/translation.png");
     public static final Icon TEMPLATE_CONTROLLER_LINE_MARKER = IconLoader.getIcon("/icons/controller_line_marker.png");
+    public static final Icon log = IconLoader.getIcon("/runConfigurations/trackTests.png");
 }

@@ -25,11 +25,17 @@
     -->
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
+
         <completion.contributor language="PHP" implementationClass="pers.fw.tplugin.main.Completer"/>
         <gotoDeclarationHandler implementation="pers.fw.tplugin.main.GotoHandler"/>
         <fileBasedIndex implementation="pers.fw.tplugin.config.ConfigKeyStubIndex"/>
         <fileBasedIndex implementation="pers.fw.tplugin.router.RouteValStubIndex"/>
         <fileBasedIndex implementation="pers.fw.tplugin.model.ModelStubIndex"/>
+
+        <!--<toolWindow id="RNConsole" anchor="bottom" factoryClass="pers.fw.tplugin.log.LogView" secondary="false"/>-->
+
+        <toolWindow id="tp5 log" secondary="false" icon="/icons/1.png" anchor="bottom"
+                    factoryClass="pers.fw.tplugin.log.MyToolWindowFactory"/>
     </extensions>
     <extensions defaultExtensionNs="com.jetbrains.php">
         <typeProvider3 implementation="pers.fw.tplugin.main.MyTypeProvider"/>
