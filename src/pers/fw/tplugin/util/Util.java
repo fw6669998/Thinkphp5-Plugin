@@ -139,4 +139,28 @@ Util {
         return key;
     }
 
+    public static boolean isLogFile(String filename) {
+        String ext = filename.substring(filename.lastIndexOf(".") + 1, filename.length());
+        if ("log".equals(ext))
+            return true;
+        else
+            return false;
+    }
+
+    public static String getTimeStr(String str) {
+        //处理时间行:
+        if (str.startsWith("[ 2")) {
+            int start = str.indexOf("[");
+            int end = str.indexOf("]");
+            String timeStr = str.substring(start + 2, end);
+            if (timeStr != null) {
+                timeStr = timeStr.trim();
+                //e: 2018-07-18T12:47:03
+                timeStr = timeStr.substring(0, 19);
+                timeStr = timeStr.replace("T", " ");
+                return timeStr;
+            }
+        }
+        return "";
+    }
 }

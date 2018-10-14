@@ -24,9 +24,9 @@ public class RouteUtil {
 //        String route = replace.toLowerCase();
 //        if (route.contains("/") || !route.contains("route")) {
         if (name.toLowerCase().contains("route")) {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     //判断当前位置是否是route的目录

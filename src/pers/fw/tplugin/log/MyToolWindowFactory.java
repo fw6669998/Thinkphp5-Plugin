@@ -5,15 +5,14 @@ import com.intellij.openapi.vfs.*;
 import com.intellij.openapi.wm.*;
 import com.intellij.ui.content.*;
 import org.jetbrains.annotations.NotNull;
+import pers.fw.tplugin.util.Util;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.*;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * Created by IntelliJ IDEA.
@@ -33,7 +32,7 @@ public class MyToolWindowFactory implements ToolWindowFactory {
     //    private JList list2;
     private JTextPane textPane1;
     private ToolWindow myToolWindow;
-
+    private static String oldTime = "1000";
 
     public MyToolWindowFactory() {
 //        hideToolWindowButton.addActionListener(new ActionListener() {
@@ -67,11 +66,11 @@ public class MyToolWindowFactory implements ToolWindowFactory {
 //            }
 //        });
 //        ArrayList<String> strings = new ArrayList<>();
-        Vector strings = new Vector();
-        strings.addElement("one");
-        strings.addElement("two");
-        strings.addElement("three22222222222223weqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
-        strings.addElement("three22222222222223weqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
+        Vector records = new Vector();
+        records.addElement("one");
+        records.addElement("two");
+        records.addElement("three22222222222223weqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
+        records.addElement("three22222222222223weqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
 
         textPane1.setText("test haha");
 //        VirtualFileSystem.addVirtualFileListener(VirtualFileListener);
@@ -83,31 +82,39 @@ public class MyToolWindowFactory implements ToolWindowFactory {
 
             @Override
             public void contentsChanged(@NotNull VirtualFileEvent event) {
-                //todo 判断文件是否是日志文件
-                System.out.println(event.getFileName());
+                //判断文件是否是日志文件
+                if (!Util.isLogFile(event.getFileName()))
+                    return;
                 //todo 查看新增内容
                 VirtualFile file = event.getFile();
-                String extension = file.getExtension();
                 try {
                     InputStream inputStream = file.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                    String str="";
-                    while ((str=reader.readLine())!=null){
+                    String str = "";
+                    while ((str = reader.readLine()) != null) {
                         boolean b = str.startsWith("-");
-                        if(b){
-                            str = reader.readLine();
-                            if(str.startsWith("[ 2")){
-                                //处理时间行:
-                                
+                        if (b) {
+                            String timeStr = Util.getTimeStr(reader.readLine());
+                            if (oldTime == null || timeStr.compareTo(oldTime) > 0) {
+
+                                String addStr;
+                                while ((addStr = reader.readLine()) != null) {
+                                    if (addStr.startsWith("-")) {
+                                        timeStr = Util.getTimeStr(reader.readLine());
+                                        records.addElement("时间: " + timeStr);
+                                    } else {
+                                        records.addElement(addStr);
+                                    }
+                                }
+                                oldTime = timeStr;
                             }
                         }
                     }
-
-                    BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                System.out.println("chage:"+event.getFile());
+                System.out.println("chage:" + event.getFile());
+                list1.setListData(records);
             }
         });
 //        while (true) {
