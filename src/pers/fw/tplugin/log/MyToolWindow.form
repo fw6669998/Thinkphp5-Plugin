@@ -19,12 +19,6 @@
         </properties>
         <border type="none"/>
         <children>
-          <component id="47867" class="javax.swing.JTextPane" binding="textPane1" default-binding="true">
-            <constraints>
-              <splitpane position="right"/>
-            </constraints>
-            <properties/>
-          </component>
           <scrollpane id="a9bee">
             <constraints>
               <splitpane position="left"/>
@@ -32,7 +26,20 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="af843" class="javax.swing.JList" binding="list1" default-binding="true">
+              <component id="73a74" class="javax.swing.JList" binding="list1" default-binding="true">
+                <constraints/>
+                <properties/>
+              </component>
+            </children>
+          </scrollpane>
+          <scrollpane id="a5a02">
+            <constraints>
+              <splitpane position="right"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="c7f8" class="javax.swing.JTextPane" binding="textPane1" default-binding="true">
                 <constraints/>
                 <properties/>
               </component>

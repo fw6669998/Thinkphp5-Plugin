@@ -4,10 +4,13 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.*;
 import com.intellij.openapi.wm.*;
 import com.intellij.ui.content.*;
+import com.intellij.util.ui.Table;
 import org.jetbrains.annotations.NotNull;
 import pers.fw.tplugin.util.Util;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -59,31 +62,21 @@ public class MyToolWindowFactory implements ToolWindowFactory {
     }
 
     public void init() {
-//        list1.add("test", new Component() {
-//            @Override
-//            public String getName() {
-//                return "test name";
-//            }
-//        });
-//        ArrayList<String> strings = new ArrayList<>();
+        String[] columnNames = {"类型1", "类型2", "内容"};
         Vector records = new Vector();
-        records.addElement("one");
-        records.addElement("two");
-        records.addElement("three22222222222223weqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
-        records.addElement("three22222222222223weqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
+//        for (String col : columnNames) {
+////            String[] split = col.split(".");
+//            TableColumn tableColumn = new TableColumn(1, 200);
+//            tableColumn.setHeaderValue(col);
+//            table1.addColumn(tableColumn);
+//        }
 
         textPane1.setText("test haha");
-//        VirtualFileSystem.addVirtualFileListener(VirtualFileListener);
         VirtualFileManager.getInstance().addVirtualFileListener(new VirtualFileListener() {
-//            @Override
-//            public void propertyChanged(@NotNull VirtualFilePropertyEvent event) {
-//                System.out.println("chage:");
-//            }
-
             @Override
             public void contentsChanged(@NotNull VirtualFileEvent event) {
                 //判断文件是否是日志文件
-                if (!Util.isLogFile(event.getFileName()))
+                if (!LogUtil.isLogFile(event.getFileName()))
                     return;
                 //todo 查看新增内容
                 VirtualFile file = event.getFile();
@@ -94,16 +87,21 @@ public class MyToolWindowFactory implements ToolWindowFactory {
                     while ((str = reader.readLine()) != null) {
                         boolean b = str.startsWith("-");
                         if (b) {
-                            String timeStr = Util.getTimeStr(reader.readLine());
+                            String timeStr = LogUtil.getTimeStr(reader.readLine());
                             if (oldTime == null || timeStr.compareTo(oldTime) > 0) {
 
                                 String addStr;
                                 while ((addStr = reader.readLine()) != null) {
                                     if (addStr.startsWith("-")) {
-                                        timeStr = Util.getTimeStr(reader.readLine());
+                                        timeStr = LogUtil.getTimeStr(reader.readLine());
                                         records.addElement("时间: " + timeStr);
+                                        oldTime = timeStr;
                                     } else {
-                                        records.addElement(addStr);
+//                                        String[] content = LogUtil.getContent(addStr);
+//                                        DefaultTableModel model = new DefaultTableModel();
+//                                        model.addRow(content);
+//                                        table1.setModel(model);
+                                        records.addElement(oldTime + " : " + addStr);
                                     }
                                 }
                                 oldTime = timeStr;

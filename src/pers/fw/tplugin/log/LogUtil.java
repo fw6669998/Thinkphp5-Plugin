@@ -27,18 +27,44 @@ public class LogUtil {
     }
 
     //  获取类型1;
-    public static String getType1(String str) {
+    public static String[] getContent(String str) {
+        String[] arr = new String[3];
         String type = "";
-        type = str.substring(1, str.indexOf("]"));
-        return type;
+        int l = str.indexOf("[");
+        int r = str.indexOf("]");
+        if (l != -1 && r != -1 && r > 1)
+            type = str.substring(l + 1, r);
+
+        String type2 = "";
+        int l1 = str.indexOf("] [");
+        int r1 = str.substring(l1 + 3).indexOf("]") + l1 + 3;
+        if (l1 != -1 && r1 != -1 && r1 > l1)
+            type2 = str.substring(l1 + 3, r1);
+
+        String content = "";
+        if (r1 != -1 && l1 != -1)
+            content = str.substring(r1 + 1);
+        else if (r != -1 && r < 5)
+            content = str.substring(r + 1);
+        else
+            content = str;
+
+        arr[0] = type.trim();
+        arr[1] = type2.trim();
+        arr[2] = content;
+        return arr;
     }
 
     //  获取类型2
     public static String getType2(String str) {
-        String type = "";
-        int i = str.indexOf("] [");
-        int i1 = str.substring(i + 3).indexOf("]");
-        type = str.substring(i + 3, i1);
-        return type;
+        String type2 = "";
+        int l1 = str.indexOf("] [");
+        if (l1 != -1) return type2;
+        int r1 = str.substring(l1 + 3).indexOf("]");
+        if (r1 == -1) return type2;
+        type2 = str.substring(l1 + 3, r1);
+        String content = "";
+        content = str.substring(r1 + 1);
+        return type2;
     }
 }
