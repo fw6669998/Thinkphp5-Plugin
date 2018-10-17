@@ -28,10 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.fw.tplugin.util.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 
 public class DbReference implements GotoCompletionLanguageRegistrar {
     private static MethodMatcher.CallToSignature[] QUERY = new MethodMatcher.CallToSignature[]{
@@ -87,7 +84,7 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                 if ((param instanceof StringLiteralExpression && (MethodMatcher.getMatchedSignatureWithDepth(param, QUERY, 0) != null) ||
                         MethodMatcher.getMatchedSignatureWithDepth(param, new MethodMatcher.CallToSignature[]{
                                 new MethodMatcher.CallToSignature("\\think\\db\\Query", "join")}, 1) != null)
-                        ) {
+                ) {
                     //列
                     return new ColumnProvider(param);
                 } else if (PsiElementUtil.isFunctionReference(param, "db", 0)
@@ -132,27 +129,27 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
             if (!(methodRef instanceof MethodReference)) return lookupElements;
 
             //获取方法对象的类
-            int type = 1;
-            String tableName = "";
 //            PsiElement resolve = ((MethodReference) methodRef).resolve();
             //Query类
 //            PhpClassImpl phpClass = Util.getPhpClass(resolve);
+            //获取可能出现的表
+//            List<TableBean> tables= new ArrayList<>();
+            Tables tables = new Tables();
             //Model子类
-            PhpClass phpClass = Util.getInstanseClass(getElement().getProject(), (MethodReference) methodRef);
+            PhpClass phpClass = Util.getInstanseClass(getProject(), (MethodReference) methodRef);  //获取模型类
             if (phpClass != null) {
                 Collection<Field> fields = phpClass.getFields();
                 for (Field item : fields) {
                     if ("name".equals(item.getName())) {
                         String name = item.getDefaultValue().getText();
                         if (name != null && !name.isEmpty() && !"$name".equals(name)) {
-                            tableName = name;
+                            tables.put(DbTableUtil.getTableByName(getProject(), name));
                             break;
                         }
                     } else if ("table".equals(item.getName())) {
                         String name = item.getDefaultValue().getText();//item.getDefaultValuePresentation();
                         if (name != null && !name.isEmpty() && !"$table".equals(name)) {
-                            type = 2;
-                            tableName = name;
+                            tables.put(name);
                             break;
                         }
                     }

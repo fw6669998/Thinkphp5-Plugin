@@ -15,6 +15,13 @@ import pers.fw.tplugin.util.*;
 import java.util.*;
 
 public class DbTableUtil {
+
+    public static String[] getPossibleTables() {
+
+
+        return null;
+    }
+
     //根据模型表获取列,
     public static JBIterable<? extends DasColumn> getColumns(Project project, String table, int type) {
         if (table.isEmpty()) return null;
@@ -46,9 +53,22 @@ public class DbTableUtil {
         return null;
     }
 
-    public static List<Column> getColumns(Project project, String table) {
-        JBIterable<? extends DasTable> tables = getTables(project);
+    public static List<Column> getColumns(Project project, Tables tables) {
+        Map<String, HashSet<String>> tables1 = tables.getTables();
+        for (String table : tables1.keySet()) {
 
+        }
+        return null;
+    }
+
+    public static JBIterable<? extends DasColumn> getColumns(Project project, String table) {
+        if (table == null) return null;
+        JBIterable<? extends DasTable> tables = getTables(project);
+        for (DasTable item : tables) {
+            if (table.equals(item.getName())) {
+                return DasUtil.getColumns(item);
+            }
+        }
         return null;
     }
 
@@ -94,5 +114,23 @@ public class DbTableUtil {
             }
         }, contextTable));
         return alias;
+    }
+
+    public static String getTableByName(Project project, String name) {
+        if (name.isEmpty()) return null;
+        name = name.replace("'", "").replace("\"", "");
+        JBIterable<? extends DasTable> tables = getTables(project);
+        if (tables == null) return null;
+        for (DasTable item : tables) {
+            String tableName = item.getName();
+            if (tableName.contains(name)) {
+                String prefix = tableName.replace(name, "");
+                if (prefix.equals(tableName.substring(0, prefix.length()))) {
+                    if (prefix.indexOf("_") == prefix.length() - 1)
+                        return tableName;
+                }
+            }
+        }
+        return null;
     }
 }
