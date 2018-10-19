@@ -1,5 +1,8 @@
 package pers.fw.tplugin.db;
 
+import com.jetbrains.php.lang.psi.elements.Field;
+import com.jetbrains.php.lang.psi.elements.MethodReference;
+import com.jetbrains.php.lang.psi.elements.PhpClass;
 import pers.fw.tplugin.beans.ArrayMapVisitor;
 import com.intellij.database.model.DasColumn;
 import com.intellij.database.model.DasTable;
@@ -53,14 +56,6 @@ public class DbTableUtil {
         return null;
     }
 
-    public static List<Column> getColumns(Project project, Tables tables) {
-        Map<String, HashSet<String>> tables1 = tables.getTables();
-        for (String table : tables1.keySet()) {
-
-        }
-        return null;
-    }
-
     public static JBIterable<? extends DasColumn> getColumns(Project project, String table) {
         if (table == null) return null;
         JBIterable<? extends DasTable> tables = getTables(project);
@@ -103,17 +98,50 @@ public class DbTableUtil {
 //    }
 
     //    private static final Pattern aliasPattern = Pattern.compile(".*/application/(\\w+)/controller/(\\w+).php$");
-    public static Map<String, String> getAlias(PsiElement element, String contextTable) {
+    //从上下文中获取表
+    public static void collectionTableByContext(PsiElement element, HashSet<String> tables) {
         Map<String, String> alias = new HashMap<>();
         Method method = Util.getMethod(element);
-        if (method == null) return alias;
-        method.acceptChildren(new MethodRefVisitor(new ArrayMapVisitor() {
+        if (method == null) return;
+        method.acceptChildren(new TablesVisitor(new ArrayMapVisitor() {
             @Override
             public void visit(String key, String value) {
-                alias.put(key, value);
+                tables.add(key);
             }
-        }, contextTable));
-        return alias;
+        }, tables));
+        return;
+    }
+
+    //从模型变量中获取表
+    public static void collectionTableByModel(PsiElement psiElement, HashSet<String> tables) {
+        //获取方法对象的类
+//            PsiElement resolve = ((MethodReference) methodRef).resolve();
+        //Query类
+//            PhpClassImpl phpClass = Util.getPhpClass(resolve);
+        //获取可能出现的表
+//            List<TableBean> tables= new ArrayList<>();
+//            Tables tables = new Tables();
+        Project project = psiElement.getProject();
+        //Model子类
+        PhpClass phpClass = Util.getInstanseClass(project, (MethodReference) psiElement);  //获取模型类
+        if (phpClass != null) {
+            Collection<Field> fields = phpClass.getFields();
+            for (Field item : fields) {
+                if ("name".equals(item.getName())) {
+                    String name = item.getDefaultValue().getText();
+                    if (name != null && !name.isEmpty() && !"$name".equals(name)) {
+                        tables.add(DbTableUtil.getTableByName(project, name));
+                        break;
+                    }
+                } else if ("table".equals(item.getName())) {
+                    String name = item.getDefaultValue().getText();//item.getDefaultValuePresentation();
+                    if (name != null && !name.isEmpty() && !"$table".equals(name)) {
+                        tables.add(name);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     public static String getTableByName(Project project, String name) {

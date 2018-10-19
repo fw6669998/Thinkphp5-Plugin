@@ -3,23 +3,14 @@ package pers.fw.tplugin.db;
 import com.intellij.codeInsight.lookup.*;
 import com.intellij.database.model.DasColumn;
 import com.intellij.database.model.DasTable;
-import com.intellij.database.model.PsiColumn;
-import com.intellij.database.psi.DbColumn;
-import com.intellij.database.psi.DbColumnImpl;
-import com.intellij.database.psi.DbPsiManager;
-import com.intellij.database.util.DasUtil;
-import com.intellij.database.util.DbImplUtil;
-import com.intellij.database.util.DbUtil;
 import com.intellij.lang.Language;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiTarget;
 import com.intellij.util.containers.JBIterable;
 import com.jetbrains.php.lang.PhpLanguage;
 import com.jetbrains.php.lang.psi.elements.*;
 import icons.DatabaseIcons;
-import org.apache.velocity.runtime.directive.Foreach;
 import pers.fw.tplugin.inter.GotoCompletionContributor;
 import pers.fw.tplugin.inter.GotoCompletionLanguageRegistrar;
 import pers.fw.tplugin.inter.GotoCompletionProvider;
@@ -134,54 +125,21 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
 //            PhpClassImpl phpClass = Util.getPhpClass(resolve);
             //获取可能出现的表
 //            List<TableBean> tables= new ArrayList<>();
-            Tables tables = new Tables();
-            //Model子类
-            PhpClass phpClass = Util.getInstanseClass(getProject(), (MethodReference) methodRef);  //获取模型类
-            if (phpClass != null) {
-                Collection<Field> fields = phpClass.getFields();
-                for (Field item : fields) {
-                    if ("name".equals(item.getName())) {
-                        String name = item.getDefaultValue().getText();
-                        if (name != null && !name.isEmpty() && !"$name".equals(name)) {
-                            tables.put(DbTableUtil.getTableByName(getProject(), name));
-                            break;
-                        }
-                    } else if ("table".equals(item.getName())) {
-                        String name = item.getDefaultValue().getText();//item.getDefaultValuePresentation();
-                        if (name != null && !name.isEmpty() && !"$table".equals(name)) {
-                            tables.put(name);
-                            break;
-                        }
-                    }
-                }
-            }
+//            Tables tables = new Tables();
+            HashSet<String> tables = new HashSet<>();
+            DbTableUtil.collectionTableByModel(methodRef, tables);
+            DbTableUtil.collectionTableByContext(getElement(), tables); //键为前缀, 值为表
 
-            //上下文表
-            JBIterable<? extends DasColumn> columns = DbTableUtil.getColumns(getElement().getProject(), tableName, type);
-            if (columns != null) {
-                for (DasColumn item : columns) {
-                    String comment = "";
-                    if (item.getComment() != null)
-                        comment = item.getComment();
-                    lookupElements.add(LookupElementBuilder.create(item.getName()).withTailText("   " + comment).withIcon(DatabaseIcons.Col));
-                }
-            }
-
-            //join和alias表
-            Map<String, String> alias = DbTableUtil.getAlias(getElement(), tableName); //键为前缀, 值为表
-            if (alias != null) {
-                for (String key : alias.keySet()) {
-                    JBIterable<? extends DasColumn> aliasColumns = DbTableUtil.getColumns(getElement().getProject(), alias.get(key), 2);
-                    if (aliasColumns != null) {
-                        for (DasColumn item : aliasColumns) {
-                            String comment = "";
-                            if (item.getComment() != null)
-                                comment = item.getComment();
-                            lookupElements.add(LookupElementBuilder.create(key + "." + item.getName())
-                                    .withTailText("   " + comment).withIcon(DatabaseIcons.Col));
-                        }
+            //获取列
+            for (String table : tables) {
+                JBIterable<? extends DasColumn> columns = DbTableUtil.getColumns(getElement().getProject(), table);
+                if (columns != null)
+                    for (DasColumn column : columns) {
+                        String comment = column.getComment();
+                        if (comment == null) comment = "";
+                        lookupElements.add(LookupElementBuilder.create(column.getName()).
+                                withTailText("   " + table + "  " + comment).withBoldness(true).withIcon(DatabaseIcons.Col));
                     }
-                }
             }
             return lookupElements;
         }

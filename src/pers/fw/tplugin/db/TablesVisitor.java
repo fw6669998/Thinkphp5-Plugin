@@ -8,14 +8,17 @@ import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.impl.ParameterListImpl;
 import pers.fw.tplugin.util.MethodMatcher;
 import pers.fw.tplugin.util.PsiElementUtil;
+import pers.fw.tplugin.util.Tool;
 
-public class MethodRefVisitor extends PsiRecursiveElementWalkingVisitor {
+import java.util.HashSet;
+
+public class TablesVisitor extends PsiRecursiveElementWalkingVisitor {
     private final ArrayMapVisitor visitor;
-    private String contextTable;
+    private HashSet<String> tables;
 
-    public MethodRefVisitor(ArrayMapVisitor visitor, String contextTable) {
+    public TablesVisitor(ArrayMapVisitor visitor, HashSet<String> tables) {
         this.visitor = visitor;
-        this.contextTable = contextTable;
+        this.tables = tables;
     }
 
     private static MethodMatcher.CallToSignature[] alias = new MethodMatcher.CallToSignature[]{
@@ -31,6 +34,14 @@ public class MethodRefVisitor extends PsiRecursiveElementWalkingVisitor {
             new MethodMatcher.CallToSignature("\\think\\Db", "name")
     };
 
+    private void addTable(PsiElement param, int type) {
+        String text = param.getText().replace("'", "").replace("\"", "");
+        if (type == 1) {
+            text = DbTableUtil.getTableByName(param.getProject(), text);
+        }
+        this.visitor.visit(text, null);
+    }
+
     @Override
     public void visitElement(PsiElement element) {
         if (element instanceof FunctionReference) {
@@ -38,29 +49,27 @@ public class MethodRefVisitor extends PsiRecursiveElementWalkingVisitor {
             for (PsiElement paramList : childrens) {
                 if (paramList instanceof ParameterListImpl) {
                     if (paramList.getChildren().length > 0) {
+                        Tool.printPsiTree(element.getParent());
                         PsiElement param = paramList.getChildren()[0];
                         String methodName = ((FunctionReference) element).getName();
-                        if ("alias".equals(methodName) && MethodMatcher.getMatchedSignatureWithDepth(param, alias, 0) != null) {
-                            String text = param.getText().replace("'", "").replace("\"", "");
-                            this.visitor.visit(text, contextTable);
-                        } else if ("join".equals(methodName) && MethodMatcher.getMatchedSignatureWithDepth(param, join, 0) != null) {
+//                        if ("alias".equals(methodName) && MethodMatcher.getMatchedSignatureWithDepth(param, alias, 0) != null) {
+//                            String text = param.getText().replace("'", "").replace("\"", "");
+//                            this.visitor.visit(text, null);
+//                        } else
+                        if ("join".equals(methodName) && MethodMatcher.getMatchedSignatureWithDepth(param, join, 0) != null) {
                             String text = param.getText().replace("'", "").replace("\"", "");
                             String[] s = text.split(" ");
-                            if (s.length == 2) {    //有别名
-                                this.visitor.visit(s[1], s[0]);
-                            } else if (s.length == 1) { //无别名
-                                this.visitor.visit(text, text);
-                            }
-                        } else if (("table".equals(methodName) || "name".equals(methodName))
+                            this.visitor.visit(s[1], null);
+                        } else if ("table".equals(methodName)
                                 && MethodMatcher.getMatchedSignatureWithDepth(param, table, 0) != null) {
-                            String text = param.getText().replace("'", "").replace("\"", "");
-                            this.visitor.visit(text, text);
+                            addTable(param, 0);
+                        } else if ("name".equals(methodName) && MethodMatcher.getMatchedSignatureWithDepth(param, table, 0) != null) {
+                            addTable(param, 1);
                         } else if (PsiElementUtil.isFunctionReference(param, "db", 0)) {
-                            String text = param.getText().replace("'", "").replace("\"", "");
-                            this.visitor.visit(text, text);
+                            addTable(param, 1);
                         }
                     }
-                } else if (paramList instanceof MethodReference) {  //链式调用方法
+                } else if (paramList instanceof FunctionReference) {  //链式调用方法
                     super.visitElement(element);
                 }
             }
@@ -68,4 +77,6 @@ public class MethodRefVisitor extends PsiRecursiveElementWalkingVisitor {
             super.visitElement(element);
         }
     }
+
+
 }

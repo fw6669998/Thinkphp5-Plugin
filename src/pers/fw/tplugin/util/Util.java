@@ -71,7 +71,9 @@ Util {
         int i = prefix.lastIndexOf("=");
         int j = prefix.lastIndexOf(",");
         int k = prefix.lastIndexOf("|");
-        int max = Math.max(k, Math.max(i, j));
+        int d = prefix.lastIndexOf(".");
+
+        int max = Math.max(Math.max(k, Math.max(i, j)), d);
         if (max != -1) {
             newPrefix = prefix.substring(max + 1, prefix.length());
             return newPrefix;
