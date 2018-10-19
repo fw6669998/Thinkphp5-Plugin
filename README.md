@@ -10,9 +10,9 @@ thinkPhp5 plugin
 
 ## 安装
 
-在线安装: 在phpstorm的插件设置页, 搜索thinkphp5 plugin安装
+在线安装: 在phpstorm的插件中心(File->Setting->Plugins), 搜索thinkphp5 plugin安装
 
-离线安装: 下载根目录下的plugin.jar, 在phpstorm的插件安装页,点击install plugin from disk
+离线安装: 下载release文件或者根目录下的plugin.zip, 在phpstorm的插件中心,点击install plugin from disk,选择下载文件安装
 
 ## 使用
 
