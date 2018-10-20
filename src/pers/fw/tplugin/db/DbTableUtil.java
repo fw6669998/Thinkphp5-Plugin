@@ -121,9 +121,14 @@ public class DbTableUtil {
         //获取可能出现的表
 //            List<TableBean> tables= new ArrayList<>();
 //            Tables tables = new Tables();
+        PsiElement paramList = psiElement.getParent();
+        if (paramList == null) return;
+        PsiElement methodRef = paramList.getParent();
+        if (!(methodRef instanceof MethodReference)) return;
+
         Project project = psiElement.getProject();
         //Model子类
-        PhpClass phpClass = Util.getInstanseClass(project, (MethodReference) psiElement);  //获取模型类
+        PhpClass phpClass = Util.getInstanseClass(project, (MethodReference) methodRef);  //获取模型类
         if (phpClass != null) {
             Collection<Field> fields = phpClass.getFields();
             for (Field item : fields) {

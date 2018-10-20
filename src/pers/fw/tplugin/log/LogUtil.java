@@ -11,6 +11,7 @@ public class LogUtil {
 
     public static String getTimeStr(String str) {
         //处理时间行:
+
         if (str.startsWith("[ 2")) {
             int start = str.indexOf("[");
             int end = str.indexOf("]");
@@ -23,7 +24,7 @@ public class LogUtil {
                 return timeStr;
             }
         }
-        return "";
+        return null;
     }
 
     //  获取类型1;

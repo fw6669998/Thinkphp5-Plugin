@@ -49,8 +49,36 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "table"),
             new MethodMatcher.CallToSignature("\\think\\Db", "table"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "name"),
-            new MethodMatcher.CallToSignature("\\think\\Db", "name"),
+            new MethodMatcher.CallToSignature("\\Query", "name"),
     };
+
+    private static MethodMatcher.CallToSignature[] join = new MethodMatcher.CallToSignature[]{
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "join"),
+    };
+
+    //是否进行类型比较
+    public static Boolean compareClass = false;
+
+    public static Boolean isHintMethod(PsiElement param, MethodMatcher.CallToSignature[] Signatures, int paramIndex) {
+        PsiElement methodRef = param.getParent().getParent();
+        if (!(methodRef instanceof MethodReference)) return false;
+        String name = ((MethodReference) methodRef).getName();
+        List<MethodMatcher.CallToSignature> list = new ArrayList<>();
+        for (MethodMatcher.CallToSignature signature : Signatures) {
+            String method = signature.getMethod();
+            if (method.equals(name)) {
+                if (!compareClass) return PsiElementUtil.isFunctionReference(param, name, paramIndex);
+                list.add(signature);
+            }
+        }
+        if (list.size() == 0) return false;
+        return MethodMatcher.getMatchedSignatureWithDepth(param, (MethodMatcher.CallToSignature[]) list.toArray(), paramIndex) != null;
+    }
+
+    public static boolean isHintVar(PsiElement param) {
+        String text = param.getParent().getParent().getText();
+        return text.startsWith("$field") || text.startsWith("$where");
+    }
 
     @Override
     public boolean support(@NotNull Language language) {
@@ -66,20 +94,16 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                 if (psiElement == null) {
                     return null;
                 }
+
                 PsiElement param = psiElement.getParent();
-//                PsiElement arr=null;
-//                try{
-//                    arr=param.getParent().getParent();
-//                }catch (Exception e){}
-                if (param == null) return null;
-                if ((param instanceof StringLiteralExpression && (MethodMatcher.getMatchedSignatureWithDepth(param, QUERY, 0) != null) ||
-                        MethodMatcher.getMatchedSignatureWithDepth(param, new MethodMatcher.CallToSignature[]{
-                                new MethodMatcher.CallToSignature("\\think\\db\\Query", "join")}, 1) != null)
+//                Tool.printPsiTree(Util.getMethod(param));
+
+                if (!(param instanceof StringLiteralExpression)) return null;
+                if (isHintMethod(param, QUERY, 0) || isHintMethod(param, join, 1) || isHintVar(param)
                 ) {
                     //列
                     return new ColumnProvider(param);
-                } else if (PsiElementUtil.isFunctionReference(param, "db", 0)
-                        || MethodMatcher.getMatchedSignatureWithDepth(param, QUERYTABLE, 0) != null) {
+                } else if (PsiElementUtil.isFunctionReference(param, "db", 0) || isHintMethod(param, QUERYTABLE, 0)) {
                     //表
                     return new TableProvider(param);
                 } else {
@@ -94,7 +118,7 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                     } catch (Exception e) {
                         return null;
                     }
-                    if (MethodMatcher.getMatchedSignatureWithDepth(param1, QUERYARR, 0) != null) {
+                    if (isHintMethod(param1, QUERYARR, 0)) {
                         return new ColumnProvider(param1);
                     }
                 }
@@ -114,10 +138,6 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
         public Collection<LookupElement> getLookupElements() {
             final Collection<LookupElement> lookupElements = new ArrayList<>();
 
-            PsiElement paramList = getElement().getParent();
-            if (paramList == null) return lookupElements;
-            PsiElement methodRef = paramList.getParent();
-            if (!(methodRef instanceof MethodReference)) return lookupElements;
 
             //获取方法对象的类
 //            PsiElement resolve = ((MethodReference) methodRef).resolve();
@@ -127,8 +147,8 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
 //            List<TableBean> tables= new ArrayList<>();
 //            Tables tables = new Tables();
             HashSet<String> tables = new HashSet<>();
-            DbTableUtil.collectionTableByModel(methodRef, tables);
-            DbTableUtil.collectionTableByContext(getElement(), tables); //键为前缀, 值为表
+            DbTableUtil.collectionTableByModel(getElement(), tables);
+            DbTableUtil.collectionTableByContext(getElement(), tables);
 
             //获取列
             for (String table : tables) {
@@ -137,8 +157,9 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                     for (DasColumn column : columns) {
                         String comment = column.getComment();
                         if (comment == null) comment = "";
-                        lookupElements.add(LookupElementBuilder.create(column.getName()).
-                                withTailText("   " + table + "  " + comment).withBoldness(true).withIcon(DatabaseIcons.Col));
+                        lookupElements.add(LookupElementBuilder.create(column.getName())
+                                .withTailText("   " + comment).withTypeText(table)
+                                .withBoldness(true).withIcon(DatabaseIcons.Col));
                     }
             }
             return lookupElements;
