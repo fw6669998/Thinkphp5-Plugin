@@ -10,6 +10,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.util.containers.JBIterable;
 import com.jetbrains.php.lang.PhpLanguage;
 import com.jetbrains.php.lang.psi.elements.*;
+import com.jetbrains.php.lang.psi.elements.impl.ArrayIndexImpl;
+import com.jetbrains.php.lang.psi.elements.impl.VariableImpl;
 import icons.DatabaseIcons;
 import pers.fw.tplugin.inter.GotoCompletionContributor;
 import pers.fw.tplugin.inter.GotoCompletionLanguageRegistrar;
@@ -67,14 +69,14 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                     return null;
                 }
                 PsiElement param = psiElement.getParent();
-//                PsiElement arr=null;
-//                try{
-//                    arr=param.getParent().getParent();
-//                }catch (Exception e){}
-                if (param == null) return null;
-                if ((param instanceof StringLiteralExpression && (MethodMatcher.getMatchedSignatureWithDepth(param, QUERY, 0) != null) ||
-                        MethodMatcher.getMatchedSignatureWithDepth(param, new MethodMatcher.CallToSignature[]{
-                                new MethodMatcher.CallToSignature("\\think\\db\\Query", "join")}, 1) != null)
+                Tool.printPsiTree(Util.getMethod(param));
+//                VariableImpl param2 = (VariableImpl) param;
+//                param2.
+                if (!(param instanceof StringLiteralExpression)) return null;
+                if (
+                        MethodMatcher.getMatchedSignatureWithDepth(param, QUERY, 0) != null
+                                || MethodMatcher.getMatchedSignatureWithDepth(param, new MethodMatcher.CallToSignature[]{new MethodMatcher.CallToSignature("\\think\\db\\Query", "join")}, 1) != null
+                                || (param.getParent() instanceof ArrayIndexImpl && (param.getParent().getParent().getText().startsWith("$field") || param.getParent().getParent().getText().startsWith("$where")))
                 ) {
                     //列
                     return new ColumnProvider(param);
@@ -113,23 +115,9 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
         @Override
         public Collection<LookupElement> getLookupElements() {
             final Collection<LookupElement> lookupElements = new ArrayList<>();
-
-            PsiElement paramList = getElement().getParent();
-            if (paramList == null) return lookupElements;
-            PsiElement methodRef = paramList.getParent();
-            if (!(methodRef instanceof MethodReference)) return lookupElements;
-
-            //获取方法对象的类
-//            PsiElement resolve = ((MethodReference) methodRef).resolve();
-            //Query类
-//            PhpClassImpl phpClass = Util.getPhpClass(resolve);
-            //获取可能出现的表
-//            List<TableBean> tables= new ArrayList<>();
-//            Tables tables = new Tables();
             HashSet<String> tables = new HashSet<>();
-            DbTableUtil.collectionTableByModel(methodRef, tables);
+            DbTableUtil.collectionTableByModel(getElement(), tables);
             DbTableUtil.collectionTableByContext(getElement(), tables); //键为前缀, 值为表
-
             //获取列
             for (String table : tables) {
                 JBIterable<? extends DasColumn> columns = DbTableUtil.getColumns(getElement().getProject(), table);
