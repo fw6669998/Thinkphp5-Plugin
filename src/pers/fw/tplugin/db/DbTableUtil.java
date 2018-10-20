@@ -114,10 +114,18 @@ public class DbTableUtil {
 
     //从模型变量中获取表
     public static void collectionTableByModel(PsiElement psiElement, HashSet<String> tables) {
+        //获取方法对象的类
+//            PsiElement resolve = ((MethodReference) methodRef).resolve();
+        //Query类
+//            PhpClassImpl phpClass = Util.getPhpClass(resolve);
+        //获取可能出现的表
+//            List<TableBean> tables= new ArrayList<>();
+//            Tables tables = new Tables();
         PsiElement paramList = psiElement.getParent();
         if (paramList == null) return;
         PsiElement methodRef = paramList.getParent();
         if (!(methodRef instanceof MethodReference)) return;
+
         Project project = psiElement.getProject();
         //Model子类
         PhpClass phpClass = Util.getInstanseClass(project, (MethodReference) methodRef);  //获取模型类

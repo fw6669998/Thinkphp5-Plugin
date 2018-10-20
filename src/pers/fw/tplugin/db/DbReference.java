@@ -10,8 +10,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.util.containers.JBIterable;
 import com.jetbrains.php.lang.PhpLanguage;
 import com.jetbrains.php.lang.psi.elements.*;
-import com.jetbrains.php.lang.psi.elements.impl.ArrayIndexImpl;
-import com.jetbrains.php.lang.psi.elements.impl.VariableImpl;
 import icons.DatabaseIcons;
 import pers.fw.tplugin.inter.GotoCompletionContributor;
 import pers.fw.tplugin.inter.GotoCompletionLanguageRegistrar;
@@ -51,8 +49,36 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "table"),
             new MethodMatcher.CallToSignature("\\think\\Db", "table"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "name"),
-            new MethodMatcher.CallToSignature("\\think\\Db", "name"),
+            new MethodMatcher.CallToSignature("\\Query", "name"),
     };
+
+    private static MethodMatcher.CallToSignature[] join = new MethodMatcher.CallToSignature[]{
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "join"),
+    };
+
+    //是否进行类型比较
+    public static Boolean compareClass = false;
+
+    public static Boolean isHintMethod(PsiElement param, MethodMatcher.CallToSignature[] Signatures, int paramIndex) {
+        PsiElement methodRef = param.getParent().getParent();
+        if (!(methodRef instanceof MethodReference)) return false;
+        String name = ((MethodReference) methodRef).getName();
+        List<MethodMatcher.CallToSignature> list = new ArrayList<>();
+        for (MethodMatcher.CallToSignature signature : Signatures) {
+            String method = signature.getMethod();
+            if (method.equals(name)) {
+                if (!compareClass) return PsiElementUtil.isFunctionReference(param, name, paramIndex);
+                list.add(signature);
+            }
+        }
+        if (list.size() == 0) return false;
+        return MethodMatcher.getMatchedSignatureWithDepth(param, (MethodMatcher.CallToSignature[]) list.toArray(), paramIndex) != null;
+    }
+
+    public static boolean isHintVar(PsiElement param) {
+        String text = param.getParent().getParent().getText();
+        return text.startsWith("$field") || text.startsWith("$where");
+    }
 
     @Override
     public boolean support(@NotNull Language language) {
@@ -68,20 +94,16 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                 if (psiElement == null) {
                     return null;
                 }
+
                 PsiElement param = psiElement.getParent();
-                Tool.printPsiTree(Util.getMethod(param));
-//                VariableImpl param2 = (VariableImpl) param;
-//                param2.
+//                Tool.printPsiTree(Util.getMethod(param));
+
                 if (!(param instanceof StringLiteralExpression)) return null;
-                if (
-                        MethodMatcher.getMatchedSignatureWithDepth(param, QUERY, 0) != null
-                                || MethodMatcher.getMatchedSignatureWithDepth(param, new MethodMatcher.CallToSignature[]{new MethodMatcher.CallToSignature("\\think\\db\\Query", "join")}, 1) != null
-                                || (param.getParent() instanceof ArrayIndexImpl && (param.getParent().getParent().getText().startsWith("$field") || param.getParent().getParent().getText().startsWith("$where")))
+                if (isHintMethod(param, QUERY, 0) || isHintMethod(param, join, 1) || isHintVar(param)
                 ) {
                     //列
                     return new ColumnProvider(param);
-                } else if (PsiElementUtil.isFunctionReference(param, "db", 0)
-                        || MethodMatcher.getMatchedSignatureWithDepth(param, QUERYTABLE, 0) != null) {
+                } else if (PsiElementUtil.isFunctionReference(param, "db", 0) || isHintMethod(param, QUERYTABLE, 0)) {
                     //表
                     return new TableProvider(param);
                 } else {
@@ -96,7 +118,7 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                     } catch (Exception e) {
                         return null;
                     }
-                    if (MethodMatcher.getMatchedSignatureWithDepth(param1, QUERYARR, 0) != null) {
+                    if (isHintMethod(param1, QUERYARR, 0)) {
                         return new ColumnProvider(param1);
                     }
                 }
@@ -115,9 +137,19 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
         @Override
         public Collection<LookupElement> getLookupElements() {
             final Collection<LookupElement> lookupElements = new ArrayList<>();
+
+
+            //获取方法对象的类
+//            PsiElement resolve = ((MethodReference) methodRef).resolve();
+            //Query类
+//            PhpClassImpl phpClass = Util.getPhpClass(resolve);
+            //获取可能出现的表
+//            List<TableBean> tables= new ArrayList<>();
+//            Tables tables = new Tables();
             HashSet<String> tables = new HashSet<>();
             DbTableUtil.collectionTableByModel(getElement(), tables);
-            DbTableUtil.collectionTableByContext(getElement(), tables); //键为前缀, 值为表
+            DbTableUtil.collectionTableByContext(getElement(), tables);
+
             //获取列
             for (String table : tables) {
                 JBIterable<? extends DasColumn> columns = DbTableUtil.getColumns(getElement().getProject(), table);
@@ -125,8 +157,9 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                     for (DasColumn column : columns) {
                         String comment = column.getComment();
                         if (comment == null) comment = "";
-                        lookupElements.add(LookupElementBuilder.create(column.getName()).
-                                withTailText("   " + table + "  " + comment).withBoldness(true).withIcon(DatabaseIcons.Col));
+                        lookupElements.add(LookupElementBuilder.create(column.getName())
+                                .withTailText("   " + comment).withTypeText(table)
+                                .withBoldness(true).withIcon(DatabaseIcons.Col));
                     }
             }
             return lookupElements;

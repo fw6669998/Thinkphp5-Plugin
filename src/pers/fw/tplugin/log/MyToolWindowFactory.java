@@ -83,19 +83,35 @@ public class MyToolWindowFactory implements ToolWindowFactory {
                 try {
                     InputStream inputStream = file.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                    String str = "";
-                    while ((str = reader.readLine()) != null) {
-                        boolean b = str.startsWith("-");
-                        if (b) {
-                            String timeStr = LogUtil.getTimeStr(reader.readLine());
-                            if (oldTime == null || timeStr.compareTo(oldTime) > 0) {
+                    String line = "";
+                    while ((line = reader.readLine()) != null) {
 
+                        if (line.startsWith("-")) continue;     //忽略
+                        if (line.startsWith("[")) {
+                            if (line.startsWith("[ 2")) {
+                                //todo 时间行: 记录,更新时间
+                                records.addElement(line);
+                                oldTime = line;
+                            } else {
+                                //todo 内容头行: 记录
+                                records.addElement(line);
+                            }
+                        } else {
+                            //todo 内容行: 追加记录
+                            String preStr = (String) records.get(records.size() - 1);
+                            records.addElement(preStr + line);
+                        }
+
+                        String timeStr = LogUtil.getTimeStr(reader.readLine());
+                        if (timeStr != null)   //这是新时间行
+
+                            if (oldTime == null || timeStr.compareTo(oldTime) > 0) {
                                 String addStr;
                                 while ((addStr = reader.readLine()) != null) {
                                     if (addStr.startsWith("-")) {
                                         timeStr = LogUtil.getTimeStr(reader.readLine());
                                         records.addElement("时间: " + timeStr);
-                                        oldTime = timeStr;
+
                                     } else {
 //                                        String[] content = LogUtil.getContent(addStr);
 //                                        DefaultTableModel model = new DefaultTableModel();
@@ -106,7 +122,6 @@ public class MyToolWindowFactory implements ToolWindowFactory {
                                 }
                                 oldTime = timeStr;
                             }
-                        }
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
