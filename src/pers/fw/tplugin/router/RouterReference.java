@@ -47,6 +47,7 @@ public class RouterReference implements GotoCompletionLanguageRegistrar {
 //            new MethodMatcher.CallToSignature("\\Illuminate\\Config\\Repository", "setParsedKey"),
     };
 
+
     @Override
     public void register(GotoCompletionRegistrarParameter registrar) {
         registrar.register(PlatformPatterns.psiElement(), new GotoCompletionContributor() {
@@ -60,8 +61,9 @@ public class RouterReference implements GotoCompletionLanguageRegistrar {
                 PsiElement parent = psiElement.getParent();
                 PsiFile containingFile = psiElement.getContainingFile();
                 containingFile.getName();
-                if (parent != null && (
-                        MethodMatcher.getMatchedSignatureWithDepth(parent, Router, 1) != null || PsiElementUtil.isFunctionReference(parent, "route", 1)
+                if (parent != null &&
+                        (Util.isHintMethod(parent, Router, 1, true)
+                                || PsiElementUtil.isFunctionReference(parent, "route", 1)
                                 || (RouteUtil.isRouteFile(containingFile) && RouteUtil.isRoutePosition(parent)))) {
                     return new RouteProvider(parent);
                 }

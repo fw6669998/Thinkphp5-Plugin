@@ -28,7 +28,7 @@ public class MainTest {
 //        String str = "123123[qewwq][qwewqeqw]";
 //        String[] tests = LogUtil.getContent(str);
 //        System.out.println(Arrays.toString(tests));
-        String item = "  " + null;
-        System.out.println(item);
+        int acc = "abcd".compareTo("acc");
+        System.out.println(acc);
     }
 }

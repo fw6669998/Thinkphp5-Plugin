@@ -9,7 +9,9 @@ import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.impl.PhpClassImpl;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 public class
@@ -141,5 +143,26 @@ Util {
         return key;
     }
 
+    public static Boolean isHintMethod(PsiElement param, MethodMatcher.CallToSignature[] Signatures, int paramIndex, boolean compareClass) {
+        PsiElement methodRef = param.getParent().getParent();
+        compareClass = compareClass ? compareClass : false;
+        if (!(methodRef instanceof MethodReference)) return false;
+        String name = ((MethodReference) methodRef).getName();
+        List<MethodMatcher.CallToSignature> list = new ArrayList<>();
+        for (MethodMatcher.CallToSignature signature : Signatures) {
+            String method = signature.getMethod();
+            if (method.equals(name)) {
+                if (!compareClass) return PsiElementUtil.isFunctionReference(param, name, paramIndex);
+                list.add(signature);
+            }
+        }
+        if (list.size() == 0) return false;
+        MethodMatcher.CallToSignature[] newSignatures = new MethodMatcher.CallToSignature[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            newSignatures[i] = list.get(i);
+        }
+        boolean res = MethodMatcher.getMatchedSignatureWithDepth(param, newSignatures, paramIndex) != null;
+        return res;
+    }
 
 }

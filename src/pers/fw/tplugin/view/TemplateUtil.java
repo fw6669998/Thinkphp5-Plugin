@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.fw.tplugin.view.dict.TemplatePath;
 
+import java.io.File;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -276,5 +277,21 @@ public class TemplateUtil {
 
             views.add(Pair.create(contents, parameters[0]));
         }
+    }
+
+    public static File recursionMatch(File root, String file) {
+        if (root == null) return null;
+        File[] files = root.listFiles();
+        if (files != null)
+            for (File f : files) {
+                if (f.isFile()) {
+                    if (f.getAbsolutePath().toLowerCase().startsWith(file.toLowerCase())) {
+                        return f;
+                    }
+                } else if (f.isDirectory()){
+                    return recursionMatch(f,file);
+                }
+            }
+        return null;
     }
 }

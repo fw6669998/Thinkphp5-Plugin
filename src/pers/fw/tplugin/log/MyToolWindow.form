@@ -19,7 +19,7 @@
         </properties>
         <border type="none"/>
         <children>
-          <scrollpane id="a9bee">
+          <scrollpane id="a9bee" binding="scroll1">
             <constraints>
               <splitpane position="left"/>
             </constraints>

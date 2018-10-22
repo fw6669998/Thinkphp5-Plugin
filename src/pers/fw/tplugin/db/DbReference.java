@@ -61,21 +61,6 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
     //是否进行类型比较
     public static Boolean compareClass = false;
 
-    public static Boolean isHintMethod(PsiElement param, MethodMatcher.CallToSignature[] Signatures, int paramIndex) {
-        PsiElement methodRef = param.getParent().getParent();
-        if (!(methodRef instanceof MethodReference)) return false;
-        String name = ((MethodReference) methodRef).getName();
-        List<MethodMatcher.CallToSignature> list = new ArrayList<>();
-        for (MethodMatcher.CallToSignature signature : Signatures) {
-            String method = signature.getMethod();
-            if (method.equals(name)) {
-                if (!compareClass) return PsiElementUtil.isFunctionReference(param, name, paramIndex);
-                list.add(signature);
-            }
-        }
-        if (list.size() == 0) return false;
-        return MethodMatcher.getMatchedSignatureWithDepth(param, (MethodMatcher.CallToSignature[]) list.toArray(), paramIndex) != null;
-    }
 
     public static boolean isHintVar(PsiElement param) {
         String text = param.getParent().getParent().getText();
@@ -101,11 +86,11 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
 //                Tool.printPsiTree(Util.getMethod(param));
 
                 if (!(param instanceof StringLiteralExpression)) return null;
-                if (isHintMethod(param, QUERY, 0) || isHintMethod(param, join, 1) || isHintVar(param)
+                if (Util.isHintMethod(param, QUERY, 0, compareClass) || Util.isHintMethod(param, join, 1, compareClass) || isHintVar(param)
                 ) {
                     //列
                     return new ColumnProvider(param);
-                } else if (PsiElementUtil.isFunctionReference(param, "db", 0) || isHintMethod(param, QUERYTABLE, 0)) {
+                } else if (PsiElementUtil.isFunctionReference(param, "db", 0) || Util.isHintMethod(param, QUERYTABLE, 0, compareClass)) {
                     //表
                     return new TableProvider(param);
                 } else {
@@ -120,7 +105,7 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                     } catch (Exception e) {
                         return null;
                     }
-                    if (isHintMethod(param1, QUERYARR, 0)) {
+                    if (Util.isHintMethod(param1, QUERYARR, 0, compareClass)) {
                         return new ColumnProvider(param1);
                     }
                 }

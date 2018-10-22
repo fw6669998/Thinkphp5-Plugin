@@ -50,7 +50,8 @@ public class AppConfigReferences implements GotoCompletionLanguageRegistrar {
                 }
 
                 PsiElement parent = psiElement.getParent();
-                if (parent != null && (PsiElementUtil.isFunctionReference(parent, "config", 0) || MethodMatcher.getMatchedSignatureWithDepth(parent, CONFIG) != null)) {
+                if (parent != null && (PsiElementUtil.isFunctionReference(parent, "config", 0)
+                        || Util.isHintMethod(parent, CONFIG, 0, true))) {
                     return new ConfigKeyProvider(parent);
                 }
 

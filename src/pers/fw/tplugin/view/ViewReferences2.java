@@ -17,6 +17,7 @@ import com.intellij.psi.impl.file.PsiFileImplUtil;
 import com.jetbrains.php.lang.PhpLanguage;
 import com.jetbrains.php.lang.psi.elements.Method;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
+import com.sun.xml.internal.ws.util.UtilException;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -150,9 +151,10 @@ public class ViewReferences2 implements GotoCompletionLanguageRegistrar {
                 methodName = contents;
             }
 
-            String dir = viewDir + className;
+            String dir = viewDir + className;//+ "/" + methodName;
             dir = dir.replace("file:/", "");
             File file = new File(dir);
+            TemplateUtil.recursionMatch(file)
             File[] files = file.listFiles();
             Collection<VirtualFile> virFiles = new ArrayList<>();
             if (files != null)
@@ -167,17 +169,6 @@ public class ViewReferences2 implements GotoCompletionLanguageRegistrar {
                 }
 
             Collection<PsiElement> targets = new ArrayList<>(PsiElementUtils.convertVirtualFilesToPsiFiles(getProject(), virFiles));
-
-//            int caretOffset = offset - psiElement.getTextRange().getStartOffset();
-//            Collection<PsiElement> targets = new ArrayList<>(PsiElementUtils.convertVirtualFilesToPsiFiles(
-//                    getProject(),
-//                    TemplateUtil.resolveTemplate(getProject(), contents, caretOffset)
-//            ));
-
-            // @TODO: no filesystem access in test; fake item
-//            if ("test_view".equals(contents) && ApplicationManager.getApplication().isUnitTestMode()) {
-//                targets.add(PsiManager.getInstance(getProject()).findDirectory(getProject().getBaseDir()));
-//            }
 
             return targets;
         }
