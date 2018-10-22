@@ -32,6 +32,7 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "min"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "field"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "order"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "value")
     };
 
     private static MethodMatcher.CallToSignature[] QUERYARR = new MethodMatcher.CallToSignature[]{
