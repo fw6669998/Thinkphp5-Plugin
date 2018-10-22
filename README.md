@@ -41,14 +41,22 @@ thinkPhp5 plugin
 ![img](https://github.com/fw6669998/Thinkphp5-Plugin/blob/master/img/model.gif)
 
 数据库
+
+[配置phpstorm数据库连接](https://jingyan.baidu.com/article/0a52e3f4cee074bf62ed7208.html)
+
+    首先配置请数据库连接,如果不会请点击上面的衔接
     
-    根据配置数据源,进行数据库表和列提示,
-    配置数据源,在ide自带的数据库管理工具连接数据库,
+    提示衔接:
     如果只有一条数据库连接,则该数据库为提示连接, 
-    如果有多条连接将需要提示的数据库连接命名为包含work的命名的连接, //重命名连接, 连接->右键->rename 
-    模型变量提示根据模型类的name和table字段提供的数据匹配表,
-    数据库的join,table也会提供表,进行字段提示
+    如果有多条连接将需要提示的数据库连接命名为包含work的命名的连接, //重命名连接, 连接->右键->rename
+     
+    数据库会在方法的代码中收集表进行字段提示,
+    以数据表相关的方法会进行表提示, 以数据库字段相关的方法会进行字段提示, 以$where和$field为开头的数组变量会进行字段提示
+
 ![img](https://github.com/fw6669998/Thinkphp5-Plugin/blob/master/img/db.gif)
+
+## 常见异常
+如果模型,配置,和路由不能正常提示和跳转, 请点击File -> invalidate caches/restart 
 
 ## 搭建
 

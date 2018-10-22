@@ -5,9 +5,11 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.jetbrains.php.lang.psi.elements.ArrayCreationExpression;
+import com.jetbrains.php.lang.psi.elements.ArrayHashElement;
 import com.jetbrains.php.lang.psi.elements.impl.PhpReturnImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.debugger.values.ArrayValue;
+import pers.fw.tplugin.util.Tool;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
