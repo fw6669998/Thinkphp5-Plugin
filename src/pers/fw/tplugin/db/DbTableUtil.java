@@ -127,9 +127,11 @@ public class DbTableUtil {
                         tables.add(DbTableUtil.getTableByName(project, name));
                         break;
                     }
-                } else if ("table".equals(item.getName())) {
+                }
+                if ("table".equals(item.getName())) {
                     String name = item.getDefaultValue().getText();//item.getDefaultValuePresentation();
                     if (name != null && !name.isEmpty() && !"$table".equals(name)) {
+                        name = name.replace("'", "").replace("\"", "");
                         tables.add(name);
                         break;
                     }
@@ -164,9 +166,11 @@ public class DbTableUtil {
                         tables.add(DbTableUtil.getTableByName(project, name));
                         break;
                     }
-                } else if ("table".equals(item.getName())) {
+                }
+                if ("table".equals(item.getName())) {
                     String name = item.getDefaultValue().getText();//item.getDefaultValuePresentation();
                     if (name != null && !name.isEmpty() && !"$table".equals(name)) {
+                        name = name.replace("'", "").replace("\"", "");
                         tables.add(name);
                         break;
                     }
