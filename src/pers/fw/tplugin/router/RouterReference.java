@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.fw.tplugin.model.ModelStubIndex;
 import pers.fw.tplugin.util.MethodMatcher;
+import pers.fw.tplugin.util.PsiElementUtil;
 import pers.fw.tplugin.util.Util;
 
 import java.util.*;
@@ -60,7 +61,7 @@ public class RouterReference implements GotoCompletionLanguageRegistrar {
                 PsiFile containingFile = psiElement.getContainingFile();
                 containingFile.getName();
                 if (parent != null && (
-                        MethodMatcher.getMatchedSignatureWithDepth(parent, Router, 1) != null
+                        MethodMatcher.getMatchedSignatureWithDepth(parent, Router, 1) != null || PsiElementUtil.isFunctionReference(parent, "route", 1)
                                 || (RouteUtil.isRouteFile(containingFile) && RouteUtil.isRoutePosition(parent)))) {
                     return new RouteProvider(parent);
                 }
@@ -125,7 +126,9 @@ public class RouterReference implements GotoCompletionLanguageRegistrar {
                     if (psiFileTarget == null) {
                         return true;
                     }
-
+                    String[] split = contents.split("/");
+                    if (split.length == 2)
+                        targets.add(psiFileTarget);
                     psiFileTarget.acceptChildren(new PhpControllerVisitor(RouteUtil.matchControllerFile(RouteProvider.this.getProject(), virtualFile).getKeyPrefix(),
                             new ArrayKeyVisitor() {
                                 @Override

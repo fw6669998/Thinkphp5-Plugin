@@ -3,6 +3,7 @@ package pers.fw.tplugin.db;
 import com.jetbrains.php.lang.psi.elements.Field;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
+import com.jetbrains.php.lang.psi.elements.impl.PhpClassImpl;
 import pers.fw.tplugin.beans.ArrayMapVisitor;
 import com.intellij.database.model.DasColumn;
 import com.intellij.database.model.DasTable;
@@ -112,6 +113,31 @@ public class DbTableUtil {
         return;
     }
 
+    public static void collectionTableByCurFile(PsiElement psiElement, HashSet<String> tables) {
+
+        PhpClassImpl phpClass = Util.getPhpClass(psiElement);
+        Project project = psiElement.getProject();
+
+        if (phpClass != null) {
+            Collection<Field> fields = phpClass.getFields();
+            for (Field item : fields) {
+                if ("name".equals(item.getName())) {
+                    String name = item.getDefaultValue().getText();
+                    if (name != null && !name.isEmpty() && !"$name".equals(name)) {
+                        tables.add(DbTableUtil.getTableByName(project, name));
+                        break;
+                    }
+                } else if ("table".equals(item.getName())) {
+                    String name = item.getDefaultValue().getText();//item.getDefaultValuePresentation();
+                    if (name != null && !name.isEmpty() && !"$table".equals(name)) {
+                        tables.add(name);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     //从模型变量中获取表
     public static void collectionTableByModel(PsiElement psiElement, HashSet<String> tables) {
         //获取方法对象的类
@@ -148,6 +174,7 @@ public class DbTableUtil {
             }
         }
     }
+
 
     public static String getTableByName(Project project, String name) {
         if (name.isEmpty()) return null;
