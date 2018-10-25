@@ -127,13 +127,6 @@ public class ViewReferences2 implements GotoCompletionLanguageRegistrar {
             }
 
             String contents = ((StringLiteralExpression) stringLiteral).getContents();
-            if (StringUtils.isBlank(contents)) {
-                Method method = PsiElementUtil.getMethod(psiElement);
-                if (method == null)
-                    return Collections.emptyList();
-                else
-                    contents = method.getName();
-            }
 
             String viewDir = getProject().getBaseDir() + Util.getApplicationDir(psiElement) + "/" + Util.getCurTpModuleName(psiElement) + "/" + "view" + "/";
             String className = "";
@@ -142,7 +135,7 @@ public class ViewReferences2 implements GotoCompletionLanguageRegistrar {
             if (contents.contains("/")) {  // index/test
                 String[] split = contents.split("/");
                 className = split[0];
-                methodName = split[1];
+                methodName = contents.substring(className.length() + 1);
             } else if ("".equals(contents)) {   //
                 className = Util.getPhpClass(psiElement).getName().toLowerCase();
                 methodName = Util.getMethod(psiElement).getName();
@@ -152,22 +145,16 @@ public class ViewReferences2 implements GotoCompletionLanguageRegistrar {
             }
 
             String dir = viewDir + className;//+ "/" + methodName;
-            dir = dir.replace("file:/", "");
+            String filePath = viewDir + className + "/" + methodName;
+            dir = dir.replace("file://", "");
+            filePath = filePath.replace("file://", "");
             File file = new File(dir);
-            TemplateUtil.recursionMatch(file)
-            File[] files = file.listFiles();
+            File targetFile = TemplateUtil.recursionMatch(file, filePath);
             Collection<VirtualFile> virFiles = new ArrayList<>();
-            if (files != null)
-                for (File f : files) {
-                    if (f.isFile()) {
-                        if (f.getName().toLowerCase().startsWith(methodName.toLowerCase() + ".")) {
-                            //todo goto f
-                            VirtualFile fileByIoFile = VfsUtil.findFileByIoFile(f, false);
-                            ((ArrayList<VirtualFile>) virFiles).add(fileByIoFile);
-                        }
-                    }
-                }
-
+            if (targetFile != null) {
+                VirtualFile fileByIoFile = VfsUtil.findFileByIoFile(targetFile, false);
+                virFiles.add(fileByIoFile);
+            }
             Collection<PsiElement> targets = new ArrayList<>(PsiElementUtils.convertVirtualFilesToPsiFiles(getProject(), virFiles));
 
             return targets;

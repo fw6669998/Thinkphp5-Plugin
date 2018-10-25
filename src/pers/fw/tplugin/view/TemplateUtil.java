@@ -285,11 +285,14 @@ public class TemplateUtil {
         if (files != null)
             for (File f : files) {
                 if (f.isFile()) {
-                    if (f.getAbsolutePath().toLowerCase().startsWith(file.toLowerCase())) {
+                    String curPath = f.getAbsolutePath().toLowerCase();
+                    curPath = curPath.replace("\\", "/");
+                    curPath=curPath.substring(0,curPath.lastIndexOf("."));
+                    if (curPath.equals(file.toLowerCase())) {
                         return f;
                     }
-                } else if (f.isDirectory()){
-                    return recursionMatch(f,file);
+                } else if (f.isDirectory()) {
+                    return recursionMatch(f, file);
                 }
             }
         return null;
