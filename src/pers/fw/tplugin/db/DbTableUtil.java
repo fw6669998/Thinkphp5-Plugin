@@ -82,9 +82,10 @@ public class DbTableUtil {
                 }
             }
             if (work != null) {
-                return DasUtil.getTables(work);
+                return DasUtil.getTables(work.getDelegate());
             } else {
-                return DasUtil.getTables(dataSources.get(0));
+                if (dataSources.get(0) == null) return null;
+                return DasUtil.getTables(dataSources.get(0).getDelegate());
             }
         }
     }
