@@ -53,7 +53,7 @@ public class RouteUtil {
 
     public static ControllerFileMatchResult matchControllerFile(Project project, VirtualFile virtualFile) {
         String path = virtualFile.getPath();
-        String projectPath = project.getBaseDir().getPath();
+        String projectPath = project.getBasePath();
         path = path.substring(projectPath.length());
         Matcher matcher = controllerFilePattern.matcher(path);
         if (matcher.matches()) {

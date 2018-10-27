@@ -38,20 +38,22 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
 
     private static MethodMatcher.CallToSignature[] QUERYARR = new MethodMatcher.CallToSignature[]{
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "delete"),
-            new MethodMatcher.CallToSignature("\\think\\Model", "delete"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "update"),
-            new MethodMatcher.CallToSignature("\\think\\Model", "update"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "insert"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "where"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "order"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "delete"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "update"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "insert"),
     };
 
     private static MethodMatcher.CallToSignature[] QUERYTABLE = new MethodMatcher.CallToSignature[]{
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "join"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "table"),
             new MethodMatcher.CallToSignature("\\think\\Db", "table"),
+            new MethodMatcher.CallToSignature("\\think\\Db", "name"),
+            new MethodMatcher.CallToSignature("\\think\\Db", "join"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "table"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "name"),
-            new MethodMatcher.CallToSignature("\\Query", "name"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "join"),
     };
 
     private static MethodMatcher.CallToSignature[] join = new MethodMatcher.CallToSignature[]{
@@ -59,7 +61,7 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
     };
 
     //是否进行类型比较
-    public static Boolean compareClass = false;
+    public static Boolean compareClass = true;
 
 
     public static boolean isHintVar(PsiElement param) {

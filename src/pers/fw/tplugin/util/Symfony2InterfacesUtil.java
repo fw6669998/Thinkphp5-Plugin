@@ -269,6 +269,8 @@ public class Symfony2InterfacesUtil {
 
     public boolean isInstanceOf(@NotNull PhpClass subjectClass, @NotNull PhpClass expectedClass) {
 
+        Tool.log(subjectClass.getFQN()+":"+expectedClass.getFQN());
+
         if (subjectClass.getFQN().equals(expectedClass.getFQN())) return true;
 
         if (subjectClass == expectedClass) {

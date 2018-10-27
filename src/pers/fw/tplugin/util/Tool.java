@@ -15,7 +15,7 @@ import java.util.List;
 
 public class Tool {
     public static void log(Object obj) {
-//        System.out.println(obj);
+        System.out.println(obj);
     }
 
     //打印当前psiElement,及它的子类

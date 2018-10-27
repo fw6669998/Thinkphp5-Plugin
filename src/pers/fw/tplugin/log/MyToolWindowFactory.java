@@ -38,6 +38,8 @@ public class MyToolWindowFactory implements ToolWindowFactory {
     //    private JList list2;
     private JTextPane textPane1;
     private JScrollPane scroll1;
+    private JButton button1;
+    private JButton button2;
     private ToolWindow myToolWindow;
     private static String oldTime = "1000";
 
