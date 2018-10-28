@@ -1,6 +1,12 @@
 package pers.fw.tplugin.db;
 
 public class Column {
-    public String name;
-    public String comment;
+    public Column(String comment, String table) {
+        this.comment = comment;
+        this.table = table;
+    }
+
+    public String comment="";
+    public String table="";
+
 }

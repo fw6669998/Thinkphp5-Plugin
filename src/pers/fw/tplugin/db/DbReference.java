@@ -8,6 +8,7 @@ import com.intellij.lang.Language;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
+import com.intellij.util.containers.ArrayListSet;
 import com.intellij.util.containers.JBIterable;
 import com.jetbrains.php.lang.PhpLanguage;
 import com.jetbrains.php.lang.psi.elements.*;
@@ -66,7 +67,7 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
 
     public static boolean isHintVar(PsiElement param) {
         String text = param.getParent().getParent().getText();
-        return text.startsWith("$field") || text.startsWith("$where");
+        return text.startsWith("$field") || text.startsWith("$where") || text.startsWith("$row");
     }
 
     @Override
@@ -142,16 +143,27 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
             DbTableUtil.collectionTableByContext(getElement(), tables);
 
             //获取列
+            HashMap<String, Column> cols = new HashMap<String, Column>();
             for (String table : tables) {
                 JBIterable<? extends DasColumn> columns = DbTableUtil.getColumns(getElement().getProject(), table);
                 if (columns != null)
                     for (DasColumn column : columns) {
                         String comment = column.getComment();
                         if (comment == null) comment = "";
-                        lookupElements.add(LookupElementBuilder.create(column.getName())
-                                .withTailText("   " + comment).withTypeText(table)
-                                .withBoldness(true).withIcon(DatabaseIcons.Col));
+                        Column column1 = cols.get(column.getName());
+                        if (column1 == null) {
+                            cols.put(column.getName(), new Column(comment, table));
+                        } else {
+                            column1.comment = column1.comment + " | " + comment;
+                            column1.table = column1.table + "|" + table;
+                        }
                     }
+            }
+            for (String item : cols.keySet()) {
+                Column column = cols.get(item);
+                lookupElements.add(LookupElementBuilder.create(item)
+                        .withTailText("   " + column.comment).withTypeText(column.table)
+                        .withBoldness(true).withIcon(DatabaseIcons.Col));
             }
             return lookupElements;
         }
