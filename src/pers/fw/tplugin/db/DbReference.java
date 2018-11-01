@@ -34,7 +34,25 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "min"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "field"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "order"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "value")
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "value"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereOr"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereXor"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereNull"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereNotNull"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereExists"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereNotExists"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereIn"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereNotIn"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereLike"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereNotLike"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereBetween"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereNotBetween"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereExp"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereTime"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "withField"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "group"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "having"),
+//            new MethodMatcher.CallToSignature("\\think\\db\\Query", "value"),
     };
 
     private static MethodMatcher.CallToSignature[] QUERYARR = new MethodMatcher.CallToSignature[]{
@@ -43,9 +61,12 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "insert"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "where"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "order"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "data"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "insertGetId"),
             new MethodMatcher.CallToSignature("\\think\\Model", "delete"),
             new MethodMatcher.CallToSignature("\\think\\Model", "update"),
             new MethodMatcher.CallToSignature("\\think\\Model", "insert"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "data"),
     };
 
     private static MethodMatcher.CallToSignature[] QUERYTABLE = new MethodMatcher.CallToSignature[]{
@@ -55,10 +76,18 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "table"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "name"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "join"),
+//            new MethodMatcher.CallToSignature("\\think\\db\\Query", "fullJoin"),
+//            new MethodMatcher.CallToSignature("\\think\\db\\Query", "leftJoin"),
+//            new MethodMatcher.CallToSignature("\\think\\db\\Query", "rightJoin"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "getTableInfo"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "getPk"),
     };
 
     private static MethodMatcher.CallToSignature[] join = new MethodMatcher.CallToSignature[]{
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "join"),
+//            new MethodMatcher.CallToSignature("\\think\\db\\Query", "fullJoin"),
+//            new MethodMatcher.CallToSignature("\\think\\db\\Query", "leftJoin"),
+//            new MethodMatcher.CallToSignature("\\think\\db\\Query", "rightJoin"),
     };
 
     //是否进行类型比较
