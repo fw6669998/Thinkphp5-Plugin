@@ -128,14 +128,6 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
         public Collection<LookupElement> getLookupElements() {
             final Collection<LookupElement> lookupElements = new ArrayList<>();
 
-
-            //获取方法对象的类
-//            PsiElement resolve = ((MethodReference) methodRef).resolve();
-            //Query类
-//            PhpClassImpl phpClass = Util.getPhpClass(resolve);
-            //获取可能出现的表
-//            List<TableBean> tables= new ArrayList<>();
-//            Tables tables = new Tables();
             HashSet<String> tables = new HashSet<>();
 
             DbTableUtil.collectionTableByCurFile(getElement(), tables);
