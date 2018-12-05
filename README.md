@@ -61,6 +61,3 @@ thinkPhp5 plugin
 ## 联系方式
 
 邮箱: fw6669998@163.com
-
-### 领个红包吧( ^_^ )
-![img](https://github.com/fw6669998/Thinkphp5-Plugin/blob/master/img/hb.png)
