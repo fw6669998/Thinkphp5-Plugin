@@ -32,10 +32,16 @@
         <fileBasedIndex implementation="pers.fw.tplugin.router.RouteValStubIndex"/>
         <fileBasedIndex implementation="pers.fw.tplugin.model.ModelStubIndex"/>
 
-        <toolWindow id="tp5 log" secondary="false" icon="/icons/1.png" anchor="bottom"
-                    factoryClass="pers.fw.tplugin.log.MyToolWindowFactory"/>
+        <toolWindow id="Tp5 log" secondary="false" icon="/icons/1.png" anchor="bottom"
+                    factoryClass="pers.fw.tplugin.log.MyToolWindowFactory" conditionClass="pers.fw.tplugin.log.ShowLog"/>
     </extensions>
     <extensions defaultExtensionNs="com.jetbrains.php">
         <typeProvider3 implementation="pers.fw.tplugin.main.MyTypeProvider"/>
     </extensions>
+
+    <project-components>
+        <component>
+            <implementation-class>pers.fw.tplugin.main.MyProjectComponent</implementation-class>
+        </component>
+    </project-components>
 </idea-plugin>

@@ -1,11 +1,16 @@
 package pers.fw.tplugin.log;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.*;
 import com.intellij.openapi.wm.*;
 import com.intellij.ui.content.*;
 import com.intellij.util.ui.Table;
+import org.apache.velocity.runtime.directive.Foreach;
 import org.jetbrains.annotations.NotNull;
+import pers.fw.tplugin.beans.Bean;
+import pers.fw.tplugin.beans.Setting;
 import pers.fw.tplugin.util.Util;
 
 import javax.swing.*;
@@ -38,8 +43,6 @@ public class MyToolWindowFactory implements ToolWindowFactory {
     //    private JList list2;
     private JTextPane textPane1;
     private JScrollPane scroll1;
-    private JButton button1;
-    private JButton button2;
     private ToolWindow myToolWindow;
     private static String oldTime = "1000";
 
@@ -54,17 +57,16 @@ public class MyToolWindowFactory implements ToolWindowFactory {
 //                MyToolWindowFactory.this.currentDateTime();
 //            }
 //        });
+//        return;
         init();
     }
 
     // Create the tool window content.
     public void createToolWindowContent(Project project, ToolWindow toolWindow) {
         myToolWindow = toolWindow;
-//        this.currentDateTime();
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content content = contentFactory.createContent(myToolWindowContent, "", false);
         toolWindow.getContentManager().addContent(content);
-
     }
 
     public void init() {
@@ -86,40 +88,57 @@ public class MyToolWindowFactory implements ToolWindowFactory {
             @Override
             public void contentsChanged(@NotNull VirtualFileEvent event) {
                 //判断文件是否是日志文件
-                if (!LogUtil.isLogFile(event.getFileName()))
+                String fileName = event.getFileName();
+                if(fileName.equals(Setting.fileName)){
+                    Util.setConfig(event.getFile().getPath());
+                    return;
+                }
+                if (!LogUtil.isLogFile(fileName))
                     return;
                 VirtualFile file = event.getFile();
                 try {
                     InputStream inputStream = file.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, CharsetToolkit.UTF8));
                     String line = "";
+                    List<String> tempList = new ArrayList<String>();
+                    boolean append=true;
                     while ((line = reader.readLine()) != null) {
                         if (line.startsWith("[ 2")) {
                             if (line.compareTo(oldTime) > 0) {
                                 oldTime = line;
-                                records.addElement(line);   //开始记录的时间行
+                                tempList.add(line);   //开始记录的时间行
 
                                 while ((line = reader.readLine()) != null) {
                                     if (line.startsWith("-")) continue;     //忽略
                                     if (line.startsWith("[")) {
                                         if (line.startsWith("[ 2")) {
                                             // 记录,更新时间
-                                            records.addElement(line);
+                                            tempList.add(line);
                                             oldTime = line;
                                         } else {
-                                            // 记录
-                                            records.addElement(line);
+                                            // 记录首行
+                                            for (String item : Setting.config.logPrefix) {
+                                                if (line.startsWith(item)) {
+                                                    append=true;
+                                                    tempList.add(line);
+                                                } else {
+                                                    append=false;
+                                                }
+                                            }
                                         }
                                     } else {
-                                        // 追加记录
-                                        String str = (String) records.get(records.size() - 1);
+                                        // 追加内容, 多行一条记录
+                                        if (!append) continue;
+                                        if(tempList.size()==0)continue;
+                                        String str = (String) tempList.get(tempList.size() - 1);
                                         str = str + line;
-                                        records.setElementAt(str, records.size() - 1);
+                                        tempList.set(tempList.size() - 1, str);
                                     }
                                 }
                             }
                         }
                     }
+                    records.addAll(tempList);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

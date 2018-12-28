@@ -25,11 +25,12 @@ public class GotoHandler implements GotoDeclarationHandler {
 
         Collection<PsiElement> psiTargets = new ArrayList<PsiElement>();
 
+        if(psiElement==null)return psiTargets.toArray(new PsiElement[psiTargets.size()]); //报错解决
+
         PsiElement parent = psiElement.getParent();
         for(GotoCompletionContributor contributor: GotoCompletionUtil.getContributors(psiElement)) {
             GotoCompletionProviderInterface gotoCompletionContributorProvider = contributor.getProvider(psiElement);
             if(gotoCompletionContributorProvider != null) {
-                // @TODO: replace this: just valid PHP files
                 if(parent instanceof StringLiteralExpression) {
                     psiTargets.addAll(gotoCompletionContributorProvider.getPsiTargets((StringLiteralExpression) parent));
                 } else {
