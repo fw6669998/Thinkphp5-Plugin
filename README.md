@@ -51,7 +51,7 @@ thinkPhp5 plugin
     如果有多条连接将需要提示的数据库连接命名为包含work的命名的连接, //重命名连接, 连接->右键->rename
      
     数据库会在方法的代码中收集表进行字段提示,
-    与数据表相关的方法会进行表提示, 与数据库字段相关的方法会进行字段提示, 以$where和$field为开头的数组变量会进行字段提示
+    与数据表相关的方法会进行表提示, 与数据库字段相关的方法会进行字段提示, 以$where,$field,$row为开头的数组变量会进行字段提示
 
 ![img](https://github.com/fw6669998/Thinkphp5-Plugin/blob/master/img/db.gif)
 
