@@ -39,12 +39,13 @@ public class RouterReference implements GotoCompletionLanguageRegistrar {
             new MethodMatcher.CallToSignature("\\think\\Route", "post"),
             new MethodMatcher.CallToSignature("\\think\\Route", "put"),
             new MethodMatcher.CallToSignature("\\think\\Route", "delete"),
+            new MethodMatcher.CallToSignature("\\think\\Route", "resource"),
             new MethodMatcher.CallToSignature("\\think\\facade\\Route", "get"),
             new MethodMatcher.CallToSignature("\\think\\facade\\Route", "any"),
             new MethodMatcher.CallToSignature("\\think\\facade\\Route", "post"),
             new MethodMatcher.CallToSignature("\\think\\facade\\Route", "put"),
             new MethodMatcher.CallToSignature("\\think\\facade\\Route", "delete"),
-//            new MethodMatcher.CallToSignature("\\Illuminate\\Config\\Repository", "setParsedKey"),
+            new MethodMatcher.CallToSignature("\\think\\facade\\Route", "resource"),
     };
 
 

@@ -89,7 +89,7 @@ public class MyToolWindowFactory implements ToolWindowFactory {
             public void contentsChanged(@NotNull VirtualFileEvent event) {
                 //判断文件是否是日志文件
                 String fileName = event.getFileName();
-                if(fileName.equals(Setting.fileName)){
+                if (fileName.equals(Setting.fileName)) {
                     Util.setConfig(event.getFile().getPath());
                     return;
                 }
@@ -101,7 +101,9 @@ public class MyToolWindowFactory implements ToolWindowFactory {
                     BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, CharsetToolkit.UTF8));
                     String line = "";
                     List<String> tempList = new ArrayList<String>();
-                    boolean append=true;
+                    boolean append = true;
+                    String[] logPrefix = Setting.config.logPrefix;
+
                     while ((line = reader.readLine()) != null) {
                         if (line.startsWith("[ 2")) {
                             if (line.compareTo(oldTime) > 0) {
@@ -117,19 +119,23 @@ public class MyToolWindowFactory implements ToolWindowFactory {
                                             oldTime = line;
                                         } else {
                                             // 记录首行
-                                            for (String item : Setting.config.logPrefix) {
-                                                if (line.startsWith(item)) {
-                                                    append=true;
-                                                    tempList.add(line);
-                                                } else {
-                                                    append=false;
+                                            if (logPrefix == null || logPrefix.length == 0) {
+                                                tempList.add(line);
+                                            } else {
+                                                for (String item : logPrefix) {
+                                                    if (line.startsWith(item)) {
+                                                        append = true;
+                                                        tempList.add(line);
+                                                    } else {
+                                                        append = false;
+                                                    }
                                                 }
                                             }
                                         }
                                     } else {
                                         // 追加内容, 多行一条记录
                                         if (!append) continue;
-                                        if(tempList.size()==0)continue;
+                                        if (tempList.size() == 0) continue;
                                         String str = (String) tempList.get(tempList.size() - 1);
                                         str = str + line;
                                         tempList.set(tempList.size() - 1, str);

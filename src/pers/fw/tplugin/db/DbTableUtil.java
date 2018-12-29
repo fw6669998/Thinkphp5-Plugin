@@ -158,26 +158,30 @@ public class DbTableUtil {
         Project project = psiElement.getProject();
         //Model子类
         PhpClass phpClass = Util.getInstanseClass(project, (MethodReference) methodRef);  //获取模型类
-        if (phpClass != null) {
-            Collection<Field> fields = phpClass.getFields();
-            for (Field item : fields) {
-                if ("name".equals(item.getName())) {
-                    String name = item.getDefaultValue().getText();
-                    if (name != null && !name.isEmpty() && !"$name".equals(name)) {
-                        tables.add(DbTableUtil.getTableByName(project, name));
-                        break;
-                    }
-                }
-                if ("table".equals(item.getName())) {
-                    String name = item.getDefaultValue().getText();//item.getDefaultValuePresentation();
-                    if (name != null && !name.isEmpty() && !"$table".equals(name)) {
-                        name = name.replace("'", "").replace("\"", "");
-                        tables.add(name);
-                        break;
-                    }
-                }
-            }
+        String table = Util.getTableByClass(phpClass, project);
+        if(table!=null){
+            tables.add(table);
         }
+//        if (phpClass != null) {
+//            Collection<Field> fields = phpClass.getFields();
+//            for (Field item : fields) {
+//                if ("name".equals(item.getName())) {
+//                    String name = item.getDefaultValue().getText();
+//                    if (name != null && !name.isEmpty() && !"$name".equals(name)) {
+//                        tables.add(DbTableUtil.getTableByName(project, name));
+//                        break;
+//                    }
+//                }
+//                if ("table".equals(item.getName())) {
+//                    String name = item.getDefaultValue().getText();//item.getDefaultValuePresentation();
+//                    if (name != null && !name.isEmpty() && !"$table".equals(name)) {
+//                        name = name.replace("'", "").replace("\"", "");
+//                        tables.add(name);
+//                        break;
+//                    }
+//                }
+//            }
+//        }
     }
 
 

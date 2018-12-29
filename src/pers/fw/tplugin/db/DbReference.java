@@ -13,6 +13,7 @@ import com.intellij.util.containers.JBIterable;
 import com.jetbrains.php.lang.PhpLanguage;
 import com.jetbrains.php.lang.psi.elements.*;
 import icons.DatabaseIcons;
+import pers.fw.tplugin.beans.Setting;
 import pers.fw.tplugin.inter.GotoCompletionContributor;
 import pers.fw.tplugin.inter.GotoCompletionLanguageRegistrar;
 import pers.fw.tplugin.inter.GotoCompletionProvider;
@@ -67,6 +68,7 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
             new MethodMatcher.CallToSignature("\\think\\Model", "update"),
             new MethodMatcher.CallToSignature("\\think\\Model", "insert"),
             new MethodMatcher.CallToSignature("\\think\\Model", "data"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "save"),
     };
 
     private static MethodMatcher.CallToSignature[] QUERYTABLE = new MethodMatcher.CallToSignature[]{
@@ -96,7 +98,20 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
 
     public static boolean isHintVar(PsiElement param) {
         String text = param.getParent().getParent().getText();
-        return text.startsWith("$field") || text.startsWith("$where") || text.startsWith("$row");
+        if (text.startsWith("$field") || text.startsWith("$where") || text.startsWith("$row")) {
+            return true;
+        } else {
+            String[] dbVar = Setting.config.dbVar;
+            if (dbVar == null) {
+                return false;
+            }
+            for (String item : dbVar) {
+                if (text.startsWith("$" + item)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
@@ -115,10 +130,10 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                 }
 
                 PsiElement param = psiElement.getParent();
-//                Tool.printPsiTree(Util.getMethod(param));
 
                 if (!(param instanceof StringLiteralExpression)) return null;
-                if (Util.isHintMethod(param, QUERY, 0, compareClass) || Util.isHintMethod(param, join, 1, compareClass) || isHintVar(param)
+                if (Util.isHintMethod(param, QUERY, 0, compareClass) || Util.isHintMethod(param, join, 1, compareClass)
+                        || isHintVar(param) || Util.isConfigMethod(param, 1)
                 ) {
                     //列
                     return new ColumnProvider(param);
@@ -137,7 +152,7 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                     } catch (Exception e) {
                         return null;
                     }
-                    if (Util.isHintMethod(param1, QUERYARR, 0, compareClass)) {
+                    if (Util.isHintMethod(param1, QUERYARR, 0, compareClass) || Util.isConfigMethod(param1, 2)) {
                         return new ColumnProvider(param1);
                     }
                 }
@@ -159,6 +174,7 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
 
             HashSet<String> tables = new HashSet<>();
 
+            //收集表
             DbTableUtil.collectionTableByCurFile(getElement(), tables);
             DbTableUtil.collectionTableByModel(getElement(), tables);
             DbTableUtil.collectionTableByContext(getElement(), tables);

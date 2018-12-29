@@ -1,16 +1,22 @@
 package pers.fw.tplugin.util;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.vfs.VirtualFileEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.jetbrains.php.PhpIndex;
+import com.jetbrains.php.lang.psi.elements.Field;
 import com.jetbrains.php.lang.psi.elements.Method;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.impl.PhpClassImpl;
 import pers.fw.tplugin.beans.Config;
 import pers.fw.tplugin.beans.Setting;
+import pers.fw.tplugin.db.DbTableUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -104,6 +110,28 @@ Util {
         return "xxx";
     }
 
+    public static String getTableByClass(PhpClass phpClass, Project project) {
+        if (phpClass != null) {
+            Collection<Field> fields = phpClass.getFields();
+            for (Field item : fields) {
+                if ("name".equals(item.getName())) {
+                    String name = item.getDefaultValue().getText();
+                    if (name != null && !name.isEmpty() && !"$name".equals(name)) {
+                        name = name.replace("'", "").replace("\"", "");
+                        return DbTableUtil.getTableByName(project, name);
+                    }
+                } else if ("table".equals(item.getName())) {
+                    String name = item.getDefaultValue().getText();//item.getDefaultValuePresentation();
+                    if (name != null && !name.isEmpty() && !"$table".equals(name)) {
+                        name = name.replace("'", "").replace("\"", "");
+                        return name;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     /**
      * @return application的目录, 相对目录, 相对于项目的目录
      */
@@ -171,7 +199,7 @@ Util {
         return res;
     }
 
-    public static void setConfig(String settingfile){
+    public static void setConfig(String settingfile) {
         Config config = null;
         try {
             String str = "";
@@ -181,23 +209,51 @@ Util {
             StringBuilder sb = new StringBuilder();//定义一个字符串缓存，将字符串存放缓存中
             String s = "";
             while ((s = bReader.readLine()) != null) {//逐行读取文件内容，不读取换行符和末尾的空格
-                sb.append(s);//将读取的字符串添加换行符后累加存放在缓存中
+                sb.append(s + "\r\n");//将读取的字符串添加换行符后累加存放在缓存中
             }
             bReader.close();
             str = sb.toString();
             ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             config = mapper.readValue(str, Config.class);
+        } catch (UnrecognizedPropertyException e1) {
+            System.out.println("配置文件格式不对");
         } catch (Exception e) {
             System.out.println("读取配置失败");
         }
-        if(config!=null)Setting.config=config;
+        if (config != null) Setting.config = config;
     }
 
-    public static void updateConfig(VirtualFileEvent vFile){
-        if(!vFile.getFileName().equals(Setting.fileName))return;
-        String path = vFile.getFile().getPath();
-        setConfig(path);
-//        Config config = Util.setConfig(root+"/"+Setting.fileName);
-//        if(config!=null)Setting.config=config;
+    /**
+     * 是否是配置的提示方法,
+     */
+    public static boolean isConfigMethod(PsiElement element, int type) {
+        String[] methodStrs;
+        if (type == 1) {
+            methodStrs = Setting.config.dbMethod;
+        } else {
+            methodStrs = Setting.config.dbArrMethod;
+        }
+        if (methodStrs == null) return false;
+        for (String item : methodStrs) {
+            int index = 0;
+            String methodStr = item;
+            if (item.contains(".")) {
+                String[] method = item.split("\\.");
+                if (method.length == 2) {
+                    try {
+                        index = Integer.valueOf(method[1]) - 1;
+                    } catch (Exception e) {
+                    }
+                    if (index < 0) index = 0;
+                    methodStr = method[0];
+                }
+            }
+            if (PsiElementUtil.isFunctionReference(element, methodStr, index)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
