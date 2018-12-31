@@ -57,7 +57,7 @@ thinkPhp5 plugin
 
 日志
     
-    该功能默认管理, 要开启请在插件配置文件中打开
+    该功能默认关闭(略感鸡肋), 要开启请在插件配置文件中打开
     通过监听日志文件, 打印日志内容,
     筛选日志,在插件配置文件中配置筛选,设置匹配前缀进行匹配  //最好从日志文件中复制前缀,如[ sql ] [ SQL ]
 ![img](https://github.com/fw6669998/Thinkphp5-Plugin/blob/master/img/log.gif)
