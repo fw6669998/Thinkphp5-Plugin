@@ -51,9 +51,22 @@ thinkPhp5 plugin
     如果有多条连接将需要提示的数据库连接命名为包含work的命名的连接, //重命名连接, 连接->右键->rename
      
     数据库会在方法的代码中收集表进行字段提示,
-    与数据表相关的方法会进行表提示, 与数据库字段相关的方法会进行字段提示, 以$where,$field,$row为开头的数组变量会进行字段提示
-
+    与数据表相关的方法会进行表提示, 与数据库字段相关的方法会进行字段提示, 
+    以$where,$field,$row为开头的数组变量会进行字段提示,可在配置文件中进行配置
 ![img](https://github.com/fw6669998/Thinkphp5-Plugin/blob/master/img/db.gif)
+
+日志
+    
+    该功能默认管理, 要开启请在插件配置文件中打开
+    通过监听日志文件, 打印日志内容,
+    筛选日志,在插件配置文件中配置筛选,设置匹配前缀进行匹配  //最好从日志文件中复制前缀,如[ sql ] [ SQL ]
+![img](https://github.com/fw6669998/Thinkphp5-Plugin/blob/master/img/log.gif)
+     
+插件配置文件
+    
+    该文件用于配置某些功能, 不配置也可以没有关系
+    将配置文件放在项目即可生效,  //配置模板及说明:tplugin.json文件
+
 
 ## 常见异常
 如果模型,配置,和路由不能正常提示和跳转, 请点击File -> invalidate caches/restart 
