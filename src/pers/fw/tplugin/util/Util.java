@@ -256,4 +256,13 @@ Util {
         }
         return false;
     }
+
+    public static String formatLog(String str){
+        if(str==null)return "";
+        str=str.replace("[","\r\n[");
+        str=str.replace("]","]\r\n");
+        str=str.replace("\r\n \r\n","\r\n");
+        str=str.replace("',  '","',\r\n'");
+        return str;
+    }
 }

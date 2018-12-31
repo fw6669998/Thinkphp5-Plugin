@@ -15,7 +15,11 @@
           </grid>
         </constraints>
         <properties>
+          <continuousLayout value="false"/>
+          <dividerLocation value="500"/>
+          <dividerSize value="10"/>
           <oneTouchExpandable value="true"/>
+          <orientation value="1"/>
         </properties>
         <border type="none"/>
         <children>
@@ -28,7 +32,12 @@
             <children>
               <component id="73a74" class="javax.swing.JList" binding="list1" default-binding="true">
                 <constraints/>
-                <properties/>
+                <properties>
+                  <alignmentX value="0.5"/>
+                  <focusable value="true"/>
+                  <layoutOrientation value="0"/>
+                  <minimumSize width="0" height="0"/>
+                </properties>
               </component>
             </children>
           </scrollpane>

@@ -80,6 +80,7 @@ public class MyToolWindowFactory implements ToolWindowFactory {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 String value = (String) list1.getSelectedValue();
+                value = Util.formatLog(value);
                 textPane1.setText(value);
             }
         });
@@ -118,24 +119,23 @@ public class MyToolWindowFactory implements ToolWindowFactory {
                                             tempList.add(line);
                                             oldTime = line;
                                         } else {
-                                            // 记录首行
-                                            if (logPrefix == null || logPrefix.length == 0) {
-                                                tempList.add(line);
+                                            if (logPrefix == null || logPrefix.length == 0) {   //当没有配置筛选的时候
+                                                tempList.add("      "+line);
+                                                append=true;
                                             } else {
                                                 for (String item : logPrefix) {
+                                                    append = false;
                                                     if (line.startsWith(item)) {
                                                         append = true;
-                                                        tempList.add(line);
-                                                    } else {
-                                                        append = false;
+                                                        tempList.add("      "+line);
+                                                        break;
                                                     }
                                                 }
                                             }
                                         }
                                     } else {
                                         // 追加内容, 多行一条记录
-                                        if (!append) continue;
-                                        if (tempList.size() == 0) continue;
+                                        if (!append||tempList.size() == 0) continue;
                                         String str = (String) tempList.get(tempList.size() - 1);
                                         str = str + line;
                                         tempList.set(tempList.size() - 1, str);

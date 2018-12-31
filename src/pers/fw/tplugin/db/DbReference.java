@@ -73,23 +73,20 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
 
     private static MethodMatcher.CallToSignature[] QUERYTABLE = new MethodMatcher.CallToSignature[]{
             new MethodMatcher.CallToSignature("\\think\\Db", "table"),
-            new MethodMatcher.CallToSignature("\\think\\Db", "name"),
             new MethodMatcher.CallToSignature("\\think\\Db", "join"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "table"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "name"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "join"),
-//            new MethodMatcher.CallToSignature("\\think\\db\\Query", "fullJoin"),
-//            new MethodMatcher.CallToSignature("\\think\\db\\Query", "leftJoin"),
-//            new MethodMatcher.CallToSignature("\\think\\db\\Query", "rightJoin"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "getTableInfo"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "getPk"),
     };
 
+    private static MethodMatcher.CallToSignature[] QUERYNAME = new MethodMatcher.CallToSignature[]{
+            new MethodMatcher.CallToSignature("\\think\\Db", "name"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "name"),
+    };
+
     private static MethodMatcher.CallToSignature[] join = new MethodMatcher.CallToSignature[]{
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "join"),
-//            new MethodMatcher.CallToSignature("\\think\\db\\Query", "fullJoin"),
-//            new MethodMatcher.CallToSignature("\\think\\db\\Query", "leftJoin"),
-//            new MethodMatcher.CallToSignature("\\think\\db\\Query", "rightJoin"),
     };
 
     //是否进行类型比较
@@ -137,9 +134,12 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                 ) {
                     //列
                     return new ColumnProvider(param);
-                } else if (PsiElementUtil.isFunctionReference(param, "db", 0) || Util.isHintMethod(param, QUERYTABLE, 0, compareClass)) {
+                } else if (Util.isHintMethod(param, QUERYTABLE, 0, compareClass)) {
                     //表
-                    return new TableProvider(param);
+                    return new TableProvider(param, 1);
+                } else if (PsiElementUtil.isFunctionReference(param, "db", 0) || Util.isHintMethod(param, QUERYNAME, 0, compareClass)) {
+                    //表, name
+                    return new TableProvider(param, 2);
                 } else {
                     //列, 数组里的列
                     PsiElement param1 = null;
@@ -212,8 +212,11 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
     }
 
     private static class TableProvider extends GotoCompletionProvider {
-        public TableProvider(PsiElement element) {
+        int type = 1;
+
+        public TableProvider(PsiElement element, int type) {
             super(element);
+            this.type = type;
         }
 
         @NotNull
@@ -225,7 +228,15 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                 String comment = "";
                 if (table.getComment() != null)
                     comment = table.getComment();
-                lookupElements.add(LookupElementBuilder.create(table.getName()).withTailText("   " + comment).withIcon(DatabaseIcons.Table));
+                String tableStr = table.getName();
+                lookupElements.add(LookupElementBuilder.create(tableStr).withTailText("   " + comment).withIcon(DatabaseIcons.Table));
+                if (this.type == 2) {
+                    int index = tableStr.indexOf("_");
+                    if (index != -1) {
+                        tableStr = tableStr.substring(index+1);
+                        lookupElements.add(LookupElementBuilder.create(tableStr).withTailText("   " + comment).withIcon(DatabaseIcons.Table));
+                    }
+                }
             }
             return lookupElements;
         }
