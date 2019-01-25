@@ -102,7 +102,10 @@ Util {
      * @return 当前的模型目录; 根据类名获取
      */
     public static String getCurTpModuleName(PsiElement psiElement) {
-        String fqn = getPhpClass(psiElement).getFQN();
+        PhpClassImpl phpClass = getPhpClass(psiElement);
+        if(phpClass==null)return "xxx";
+        String fqn=phpClass.getFQN();
+        if(fqn==null)return "xxx";
         String[] split = fqn.split("\\\\");
         if (split.length > 2) {
             return split[2];
@@ -217,8 +220,6 @@ Util {
             mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             config = mapper.readValue(str, Config.class);
-        } catch (UnrecognizedPropertyException e1) {
-            System.out.println("配置文件格式不对");
         } catch (Exception e) {
             System.out.println("读取配置失败");
         }
