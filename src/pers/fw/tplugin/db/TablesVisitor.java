@@ -1,10 +1,12 @@
 package pers.fw.tplugin.db;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiReference;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.FunctionReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.impl.VariableImpl;
+import com.jetbrains.php.lang.psi.resolve.types.PhpType;
 import pers.fw.tplugin.beans.ArrayMapVisitor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiRecursiveElementWalkingVisitor;
@@ -49,18 +51,23 @@ public class TablesVisitor extends PsiRecursiveElementWalkingVisitor {
     @Override
     public void visitElement(PsiElement element) {
         if (element instanceof VariableImpl) {  //从模型变量收集
-            Set<String> types = ((VariableImpl) element.getReference()).getType().getTypes();
-            Project project=element.getProject();
-            for (String item : types){
-                if(item.contains("\\model\\")){ //model子类
-                    Collection<PhpClass> classesByFQN = PhpIndex.getInstance(project).getClassesByFQN(item);
-                    for(PhpClass cls : classesByFQN){
-                        String table=Util.getTableByClass(cls,project);
-                        this.visitor.visit(table,null);
+            PsiReference reference = element.getReference();
+            if (reference == null) {
+                super.visitElement(element);
+            } else {
+                Set<String> types = ((VariableImpl) reference).getType().getTypes();
+                Project project = element.getProject();
+                for (String item : types) {
+                    if (item.contains("\\model\\")) { //model子类
+                        Collection<PhpClass> classesByFQN = PhpIndex.getInstance(project).getClassesByFQN(item);
+                        for (PhpClass cls : classesByFQN) {
+                            String table = Util.getTableByClass(cls, project);
+                            this.visitor.visit(table, null);
+                        }
                     }
                 }
             }
-        }else if (element instanceof FunctionReference) {   //从table, join, db, name 收集
+        } else if (element instanceof FunctionReference) {   //从table, join, db, name 收集
             PsiElement[] childrens = element.getChildren();
             for (PsiElement paramList : childrens) {
                 if (paramList instanceof ParameterListImpl) {

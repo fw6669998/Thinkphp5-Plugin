@@ -115,13 +115,21 @@ Util {
             Collection<Field> fields = phpClass.getFields();
             for (Field item : fields) {
                 if ("name".equals(item.getName())) {
-                    String name = item.getDefaultValue().getText();
+                    PsiElement defaultValue = item.getDefaultValue();
+                    if(defaultValue==null){
+                        continue;
+                    }
+                    String name = defaultValue.getText();
                     if (name != null && !name.isEmpty() && !"$name".equals(name)) {
                         name = name.replace("'", "").replace("\"", "");
                         return DbTableUtil.getTableByName(project, name);
                     }
                 } else if ("table".equals(item.getName())) {
-                    String name = item.getDefaultValue().getText();//item.getDefaultValuePresentation();
+                    PsiElement defaultValue = item.getDefaultValue();
+                    if(defaultValue==null){
+                        continue;
+                    }
+                    String name = defaultValue.getText();
                     if (name != null && !name.isEmpty() && !"$table".equals(name)) {
                         name = name.replace("'", "").replace("\"", "");
                         return name;
@@ -140,7 +148,10 @@ Util {
         String projectPath = psiElement.getProject().getBasePath();//"D:\\project2\\test";
 //        String currentFilePath = psiElement.getContainingFile().getVirtualFile().getPath(); //"D:\\project2\\test\\application\\index\\controller\\Index.php";
         String currentFilePath = psiElement.getContainingFile().getVirtualFile().getPath(); //"D:\\project2\\test\\project\\application\\index\\controller\\Index.php";
-        String[] arr = currentFilePath.replace(projectPath, "").split("/"); // project,application,index,xxx
+        String[] arr = new String[0]; // project,application,index,xxx
+        if (projectPath != null) {
+            arr = currentFilePath.replace(projectPath, "").split("/");
+        }
         StringBuilder app = new StringBuilder();
 
         for (int i = 0; i < arr.length; i++) {

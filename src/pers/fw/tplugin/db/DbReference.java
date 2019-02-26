@@ -224,6 +224,7 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
         public Collection<LookupElement> getLookupElements() {
             final Collection<LookupElement> lookupElements = new ArrayList<>();
             JBIterable<? extends DasTable> tables = DbTableUtil.getTables(getElement().getProject());
+            if(tables==null) return lookupElements;
             for (DasTable table : tables) {
                 String comment = "";
                 if (table.getComment() != null)
