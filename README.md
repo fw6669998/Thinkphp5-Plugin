@@ -67,6 +67,12 @@ thinkPhp5 plugin
     该文件用于配置某些功能, 不配置也可以没有关系
     将配置文件放在项目即可生效,  //配置模板及说明:tplugin.json文件
 
+模板标签 live template
+    
+    tp的模板标签,输入关键字再按tab展开
+    如需修改标签内容在File->Setting->Editor->Live templates->Thinkphp-5中选择修改
+    模板标签配置数据来源: http://www.thinkphp.cn/code/4441.html
+![img](https://github.com/fw6669998/Thinkphp5-Plugin/blob/master/img/tplt.gif)
 
 ## 常见异常
 如果模型,配置,和路由不能正常提示和跳转, 请点击File -> invalidate caches/restart 
