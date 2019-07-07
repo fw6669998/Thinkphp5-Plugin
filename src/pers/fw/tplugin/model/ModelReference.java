@@ -51,7 +51,7 @@ public class ModelReference implements GotoCompletionLanguageRegistrar {
 
                 PsiElement parent = psiElement.getParent();
 
-                if (parent != null && PsiElementUtil.isFunctionReference(parent, "model", 0)) {
+                if (parent != null && PsiElementUtil.isFunctionReference(parent, "D", 0)) {
                     return new ModelReference.ModelProvider(parent);
                 }
                 return null;
@@ -74,6 +74,7 @@ public class ModelReference implements GotoCompletionLanguageRegistrar {
             FileBasedIndex.getInstance().processAllKeys(ModelStubIndex.KEY, ymlProjectProcessor, getProject());
             String curModule = Util.getCurTpModuleName(getElement()) + "/";
             for (String key : ymlProjectProcessor.getResult()) {    //从ymlProjectProcessor中获取结果
+                Tool.log(key);
                 lookupElements.add(LookupElementBuilder.create(key).withIcon(LaravelIcons.TEMPLATE_CONTROLLER_LINE_MARKER));
                 if (key.startsWith(curModule)) {    //去掉前缀的模型提示
                     key = key.replace(curModule, "");
@@ -96,9 +97,10 @@ public class ModelReference implements GotoCompletionLanguageRegistrar {
             if (!contents.contains("/")) contents = Util.getCurTpModuleName(getElement()) + "/" + contents;
 
             //忽略大小写
-            Collection<String> allKeys = FileBasedIndex.getInstance().getAllKeys(ModelStubIndex.KEY, getElement().getProject());
+            CollectProjectUniqueKeys ymlProjectProcessor = new CollectProjectUniqueKeys(getProject(), ModelStubIndex.KEY);
+//            Collection<String> allKeys = FileBasedIndex.getInstance().getAllKeys(ModelStubIndex.KEY,ymlProjectProcessor, getElement().getProject());
 
-            contents = Util.getKeyWithCase(allKeys, contents);
+//            contents = Util.getKeyWithCase(allKeys, contents);
 
             FileBasedIndex.getInstance().getFilesWithKey(ModelStubIndex.KEY, new HashSet<>(Collections.singletonList(contents)),
                     new Processor<VirtualFile>() {

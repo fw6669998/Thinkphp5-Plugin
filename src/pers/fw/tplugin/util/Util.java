@@ -104,8 +104,8 @@ Util {
     public static String getCurTpModuleName(PsiElement psiElement) {
         String fqn = getPhpClass(psiElement).getFQN();
         String[] split = fqn.split("\\\\");
-        if (split.length > 2) {
-            return split[2];
+        if (split.length > 1) {
+            return split[1];
         }
         return "xxx";
     }

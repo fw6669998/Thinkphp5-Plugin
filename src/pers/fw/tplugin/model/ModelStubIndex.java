@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 public class ModelStubIndex extends FileBasedIndexExtension<String, Void> {
-    public static final ID<String, Void> KEY = ID.create("fw.idea.thinkphp.model");
+    public static final ID<String, Void> KEY = ID.create("fw.idea.thinkphp3.model");
     private final KeyDescriptor<String> myKeyDescriptor = new EnumeratorStringDescriptor();
 
     @NotNull

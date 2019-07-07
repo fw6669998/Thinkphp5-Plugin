@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ModelUtil {
-    private static final Pattern modelFilePattern = Pattern.compile(".*/application/(\\w+)/model/(\\w+).php$");
+    private static final Pattern modelFilePattern = Pattern.compile(".*/Application/(\\w+)/Model/(\\w+).php$");
 
     public static String matchModelFile(Project project, VirtualFile virtualFile) {
         String path = virtualFile.getPath();
@@ -18,7 +18,7 @@ public class ModelUtil {
         }
         Matcher matcher = modelFilePattern.matcher(path);
         if (matcher.matches()) {
-            return matcher.group(1)+"/"+matcher.group(2);
+            return matcher.group(1)+"/"+matcher.group(2).replace(".class","");
         } else {
             return null;
         }
