@@ -1,11 +1,11 @@
 package pers.fw.tplugin.util;
 
-import pers.fw.tplugin.beans.MethodReferenceBag;
-import pers.fw.tplugin.beans.ParameterBag;
 import com.intellij.psi.PsiElement;
 import com.jetbrains.php.lang.psi.elements.Method;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import org.jetbrains.annotations.Nullable;
+import pers.fw.tplugin.beans.MethodReferenceBag;
+import pers.fw.tplugin.beans.ParameterBag;
 
 import java.util.ArrayList;
 import java.util.Arrays;

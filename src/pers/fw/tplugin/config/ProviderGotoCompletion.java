@@ -9,11 +9,11 @@ import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.PhpLanguage;
 import com.jetbrains.php.lang.parser.PhpElementTypes;
 import com.jetbrains.php.lang.psi.elements.*;
+import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import pers.fw.tplugin.inter.GotoCompletionLanguageRegistrar;
 import pers.fw.tplugin.inter.GotoCompletionProvider;
 import pers.fw.tplugin.inter.GotoCompletionRegistrarParameter;
-import org.apache.commons.lang.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import pers.fw.tplugin.util.PhpElementsUtil;
 
 import java.util.ArrayList;

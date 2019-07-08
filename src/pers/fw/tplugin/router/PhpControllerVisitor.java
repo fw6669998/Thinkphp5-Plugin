@@ -1,10 +1,10 @@
 package pers.fw.tplugin.router;
 
-import pers.fw.tplugin.beans.ArrayKeyVisitor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiRecursiveElementWalkingVisitor;
 import com.jetbrains.php.lang.psi.elements.Method;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
+import pers.fw.tplugin.beans.ArrayKeyVisitor;
 
 public class PhpControllerVisitor extends PsiRecursiveElementWalkingVisitor {
 

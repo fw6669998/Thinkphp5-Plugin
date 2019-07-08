@@ -1,6 +1,5 @@
 package pers.fw.tplugin.util;
 
-import pers.fw.tplugin.beans.ParameterBag;
 import com.intellij.psi.PsiElement;
 import com.jetbrains.php.lang.psi.elements.FunctionReference;
 import com.jetbrains.php.lang.psi.elements.Method;
@@ -9,6 +8,7 @@ import com.jetbrains.php.lang.psi.elements.ParameterListOwner;
 import com.jetbrains.php.lang.psi.elements.impl.PhpClassImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pers.fw.tplugin.beans.ParameterBag;
 
 public class PsiElementUtil {
 

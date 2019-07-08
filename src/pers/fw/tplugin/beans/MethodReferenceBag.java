@@ -1,6 +1,5 @@
 package pers.fw.tplugin.beans;
 
-import pers.fw.tplugin.beans.ParameterBag;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.ParameterList;
 

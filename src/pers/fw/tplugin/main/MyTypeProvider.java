@@ -1,26 +1,14 @@
 package pers.fw.tplugin.main;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.Processor;
-import com.intellij.util.indexing.FileBasedIndex;
-import com.jetbrains.php.lang.PhpFileType;
 import com.jetbrains.php.lang.psi.elements.*;
 import com.jetbrains.php.lang.psi.resolve.types.PhpType;
 import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider3;
-import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nullable;
-import pers.fw.tplugin.model.ModelReference;
-import pers.fw.tplugin.model.ModelStubIndex;
 import pers.fw.tplugin.util.Util;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 public class MyTypeProvider implements PhpTypeProvider3 {

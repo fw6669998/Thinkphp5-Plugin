@@ -1,6 +1,5 @@
 package pers.fw.tplugin.model;
 
-import pers.fw.tplugin.beans.LaravelIcons;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.lang.Language;
@@ -15,14 +14,15 @@ import com.intellij.util.indexing.FileBasedIndex;
 import com.jetbrains.php.lang.PhpFileType;
 import com.jetbrains.php.lang.PhpLanguage;
 import com.jetbrains.php.lang.psi.elements.*;
+import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import pers.fw.tplugin.beans.LaravelIcons;
 import pers.fw.tplugin.config.CollectProjectUniqueKeys;
 import pers.fw.tplugin.inter.GotoCompletionContributor;
 import pers.fw.tplugin.inter.GotoCompletionLanguageRegistrar;
 import pers.fw.tplugin.inter.GotoCompletionProvider;
 import pers.fw.tplugin.inter.GotoCompletionRegistrarParameter;
-import org.apache.commons.lang.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import pers.fw.tplugin.util.PsiElementUtil;
 import pers.fw.tplugin.util.Util;
 
