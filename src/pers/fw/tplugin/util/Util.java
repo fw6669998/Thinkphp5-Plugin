@@ -102,7 +102,9 @@ Util {
      * @return 当前的模型目录; 根据类名获取
      */
     public static String getCurTpModuleName(PsiElement psiElement) {
-        String fqn = getPhpClass(psiElement).getFQN();
+        PhpClassImpl phpClass = getPhpClass(psiElement);
+        if(phpClass==null)return "xxx";
+        String fqn = phpClass.getFQN();
         String[] split = fqn.split("\\\\");
         if (split.length > 1) {
             return split[1];
@@ -115,16 +117,29 @@ Util {
             Collection<Field> fields = phpClass.getFields();
             for (Field item : fields) {
                 if ("name".equals(item.getName())) {
-                    String name = item.getDefaultValue().getText();
+                    PsiElement defaultValue = item.getDefaultValue();
+                    if(defaultValue==null)continue;
+                    String name = defaultValue.getText();
                     if (name != null && !name.isEmpty() && !"$name".equals(name)) {
                         name = name.replace("'", "").replace("\"", "");
                         return DbTableUtil.getTableByName(project, name);
                     }
                 } else if ("table".equals(item.getName())) {
-                    String name = item.getDefaultValue().getText();//item.getDefaultValuePresentation();
+                    PsiElement defaultValue = item.getDefaultValue();
+                    if(defaultValue==null)continue;
+                    String name = defaultValue.getText();
                     if (name != null && !name.isEmpty() && !"$table".equals(name)) {
                         name = name.replace("'", "").replace("\"", "");
                         return name;
+                    }
+                }else{
+                    String fqn=phpClass.getFQN();
+                    if(fqn.contains("\\Model\\")){
+                        int start = fqn.lastIndexOf("\\");
+                        int end = fqn.lastIndexOf("Model");
+                        if(end<start+1)return null;
+                        String name=fqn.substring(start+1,end);
+                        return DbTableUtil.getTableByName(project, name);
                     }
                 }
             }
@@ -136,7 +151,7 @@ Util {
      * @return application的目录, 相对目录, 相对于项目的目录
      */
     public static String getApplicationDir(PsiElement psiElement) {
-        String application = "application";
+        String application = "Application";
         String projectPath = psiElement.getProject().getBasePath();//"D:\\project2\\test";
 //        String currentFilePath = psiElement.getContainingFile().getVirtualFile().getPath(); //"D:\\project2\\test\\application\\index\\controller\\Index.php";
         String currentFilePath = psiElement.getContainingFile().getVirtualFile().getPath(); //"D:\\project2\\test\\project\\application\\index\\controller\\Index.php";

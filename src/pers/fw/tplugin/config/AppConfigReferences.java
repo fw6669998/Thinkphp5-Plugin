@@ -30,12 +30,12 @@ import java.util.*;
 public class AppConfigReferences implements GotoCompletionLanguageRegistrar {
 
     private static MethodMatcher.CallToSignature[] CONFIG = new MethodMatcher.CallToSignature[]{
-            new MethodMatcher.CallToSignature("\\think\\Config", "get"),
-            new MethodMatcher.CallToSignature("\\think\\Config", "has"),
-            new MethodMatcher.CallToSignature("\\think\\Config", "set"),
-            new MethodMatcher.CallToSignature("\\think\\facade\\Config", "get"),
-            new MethodMatcher.CallToSignature("\\think\\facade\\Config", "set"),
-            new MethodMatcher.CallToSignature("\\think\\facade\\Config", "has"),
+//            new MethodMatcher.CallToSignature("\\think\\Config", "get"),
+//            new MethodMatcher.CallToSignature("\\think\\Config", "has"),
+//            new MethodMatcher.CallToSignature("\\think\\Config", "set"),
+//            new MethodMatcher.CallToSignature("\\think\\facade\\Config", "get"),
+//            new MethodMatcher.CallToSignature("\\think\\facade\\Config", "set"),
+//            new MethodMatcher.CallToSignature("\\think\\facade\\Config", "has"),
 //            new MethodMatcher.CallToSignature("\\Illuminate\\Config\\Repository", "setParsedKey"),
     };
 
@@ -50,7 +50,7 @@ public class AppConfigReferences implements GotoCompletionLanguageRegistrar {
                 }
 
                 PsiElement parent = psiElement.getParent();
-                if (parent != null && (PsiElementUtil.isFunctionReference(parent, "config", 0)
+                if (parent != null && (PsiElementUtil.isFunctionReference(parent, "C", 0)
                         || Util.isHintMethod(parent, CONFIG, 0, true))) {
                     return new ConfigKeyProvider(parent);
                 }

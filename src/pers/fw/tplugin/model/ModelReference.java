@@ -74,7 +74,7 @@ public class ModelReference implements GotoCompletionLanguageRegistrar {
             FileBasedIndex.getInstance().processAllKeys(ModelStubIndex.KEY, ymlProjectProcessor, getProject());
             String curModule = Util.getCurTpModuleName(getElement()) + "/";
             for (String key : ymlProjectProcessor.getResult()) {    //从ymlProjectProcessor中获取结果
-                Tool.log(key);
+//                Tool.log(key);
                 lookupElements.add(LookupElementBuilder.create(key).withIcon(LaravelIcons.TEMPLATE_CONTROLLER_LINE_MARKER));
                 if (key.startsWith(curModule)) {    //去掉前缀的模型提示
                     key = key.replace(curModule, "");

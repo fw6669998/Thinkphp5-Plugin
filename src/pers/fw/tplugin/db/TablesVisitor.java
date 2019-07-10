@@ -28,14 +28,16 @@ public class TablesVisitor extends PsiRecursiveElementWalkingVisitor {
     }
 
     private static MethodMatcher.CallToSignature[] alias = new MethodMatcher.CallToSignature[]{
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "alias")};
+//            new MethodMatcher.CallToSignature("\\think\\db\\Query", "alias")
+    };
 
     private static MethodMatcher.CallToSignature[] join = new MethodMatcher.CallToSignature[]{
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "join")};
+//            new MethodMatcher.CallToSignature("\\think\\db\\Query", "join")
+    };
 
     private static MethodMatcher.CallToSignature[] table = new MethodMatcher.CallToSignature[]{
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "table"),
-            new MethodMatcher.CallToSignature("\\think\\Db", "table"),
+//            new MethodMatcher.CallToSignature("\\think\\db\\Query", "table"),
+//            new MethodMatcher.CallToSignature("\\think\\Db", "table"),
     };
 
     private void addTable(PsiElement param, int type) {
@@ -50,17 +52,17 @@ public class TablesVisitor extends PsiRecursiveElementWalkingVisitor {
     public void visitElement(PsiElement element) {
         if (element instanceof VariableImpl) {  //从模型变量收集
             Set<String> types = ((VariableImpl) element.getReference()).getType().getTypes();
-            Project project=element.getProject();
-            for (String item : types){
-                if(item.contains("\\model\\")){ //model子类
+            Project project = element.getProject();
+            for (String item : types) {
+                if (item.contains("\\Model\\")) { //model子类
                     Collection<PhpClass> classesByFQN = PhpIndex.getInstance(project).getClassesByFQN(item);
-                    for(PhpClass cls : classesByFQN){
-                        String table=Util.getTableByClass(cls,project);
-                        this.visitor.visit(table,null);
+                    for (PhpClass cls : classesByFQN) {
+                        String table = Util.getTableByClass(cls, project);
+                        this.visitor.visit(table, null);
                     }
                 }
             }
-        }else if (element instanceof FunctionReference) {   //从table, join, db, name 收集
+        } else if (element instanceof FunctionReference) {   //从table, join, db, name 收集
             PsiElement[] childrens = element.getChildren();
             for (PsiElement paramList : childrens) {
                 if (paramList instanceof ParameterListImpl) {
@@ -73,7 +75,8 @@ public class TablesVisitor extends PsiRecursiveElementWalkingVisitor {
                             this.visitor.visit(s[0], null);
                         } else if (PsiElementUtil.isFunctionReference(param, "table", 0)) {
                             addTable(param, 0);
-                        } else if (PsiElementUtil.isFunctionReference(param, "db", 0) || PsiElementUtil.isFunctionReference(param, "name", 0)) {
+                        } else if (PsiElementUtil.isFunctionReference(param, "M", 0)
+                                || PsiElementUtil.isFunctionReference(param, "D", 0)) {
                             addTable(param, 1);
                         }
                     }

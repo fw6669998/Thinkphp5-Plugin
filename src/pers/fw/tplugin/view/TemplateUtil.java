@@ -292,7 +292,9 @@ public class TemplateUtil {
                         return f;
                     }
                 } else if (f.isDirectory()) {
-                    return recursionMatch(f, file);
+                    File res=recursionMatch(f, file);
+                    if(res!=null)
+                        return res;
                 }
             }
         return null;

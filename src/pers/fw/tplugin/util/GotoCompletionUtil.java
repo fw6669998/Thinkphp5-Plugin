@@ -21,7 +21,7 @@ public class GotoCompletionUtil {
     private static GotoCompletionRegistrar[] CONTRIBUTORS = new GotoCompletionRegistrar[]{
             new AppConfigReferences(),
             new ViewReferences2(),
-            new RouterReference(),
+//            new RouterReference(),
             new DbReference(),
             new ModelReference(),
     };

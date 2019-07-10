@@ -26,67 +26,63 @@ import java.util.*;
 
 public class DbReference implements GotoCompletionLanguageRegistrar {
     private static MethodMatcher.CallToSignature[] QUERY = new MethodMatcher.CallToSignature[]{
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "where"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "group"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "avg"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "count"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "sum"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "max"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "min"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "field"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "order"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "value"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereOr"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereXor"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereNull"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereNotNull"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereExists"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereNotExists"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereIn"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereNotIn"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereLike"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereNotLike"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereBetween"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereNotBetween"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereExp"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "whereTime"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "withField"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "group"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "having"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "where"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "group"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "avg"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "count"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "sum"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "max"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "min"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "field"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "order"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "value"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "whereOr"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "whereXor"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "whereNull"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "whereNotNull"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "whereExists"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "whereNotExists"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "whereIn"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "whereNotIn"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "whereLike"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "whereNotLike"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "whereBetween"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "whereNotBetween"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "whereExp"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "whereTime"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "withField"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "group"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "having"),
 //            new MethodMatcher.CallToSignature("\\think\\db\\Query", "value"),
     };
 
     private static MethodMatcher.CallToSignature[] QUERYARR = new MethodMatcher.CallToSignature[]{
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "delete"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "update"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "insert"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "where"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "order"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "data"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "insertGetId"),
-            new MethodMatcher.CallToSignature("\\think\\Model", "delete"),
-            new MethodMatcher.CallToSignature("\\think\\Model", "update"),
-            new MethodMatcher.CallToSignature("\\think\\Model", "insert"),
-            new MethodMatcher.CallToSignature("\\think\\Model", "data"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "delete"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "update"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "insert"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "where"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "order"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "data"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "insertGetId"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "delete"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "update"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "insert"),
+//            new MethodMatcher.CallToSignature("\\think\\Model", "data"),
             new MethodMatcher.CallToSignature("\\think\\Model", "save"),
     };
 
     private static MethodMatcher.CallToSignature[] QUERYTABLE = new MethodMatcher.CallToSignature[]{
-            new MethodMatcher.CallToSignature("\\think\\Db", "table"),
-            new MethodMatcher.CallToSignature("\\think\\Db", "join"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "table"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "join"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "getTableInfo"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "getPk"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "table"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "join"),
     };
 
     private static MethodMatcher.CallToSignature[] QUERYNAME = new MethodMatcher.CallToSignature[]{
-            new MethodMatcher.CallToSignature("\\think\\Db", "name"),
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "name"),
+//            new MethodMatcher.CallToSignature("\\think\\Db", "name"),
+//            new MethodMatcher.CallToSignature("\\think\\db\\Query", "name"),
     };
 
     private static MethodMatcher.CallToSignature[] join = new MethodMatcher.CallToSignature[]{
-            new MethodMatcher.CallToSignature("\\think\\db\\Query", "join"),
+//            new MethodMatcher.CallToSignature("\\think\\db\\Query", "join"),
     };
 
     //是否进行类型比较
@@ -137,7 +133,7 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                 } else if (Util.isHintMethod(param, QUERYTABLE, 0, compareClass)) {
                     //表
                     return new TableProvider(param, 1);
-                } else if (PsiElementUtil.isFunctionReference(param, "db", 0) || Util.isHintMethod(param, QUERYNAME, 0, compareClass)) {
+                } else if (PsiElementUtil.isFunctionReference(param, "M", 0) || Util.isHintMethod(param, QUERYNAME, 0, compareClass)) {
                     //表, name
                     return new TableProvider(param, 2);
                 } else {
@@ -152,7 +148,10 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                     } catch (Exception e) {
                         return null;
                     }
-                    if (Util.isHintMethod(param1, QUERYARR, 0, compareClass) || Util.isConfigMethod(param1, 2)) {
+                    if (PsiElementUtil.isFunctionReference(param1, "insert", 0)
+                            || PsiElementUtil.isFunctionReference(param1, "update", 0)
+                            || Util.isHintMethod(param1, QUERYARR, 0, compareClass)
+                            || Util.isConfigMethod(param1, 2)) {
                         return new ColumnProvider(param1);
                     }
                 }

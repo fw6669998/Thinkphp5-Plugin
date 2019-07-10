@@ -30,9 +30,10 @@ import java.util.Collections;
 // view 处理类
 public class ViewReferences2 implements GotoCompletionLanguageRegistrar {
     private static MethodMatcher.CallToSignature[] VIEWS = new MethodMatcher.CallToSignature[]{
-            new MethodMatcher.CallToSignature("\\think\\View", "fetch"),
-            new MethodMatcher.CallToSignature("\\think\\Controller", "fetch"),
-            new MethodMatcher.CallToSignature("\\think\\Controller", "display"),
+            new MethodMatcher.CallToSignature("\\Think\\View", "fetch"),
+            new MethodMatcher.CallToSignature("\\Think\\View", "display"),
+            new MethodMatcher.CallToSignature("\\Think\\Controller", "fetch"),
+            new MethodMatcher.CallToSignature("\\Think\\Controller", "display"),
     };
 
     @Override
@@ -47,7 +48,7 @@ public class ViewReferences2 implements GotoCompletionLanguageRegistrar {
 
                 PsiElement parent = psiElement.getParent();
                 if (parent != null
-                        && (PsiElementUtil.isFunctionReference(parent, "view", 0) || MethodMatcher.getMatchedSignatureWithDepth(parent, VIEWS) != null)
+                        && (PsiElementUtil.isFunctionReference(parent, "T", 0) || MethodMatcher.getMatchedSignatureWithDepth(parent, VIEWS) != null)
                         && handlePath(psiElement)) {
                     return new ViewDirectiveCompletionProvider(parent);
                 }
@@ -74,7 +75,7 @@ public class ViewReferences2 implements GotoCompletionLanguageRegistrar {
         String application = Util.getApplicationDir(psiElement);
 //        String moduleName = arr[2];
         String moduleName = Util.getCurTpModuleName(psiElement);
-        ViewCollector.DEFAULT_TEMPLATE_PATH = new TemplatePath[]{new TemplatePath(application + "/" + moduleName + "/view", false)};
+        ViewCollector.DEFAULT_TEMPLATE_PATH = new TemplatePath[]{new TemplatePath(application + "/" + moduleName + "/View", false)};
         ViewCollector.curModule = moduleName;
         return true;
     }

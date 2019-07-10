@@ -122,16 +122,16 @@ public class DbTableUtil {
         if (phpClass != null) {
             Collection<Field> fields = phpClass.getFields();
             for (Field item : fields) {
-                if ("name".equals(item.getName())) {
+                if ("tableName".equals(item.getName())) {
                     String name = item.getDefaultValue().getText();
-                    if (name != null && !name.isEmpty() && !"$name".equals(name)) {
+                    if (name != null && !name.isEmpty() && !"$tableName".equals(name)) {
                         tables.add(DbTableUtil.getTableByName(project, name));
                         break;
                     }
                 }
-                if ("table".equals(item.getName())) {
+                if ("trueTableName".equals(item.getName())) {
                     String name = item.getDefaultValue().getText();//item.getDefaultValuePresentation();
-                    if (name != null && !name.isEmpty() && !"$table".equals(name)) {
+                    if (name != null && !name.isEmpty() && !"$trueTableName".equals(name)) {
                         name = name.replace("'", "").replace("\"", "");
                         tables.add(name);
                         break;
@@ -187,6 +187,7 @@ public class DbTableUtil {
 
     public static String getTableByName(Project project, String name) {
         if (name.isEmpty()) return null;
+        name=name.toLowerCase();
         name = name.replace("'", "").replace("\"", "");
         JBIterable<? extends DasTable> tables = getTables(project);
         if (tables == null) return null;

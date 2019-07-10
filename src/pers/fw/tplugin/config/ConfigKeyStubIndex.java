@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class ConfigKeyStubIndex extends FileBasedIndexExtension<String, Void> {
 
-    public static final ID<String, Void> KEY = ID.create("de.espend.idea.laravel.config_keys");
+    public static final ID<String, Void> KEY = ID.create("fw.idea.thinkphp3.config");
     private final KeyDescriptor<String> myKeyDescriptor = new EnumeratorStringDescriptor();
 
     @NotNull

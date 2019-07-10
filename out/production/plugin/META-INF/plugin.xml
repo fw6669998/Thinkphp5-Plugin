@@ -36,7 +36,7 @@
                     factoryClass="pers.fw.tplugin.log.MyToolWindowFactory" conditionClass="pers.fw.tplugin.log.ShowLog"/>
     </extensions>
     <extensions defaultExtensionNs="com.jetbrains.php">
-        <typeProvider3 implementation="pers.fw.tplugin.main.MyTypeProvider"/>
+        <typeProvider4 implementation="pers.fw.tplugin.main.MyTypeProvider"/>
     </extensions>
 
 </idea-plugin>
