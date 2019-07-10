@@ -4,11 +4,11 @@ import com.intellij.codeInsight.completion.*;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
+import org.jetbrains.annotations.NotNull;
 import pers.fw.tplugin.db.DbReference;
 import pers.fw.tplugin.inter.CompletionContributorParameter;
 import pers.fw.tplugin.inter.GotoCompletionContributor;
 import pers.fw.tplugin.inter.GotoCompletionProviderInterface;
-import org.jetbrains.annotations.NotNull;
 import pers.fw.tplugin.util.GotoCompletionUtil;
 import pers.fw.tplugin.util.Util;
 

@@ -2,7 +2,6 @@ package pers.fw.tplugin.config;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.apache.velocity.runtime.directive.Foreach;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Matcher;

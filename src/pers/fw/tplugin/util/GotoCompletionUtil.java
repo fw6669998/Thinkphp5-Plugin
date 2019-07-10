@@ -2,6 +2,7 @@ package pers.fw.tplugin.util;
 
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
+import org.jetbrains.annotations.NotNull;
 import pers.fw.tplugin.config.AppConfigReferences;
 import pers.fw.tplugin.db.DbReference;
 import pers.fw.tplugin.inter.GotoCompletionContributor;
@@ -9,7 +10,6 @@ import pers.fw.tplugin.inter.GotoCompletionLanguageRegistrar;
 import pers.fw.tplugin.inter.GotoCompletionRegistrar;
 import pers.fw.tplugin.inter.GotoCompletionRegistrarParameter;
 import pers.fw.tplugin.model.ModelReference;
-import org.jetbrains.annotations.NotNull;
 import pers.fw.tplugin.router.RouterReference;
 import pers.fw.tplugin.view.ViewReferences2;
 

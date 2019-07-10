@@ -1,6 +1,5 @@
 package pers.fw.tplugin.router;
 
-import pers.fw.tplugin.beans.ArrayKeyVisitor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.indexing.*;
@@ -12,6 +11,7 @@ import com.jetbrains.php.lang.PhpFileType;
 import com.jetbrains.php.lang.psi.PhpFile;
 import gnu.trove.THashMap;
 import org.jetbrains.annotations.NotNull;
+import pers.fw.tplugin.beans.ArrayKeyVisitor;
 
 import java.util.Map;
 

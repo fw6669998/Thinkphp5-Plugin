@@ -8,12 +8,12 @@
       <sourceFolder url="file://$MODULE_DIR$/resources" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/src/temp" />
     </content>
-    <orderEntry type="jdk" jdkName="PhpStorm PS-181.5281.35" jdkType="IDEA JDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library" exported="" scope="PROVIDED">
       <library>
         <CLASSES>
-          <root url="jar://C:/Program Files/JetBrains/PhpStorm 2018.1.6/plugins/php/lib/php-openapi.jar!/" />
+          <root url="jar://C:/Program Files/JetBrains/PhpStorm 2019.1.2/plugins/php/lib/php-openapi.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -22,7 +22,7 @@
     <orderEntry type="module-library" exported="" scope="PROVIDED">
       <library>
         <CLASSES>
-          <root url="jar://C:/Program Files/JetBrains/PhpStorm 2018.1.6/plugins/php/lib/php.jar!/" />
+          <root url="jar://C:/Program Files/JetBrains/PhpStorm 2019.1.2/plugins/php/lib/php.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -31,7 +31,7 @@
     <orderEntry type="module-library" scope="PROVIDED">
       <library>
         <CLASSES>
-          <root url="jar://C:/Program Files/JetBrains/PhpStorm 2018.1.6/plugins/DatabaseTools/lib/database-openapi.jar!/" />
+          <root url="jar://C:/Program Files/JetBrains/PhpStorm 2019.1.2/plugins/DatabaseTools/lib/database-openapi.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -40,7 +40,7 @@
     <orderEntry type="module-library" scope="PROVIDED">
       <library>
         <CLASSES>
-          <root url="jar://C:/Program Files/JetBrains/PhpStorm 2018.1.6/plugins/DatabaseTools/lib/database-impl.jar!/" />
+          <root url="jar://C:/Program Files/JetBrains/PhpStorm 2019.1.2/plugins/DatabaseTools/lib/database-impl.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

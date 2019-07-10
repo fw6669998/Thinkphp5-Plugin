@@ -1,7 +1,5 @@
 package pers.fw.tplugin.util;
 
-import pers.fw.tplugin.beans.MethodReferenceBag;
-import pers.fw.tplugin.beans.ParameterBag;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.patterns.PlatformPatterns;
@@ -18,6 +16,8 @@ import com.jetbrains.php.lang.psi.elements.*;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pers.fw.tplugin.beans.MethodReferenceBag;
+import pers.fw.tplugin.beans.ParameterBag;
 
 import java.util.*;
 
