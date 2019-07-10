@@ -1,6 +1,5 @@
 package pers.fw.tplugin.util;
 
-import pers.fw.tplugin.beans.ParameterBag;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
@@ -10,6 +9,7 @@ import com.jetbrains.php.lang.psi.elements.FunctionReference;
 import com.jetbrains.php.lang.psi.elements.ParameterList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pers.fw.tplugin.beans.ParameterBag;
 
 import java.util.ArrayList;
 import java.util.Collection;

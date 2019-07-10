@@ -10,4 +10,5 @@ public class Config {   //配置类
 
     public boolean logEnable = false;   //日志开关
     public String[] logPrefix = {};     //显示日志内容的前缀
+    public String[] logRegex = {};     //显示日志内容,根据正则匹配
 }

@@ -19,10 +19,12 @@
 
   //日志开关,不设置默认关闭,该设置重启软件生效
   "logEnable": true,
-  //筛选日志前缀
+  //通过前缀筛选日志,//最好从日志文件中复制前缀,如[ sql ] [ SQL ]
   "logPrefix": [
-    "[ info ] [ HEADER ]",
-    //示例
-    "[ sql ] [ SQL ]"
+    "[ info ] [ PARAM ]"
+  ],
+  //通过正则筛选日志
+  "logRegex":[
+    "^.*\\[\\sSQL ((?!COLUMNS).)*$"  //显示带有[ sql但没是COLUMNS的记录
   ]
 }

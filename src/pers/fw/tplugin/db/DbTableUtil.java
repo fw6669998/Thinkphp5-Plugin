@@ -60,6 +60,7 @@ public class DbTableUtil {
     public static JBIterable<? extends DasColumn> getColumns(Project project, String table) {
         if (table == null) return null;
         JBIterable<? extends DasTable> tables = getTables(project);
+        if(tables==null)return null;
         for (DasTable item : tables) {
             if (table.equals(item.getName())) {
                 return DasUtil.getColumns(item);
@@ -85,7 +86,9 @@ public class DbTableUtil {
                 return DasUtil.getTables(work.getDelegate());
             } else {
                 if (dataSources.get(0) == null) return null;
-                return DasUtil.getTables(dataSources.get(0).getDelegate());
+                DbDataSource dbDataSource = dataSources.get(0);
+                if(dbDataSource==null)return null;
+                return DasUtil.getTables(dbDataSource.getDelegate());
             }
         }
     }
@@ -123,14 +126,22 @@ public class DbTableUtil {
             Collection<Field> fields = phpClass.getFields();
             for (Field item : fields) {
                 if ("tableName".equals(item.getName())) {
-                    String name = item.getDefaultValue().getText();
+                    PsiElement defaultValue = item.getDefaultValue();
+                    if(defaultValue==null){
+                        continue;
+                    }
+                    String name = defaultValue.getText();
                     if (name != null && !name.isEmpty() && !"$tableName".equals(name)) {
                         tables.add(DbTableUtil.getTableByName(project, name));
                         break;
                     }
                 }
                 if ("trueTableName".equals(item.getName())) {
-                    String name = item.getDefaultValue().getText();//item.getDefaultValuePresentation();
+                    PsiElement defaultValue = item.getDefaultValue();
+                    if(defaultValue==null){
+                        continue;
+                    }
+                    String name = defaultValue.getText();
                     if (name != null && !name.isEmpty() && !"$trueTableName".equals(name)) {
                         name = name.replace("'", "").replace("\"", "");
                         tables.add(name);
