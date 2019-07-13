@@ -1,5 +1,6 @@
 package pers.fw.tplugin.model;
 
+import com.intellij.util.indexing.ID;
 import pers.fw.tplugin.beans.LaravelIcons;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -51,15 +52,29 @@ public class ModelReference implements GotoCompletionLanguageRegistrar {
 
                 PsiElement parent = psiElement.getParent();
 
-                if (parent != null && PsiElementUtil.isFunctionReference(parent, "model", 0)) {
+                if(parent == null)return null;
+                if (PsiElementUtil.isFunctionReference(parent, "model", 0)) {
                     return new ModelReference.ModelProvider(parent);
+                }else if(PsiElementUtil.isFunctionReference(parent, "controller", 0)){
+                    return new ModelReference.ControllerProvider(parent);
                 }
                 return null;
             }
         });
     }
 
+    public static class ControllerProvider extends ModelReference.ModelProvider {
+
+        public ControllerProvider(PsiElement element) {
+            super(element);
+            this.key=ControllerStubIndex.KEY;
+        }
+    }
+
     private static class ModelProvider extends GotoCompletionProvider {
+
+        protected ID<String, Void> key=ModelStubIndex.KEY;
+
         public ModelProvider(PsiElement element) {
             super(element);
         }
@@ -70,8 +85,8 @@ public class ModelReference implements GotoCompletionLanguageRegistrar {
 
 
             final Collection<LookupElement> lookupElements = new ArrayList<>();
-            CollectProjectUniqueKeys ymlProjectProcessor = new CollectProjectUniqueKeys(getProject(), ModelStubIndex.KEY);
-            FileBasedIndex.getInstance().processAllKeys(ModelStubIndex.KEY, ymlProjectProcessor, getProject());
+            CollectProjectUniqueKeys ymlProjectProcessor = new CollectProjectUniqueKeys(getProject(), key);
+            FileBasedIndex.getInstance().processAllKeys(key, ymlProjectProcessor, getProject());
             String curModule = Util.getCurTpModuleName(getElement()) + "/";
             for (String key : ymlProjectProcessor.getResult()) {    //从ymlProjectProcessor中获取结果
                 lookupElements.add(LookupElementBuilder.create(key).withIcon(LaravelIcons.TEMPLATE_CONTROLLER_LINE_MARKER));
@@ -96,11 +111,11 @@ public class ModelReference implements GotoCompletionLanguageRegistrar {
             if (!contents.contains("/")) contents = Util.getCurTpModuleName(getElement()) + "/" + contents;
 
             //忽略大小写
-            Collection<String> allKeys = FileBasedIndex.getInstance().getAllKeys(ModelStubIndex.KEY, getElement().getProject());
+            Collection<String> allKeys = FileBasedIndex.getInstance().getAllKeys(key, getElement().getProject());
 
             contents = Util.getKeyWithCase(allKeys, contents);
 
-            FileBasedIndex.getInstance().getFilesWithKey(ModelStubIndex.KEY, new HashSet<>(Collections.singletonList(contents)),
+            FileBasedIndex.getInstance().getFilesWithKey(key, new HashSet<>(Collections.singletonList(contents)),
                     new Processor<VirtualFile>() {
                         @Override
                         public boolean process(VirtualFile virtualFile) {

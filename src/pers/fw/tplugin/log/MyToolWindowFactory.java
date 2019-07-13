@@ -24,6 +24,8 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by IntelliJ IDEA.
@@ -104,6 +106,12 @@ public class MyToolWindowFactory implements ToolWindowFactory {
                     List<String> tempList = new ArrayList<String>();
                     boolean append = true;
                     String[] logPrefix = Setting.config.logPrefix;
+                    String[] logRegex = Setting.config.logRegex;
+                    List<Pattern> patterns=new ArrayList<Pattern>();
+                    for(String item : logRegex){
+                        Pattern p = Pattern.compile(item);
+                        patterns.add(p);
+                    }
 
                     while ((line = reader.readLine()) != null) {
                         if (line.startsWith("[ 2")) {
@@ -119,10 +127,7 @@ public class MyToolWindowFactory implements ToolWindowFactory {
                                             tempList.add(line);
                                             oldTime = line;
                                         } else {
-                                            if (logPrefix == null || logPrefix.length == 0) {   //当没有配置筛选的时候
-                                                tempList.add("      "+line);
-                                                append=true;
-                                            } else {
+                                            if (logPrefix != null && logPrefix.length != 0) {   //判断前缀
                                                 for (String item : logPrefix) {
                                                     append = false;
                                                     if (line.startsWith(item)) {
@@ -131,6 +136,19 @@ public class MyToolWindowFactory implements ToolWindowFactory {
                                                         break;
                                                     }
                                                 }
+                                            } else if(logRegex.length!=0){  //判断正则
+                                                for (Pattern item : patterns) {
+                                                    append = false;
+                                                    Matcher matcher = item.matcher(line);
+                                                    if (matcher.matches()) {
+                                                        append = true;
+                                                        tempList.add("      "+line);
+                                                        break;
+                                                    }
+                                                }
+                                            }else{
+                                                tempList.add("      "+line);
+                                                append=true;
                                             }
                                         }
                                     } else {

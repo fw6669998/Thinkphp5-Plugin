@@ -1,0 +1,222 @@
+<templateSet group="ThinkPHP-5">
+    <template name="tp:icn" value="{include file=&quot;$FILEDIR$$END$&quot; /}" description="包含外部模板文件(简称)" toReformat="false" toShortenFQNames="true">
+        <variable name="FILEDIR" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:include" value="{include file=&quot;$FILEDIR$$END$&quot; /}" description="包含外部模板文件（全称）" toReformat="false" toShortenFQNames="true">
+        <variable name="FILEDIR" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:load" value="{load href=&quot;$FILEDIR$$END$&quot; /}" description="导入资源文件" toReformat="false" toShortenFQNames="true">
+        <variable name="FILEDIR" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:css" value="{css href=&quot;$FILEDIR$$END$&quot; /}" description="加载css资源文件" toReformat="false" toShortenFQNames="true">
+        <variable name="FILEDIR" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="XML" value="true" />
+        </context>
+    </template>
+    <template name="tp:js" value="{js href=&quot;$FILEDIR$$END$&quot; /}" description="加载Js资源文件" toReformat="false" toShortenFQNames="true">
+        <variable name="FILEDIR" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:vl" value="{volist name=&quot;list$END$&quot; id=&quot;vo&quot;}&#10;    &#10;{/volist}" description="循环数组数据输出(简称)" toReformat="false" toShortenFQNames="true">
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:volist" value="{volist name=&quot;list$END$&quot; id=&quot;vo&quot;}&#10;    &#10;{/volist}" description="循环数组数据输出(全称)" toReformat="false" toShortenFQNames="true">
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:for" value="{for start=&quot;$END$&quot; end=&quot;&quot; comparison=&quot;&quot; step=&quot;1&quot; name=&quot;$i&quot; }&#10;&#10;{/for}" description="For循环数据输出" toReformat="false" toShortenFQNames="true">
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:sw" value="{switch $VAR$$END$ }&#10;    {case $VALUE$}{/case}&#10;    {default /}&#10;{/switch}" description="分支判断输出(简称)" toReformat="false" toShortenFQNames="true">
+        <variable name="VAR" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="VALUE" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:switch" value="{switch $VAR$$END$ }&#10;    {case $VALUE$}{/case}&#10;    {default /}&#10;{/switch}" description="分支判断输出(全称)" toReformat="false" toShortenFQNames="true">
+        <variable name="VAR" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="VALUE" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:em" value="{empty name=&quot;$END$$VAR$&quot;}&#10;    &#10;{/empty}" description="判断数据是否为空(简称)" toReformat="false" toShortenFQNames="true">
+        <variable name="VAR" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:empty" value="{empty name=&quot;$END$$VAR$&quot;}&#10;    &#10;{/empty}" description="判断数据是否为空(全称)" toReformat="false" toShortenFQNames="true">
+        <variable name="VAR" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:nem" value="{notempty name=&quot;$END$$VAR$&quot;}&#10;    &#10;{/notempty}" description="判断数据是否不为空" toReformat="false" toShortenFQNames="true">
+        <variable name="VAR" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:if" value="{if $CONDITION$$END$}&#10;    &#10;{/if}" description="if条件判断输出" toReformat="false" toShortenFQNames="true">
+        <variable name="CONDITION" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:ifelse" value="{if $CONDITION$$END$}&#10;&#10;{else}&#10;&#10;{/if}" description="if else 条件判断输出" toReformat="false" toShortenFQNames="true">
+        <variable name="CONDITION" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:block" value="{block name=&quot;$END$&quot;}$CONTENT${/block}" description="区块重载" toReformat="false" toShortenFQNames="true">
+        <variable name="CONTENT" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:extend" value="{extend name=&quot;$FILENAME$$END$&quot; /}" description="继承模板" toReformat="false" toShortenFQNames="true">
+        <variable name="FILENAME" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:eq" value="{eq name=&quot;$DIR$$END$&quot; value=&quot;$VALUE$&quot;}&#10;    &#10;{/eq}" description="判断是否等于" toReformat="false" toShortenFQNames="true">
+        <variable name="DIR" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="VALUE" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:==" value="{eq name=&quot;$DIR$$END$&quot; value=&quot;$VALUE$&quot;}&#10;    &#10;{/eq}" description="判断是否等于" toReformat="false" toShortenFQNames="true">
+        <variable name="DIR" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="VALUE" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:gt" value="{gt name=&quot;$DIR$$END$&quot; value=&quot;$VALUE$&quot;}&#10;    &#10;{/eq}" description="判断是否大于" toReformat="false" toShortenFQNames="true">
+        <variable name="DIR" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="VALUE" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:&gt;" value="{gt name=&quot;$DIR$$END$&quot; value=&quot;$VALUE$&quot;}&#10;    &#10;{/eq}" description="判断是否大于" toReformat="false" toShortenFQNames="true">
+        <variable name="DIR" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="VALUE" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:egt" value="{egt name=&quot;$DIR$$END$&quot; value=&quot;$VALUE$&quot;}&#10;    &#10;{/eq}" description="判断大于等于" toReformat="false" toShortenFQNames="true">
+        <variable name="DIR" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="VALUE" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:&gt;=" value="{egt name=&quot;$DIR$$END$&quot; value=&quot;$VALUE$&quot;}&#10;    &#10;{/eq}" description="判断大于等于" toReformat="false" toShortenFQNames="true">
+        <variable name="DIR" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="VALUE" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:lt" value="{lt name=&quot;$DIR$$END$&quot; value=&quot;$VALUE$&quot;}&#10;    &#10;{/eq}" description="判断小于" toReformat="false" toShortenFQNames="true">
+        <variable name="DIR" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="VALUE" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:&lt;" value="{lt name=&quot;$DIR$$END$&quot; value=&quot;$VALUE$&quot;}&#10;    &#10;{/eq}" description="判断小于" toReformat="false" toShortenFQNames="true">
+        <variable name="DIR" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="VALUE" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:elt" value="{elt name=&quot;$DIR$$END$&quot; value=&quot;$VALUE$&quot;}&#10;    &#10;{/eq}" description="判断小于等于" toReformat="false" toShortenFQNames="true">
+        <variable name="DIR" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="VALUE" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:&lt;=" value="{elt name=&quot;$DIR$$END$&quot; value=&quot;$VALUE$&quot;}&#10;    &#10;{/eq}" description="判断小于等于" toReformat="false" toShortenFQNames="true">
+        <variable name="DIR" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="VALUE" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:heq" value="{heq name=&quot;$DIR$$END$&quot; value=&quot;$VALUE$&quot;}&#10;    &#10;{/eq}" description="判断恒等于" toReformat="false" toShortenFQNames="true">
+        <variable name="DIR" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="VALUE" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:===" value="{heq name=&quot;$DIR$$END$&quot; value=&quot;$VALUE$&quot;}&#10;    &#10;{/eq}" description="判断恒等于" toReformat="false" toShortenFQNames="true">
+        <variable name="DIR" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="VALUE" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:nheq" value="{nheq name=&quot;$DIR$$END$&quot; value=&quot;$VALUE$&quot;}&#10;    &#10;{/eq}" description="判断不恒等于" toReformat="false" toShortenFQNames="true">
+        <variable name="DIR" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="VALUE" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:!==" value="{nheq name=&quot;$DIR$$END$&quot; value=&quot;$VALUE$&quot;}&#10;    &#10;{/eq}" description="判断不恒等于" toReformat="true" toShortenFQNames="true">
+        <variable name="DIR" expression="lowercaseAndDash(String)" defaultValue="" alwaysStopAt="false" />
+        <variable name="VALUE" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:in" value="{in name=&quot;$DIR$$END$&quot; value=&quot;$VALURS$&quot;}&#10;    &#10;{/in}" description="in 范围判断" toReformat="false" toShortenFQNames="true">
+        <variable name="DIR" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="VALURS" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:notin" value="{notin name=&quot;$DIR$$END$&quot; value=&quot;$VALURS$&quot;}&#10;    &#10;{/in}" description="notin 范围判断" toReformat="false" toShortenFQNames="true">
+        <variable name="DIR" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="VALURS" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+    <template name="tp:bt" value="{between name=&quot;$VAR$$END$&quot; value=&quot;$VALUES$&quot;}&#10;    &#10;{/between}" description="between区间范围内" toReformat="false" toShortenFQNames="true">
+        <variable name="VAR" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="VALUES" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="HTML" value="true" />
+        </context>
+    </template>
+</templateSet>

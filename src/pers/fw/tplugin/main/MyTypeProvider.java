@@ -35,26 +35,31 @@ public class MyTypeProvider implements PhpTypeProvider3 {
     @Nullable
     @Override
     public PhpType getType(PsiElement psiElement) {
-        if (psiElement instanceof FunctionReference && "model".equals(((FunctionReference) psiElement).getName())) {
-            FunctionReference fun = (FunctionReference) psiElement;
-            ParameterList parameterList = fun.getParameterList();
-            if (parameterList != null) {
-                PsiElement[] parameters = parameterList.getParameters();
-                if (parameters.length > 0) {
-                    String moduleName = "";
-                    String text = parameters[0].getText().replace("'", "").replace("\"", "");
-                    if (text.contains("/")) {   //跨模块的model
-                        String[] split = text.split("/");
-                        moduleName = split[0];
-                        text = split[1];
-                    } else {
-                        moduleName = Util.getCurTpModuleName(psiElement);
+        try {
+            if (psiElement instanceof FunctionReference && "model".equals(((FunctionReference) psiElement).getName())) {
+                FunctionReference fun = (FunctionReference) psiElement;
+                ParameterList parameterList = fun.getParameterList();
+                if (parameterList != null) {
+                    PsiElement[] parameters = parameterList.getParameters();
+                    if (parameters.length > 0) {
+                        String moduleName = "";
+                        String text = parameters[0].getText().replace("'", "").replace("\"", "");
+                        if (text.contains("/")) {   //跨模块的model
+                            String[] split = text.split("/");
+                            moduleName = split[0];
+                            if (split.length < 2) return null;
+                            text = split[1];
+                        } else {
+                            moduleName = Util.getCurTpModuleName(psiElement);
+                        }
+                        String clsRef = "\\app\\" + moduleName + "\\model\\" + text;
+                        PhpType type = PhpType.builder().add(clsRef).build();
+                        return type;
                     }
-                    String clsRef = "\\app\\" + moduleName + "\\model\\" + text;
-                    PhpType type = PhpType.builder().add(clsRef).build();
-                    return type;
                 }
             }
+        }catch (Exception e){
+            //不报错
         }
         return null;
     }

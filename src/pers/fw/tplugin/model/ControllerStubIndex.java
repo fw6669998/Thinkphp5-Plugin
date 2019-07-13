@@ -1,7 +1,5 @@
-package pers.fw.tplugin.config;
+package pers.fw.tplugin.model;
 
-import pers.fw.tplugin.beans.ArrayKeyVisitor;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.indexing.*;
 import com.intellij.util.io.DataExternalizer;
@@ -15,9 +13,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class ConfigKeyStubIndex extends FileBasedIndexExtension<String, Void> {
+public class ControllerStubIndex extends FileBasedIndexExtension<String, Void> {
 
-    public static final ID<String, Void> KEY = ID.create("fw.idea.thinkphp.config");
+    public static final ID<String, Void> KEY = ID.create("fw.idea.thinkphp.controller");
+
     private final KeyDescriptor<String> myKeyDescriptor = new EnumeratorStringDescriptor();
 
     @NotNull
@@ -39,21 +38,11 @@ public class ConfigKeyStubIndex extends FileBasedIndexExtension<String, Void> {
                 if (!(psiFile instanceof PhpFile)) {
                     return map;
                 }
-
+                psiFile.getName();
                 //匹配文件
-                ConfigFileUtil.ConfigFileMatchResult result = ConfigFileUtil.matchConfigFile(fileContent.getProject(), fileContent.getFile());
-
-                if (result.matches()) {
-                    psiFile.acceptChildren(new ArrayReturnPsiRecursiveVisitor(result.getKeyPrefix(), new ArrayKeyVisitor() {
-                        @Override
-                        public void visit(String key, PsiElement psiKey, boolean isRootElement) {
-                            if (!isRootElement) {
-                                map.put(key, null);
-                            }
-                        }
-                    }));
-                }
-
+                String model = ModelUtil.matchControllerFile(fileContent.getProject(), fileContent.getFile());
+                if (model != null)
+                    map.put(model, null);
                 return map;
             }
         };
@@ -86,6 +75,4 @@ public class ConfigKeyStubIndex extends FileBasedIndexExtension<String, Void> {
     public int getVersion() {
         return 1;
     }
-
-
 }

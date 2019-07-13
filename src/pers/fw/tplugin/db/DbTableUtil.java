@@ -59,17 +59,22 @@ public class DbTableUtil {
 
     public static JBIterable<? extends DasColumn> getColumns(Project project, String table) {
         if (table == null) return null;
-        JBIterable<? extends DasTable> tables = getTables(project);
-        for (DasTable item : tables) {
-            if (table.equals(item.getName())) {
-                return DasUtil.getColumns(item);
+        try {
+            JBIterable<? extends DasTable> tables = getTables(project);
+            for (DasTable item : tables) {
+                if (table.equals(item.getName())) {
+                    return DasUtil.getColumns(item);
+                }
             }
+        } catch (Exception e) {
+            return null;
         }
         return null;
     }
 
     //获取所有表
     public static JBIterable<? extends DasTable> getTables(Project project) {
+
         JBIterable<DbDataSource> dataSources = DbUtil.getDataSources(project);
         if (dataSources.size() < 1) {
             return null;
@@ -159,7 +164,7 @@ public class DbTableUtil {
         //Model子类
         PhpClass phpClass = Util.getInstanseClass(project, (MethodReference) methodRef);  //获取模型类
         String table = Util.getTableByClass(phpClass, project);
-        if(table!=null){
+        if (table != null) {
             tables.add(table);
         }
 //        if (phpClass != null) {

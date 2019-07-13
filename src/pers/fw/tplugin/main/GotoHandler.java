@@ -22,23 +22,25 @@ public class GotoHandler implements GotoDeclarationHandler {
         //fwmodify:关闭开关
 //        if (!LaravelProjectComponent.isEnabled(psiElement)) {
 //            return new PsiElement[0];}
-
         Collection<PsiElement> psiTargets = new ArrayList<PsiElement>();
+        try {
+            if (psiElement == null) return psiTargets.toArray(new PsiElement[psiTargets.size()]); //报错解决
 
-        if(psiElement==null)return psiTargets.toArray(new PsiElement[psiTargets.size()]); //报错解决
+            PsiElement parent = psiElement.getParent();
+            for (GotoCompletionContributor contributor : GotoCompletionUtil.getContributors(psiElement)) {
+                GotoCompletionProviderInterface gotoCompletionContributorProvider = contributor.getProvider(psiElement);
+                if (gotoCompletionContributorProvider != null) {
+                    if (parent instanceof StringLiteralExpression) {
+                        psiTargets.addAll(gotoCompletionContributorProvider.getPsiTargets((StringLiteralExpression) parent));
+                    } else {
+                        psiTargets.addAll(gotoCompletionContributorProvider.getPsiTargets(psiElement));
+                    }
 
-        PsiElement parent = psiElement.getParent();
-        for(GotoCompletionContributor contributor: GotoCompletionUtil.getContributors(psiElement)) {
-            GotoCompletionProviderInterface gotoCompletionContributorProvider = contributor.getProvider(psiElement);
-            if(gotoCompletionContributorProvider != null) {
-                if(parent instanceof StringLiteralExpression) {
-                    psiTargets.addAll(gotoCompletionContributorProvider.getPsiTargets((StringLiteralExpression) parent));
-                } else {
-                    psiTargets.addAll(gotoCompletionContributorProvider.getPsiTargets(psiElement));
+                    psiTargets.addAll(gotoCompletionContributorProvider.getPsiTargets(psiElement, i, editor));
                 }
-
-                psiTargets.addAll(gotoCompletionContributorProvider.getPsiTargets(psiElement, i, editor));
             }
+        }catch (Exception e){
+            //
         }
         return psiTargets.toArray(new PsiElement[psiTargets.size()]);
     }

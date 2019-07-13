@@ -21,10 +21,7 @@ import pers.fw.tplugin.db.DbTableUtil;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class
 Util {
@@ -102,7 +99,9 @@ Util {
      * @return 当前的模型目录; 根据类名获取
      */
     public static String getCurTpModuleName(PsiElement psiElement) {
-        String fqn = getPhpClass(psiElement).getFQN();
+        PhpClassImpl phpClass = getPhpClass(psiElement);
+        if(phpClass==null)return "xxx";
+        String fqn = phpClass.getFQN();
         String[] split = fqn.split("\\\\");
         if (split.length > 2) {
             return split[2];
@@ -115,13 +114,17 @@ Util {
             Collection<Field> fields = phpClass.getFields();
             for (Field item : fields) {
                 if ("name".equals(item.getName())) {
-                    String name = item.getDefaultValue().getText();
+                    PsiElement defaultValue = item.getDefaultValue();
+                    if(defaultValue==null)continue;
+                    String name = defaultValue.getText();
                     if (name != null && !name.isEmpty() && !"$name".equals(name)) {
                         name = name.replace("'", "").replace("\"", "");
                         return DbTableUtil.getTableByName(project, name);
                     }
                 } else if ("table".equals(item.getName())) {
-                    String name = item.getDefaultValue().getText();//item.getDefaultValuePresentation();
+                    PsiElement defaultValue = item.getDefaultValue();
+                    if(defaultValue==null)continue;
+                    String name = defaultValue.getText();
                     if (name != null && !name.isEmpty() && !"$table".equals(name)) {
                         name = name.replace("'", "").replace("\"", "");
                         return name;
@@ -138,6 +141,7 @@ Util {
     public static String getApplicationDir(PsiElement psiElement) {
         String application = "application";
         String projectPath = psiElement.getProject().getBasePath();//"D:\\project2\\test";
+        if(projectPath==null)projectPath="";
 //        String currentFilePath = psiElement.getContainingFile().getVirtualFile().getPath(); //"D:\\project2\\test\\application\\index\\controller\\Index.php";
         String currentFilePath = psiElement.getContainingFile().getVirtualFile().getPath(); //"D:\\project2\\test\\project\\application\\index\\controller\\Index.php";
         String[] arr = currentFilePath.replace(projectPath, "").split("/"); // project,application,index,xxx
