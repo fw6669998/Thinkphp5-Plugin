@@ -10,7 +10,7 @@ thinkPhp3 plugin
 
 ## 安装
 
-离线安装: 下载release文件或者根目录下的plugin.zip, 在phpstorm的插件中心,点击Install plugin from disk,选择下载文件安装
+离线安装: 下载项目根目录下的plugin.zip, 在phpstorm的插件中心,点击Install plugin from disk,选择下载文件安装
 
 ## 功能
 
