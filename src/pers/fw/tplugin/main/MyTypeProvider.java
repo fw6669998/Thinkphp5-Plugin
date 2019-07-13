@@ -5,13 +5,13 @@ import com.intellij.psi.PsiElement;
 import com.jetbrains.php.lang.psi.elements.*;
 import com.jetbrains.php.lang.psi.resolve.types.PhpType;
 import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider3;
-import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider4;
 import org.jetbrains.annotations.Nullable;
 import pers.fw.tplugin.util.Util;
+
 import java.util.Collection;
 import java.util.Set;
 
-public class MyTypeProvider implements PhpTypeProvider4 {
+public class MyTypeProvider implements PhpTypeProvider3 {
 //    private static final Key<CachedValue<Map<String, Map<String, String>>>> MODEL_TYPE_MAP =
 //            new Key<CachedValue<Map<String, Map<String, String>>>>("MODEL_TYPE_MAP");
 
@@ -23,39 +23,34 @@ public class MyTypeProvider implements PhpTypeProvider4 {
     @Nullable
     @Override
     public PhpType getType(PsiElement psiElement) {
-        if (psiElement instanceof FunctionReference && "D".equals(((FunctionReference) psiElement).getName())) {
-            FunctionReference fun = (FunctionReference) psiElement;
-            ParameterList parameterList = fun.getParameterList();
-            if (parameterList != null) {
-                PsiElement[] parameters = parameterList.getParameters();
-                if (parameters.length > 0) {
-                    String moduleName = "";
-                    String text = parameters[0].getText().replace("'", "").replace("\"", "");
-                    if (text.contains("/")) {   //跨模块的model
-                        String[] split = text.split("/");
-                        moduleName = split[0];
-                        text = split[1];
-                    } else {
-                        moduleName = Util.getCurTpModuleName(psiElement);
+        try {
+            if (psiElement instanceof FunctionReference && "D".equals(((FunctionReference) psiElement).getName())) {
+                FunctionReference fun = (FunctionReference) psiElement;
+                ParameterList parameterList = fun.getParameterList();
+                if (parameterList != null) {
+                    PsiElement[] parameters = parameterList.getParameters();
+                    if (parameters.length > 0) {
+                        String moduleName = "";
+                        String text = parameters[0].getText().replace("'", "").replace("\"", "");
+                        if (text.contains("/")) {   //跨模块的model
+                            String[] split = text.split("/");
+                            moduleName = split[0];
+                            if (split.length < 2) return null;
+                            text = split[1];
+                        } else {
+                            moduleName = Util.getCurTpModuleName(psiElement);
+                        }
+                        String clsRef =  moduleName + "\\Model\\" + text+"Model";
+                        PhpType type = PhpType.builder().add(clsRef).build();
+                        return type;
                     }
-                    String clsRef = moduleName + "\\Model\\" + text+"Model";
-                    PhpType type = PhpType.builder().add(clsRef).build();
-                    return type;
                 }
             }
+        }catch (Exception e){
+            //不报错
         }
         return null;
     }
-
-    @Override
-    public @Nullable PhpType complete(String s, Project project) {
-        return null;
-    }
-
-//    @Override
-//    public @Nullable PhpType complete(String s, Project project) {
-//        return null;
-//    }
 
 //    public Collection<PsiElement> getPsiTargets(StringLiteralExpression psiElement) {
 ////            return super.getPsiTargets(psiElement, offset, editor);

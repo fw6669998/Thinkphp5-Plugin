@@ -5,7 +5,7 @@
     <vendor url="https://github.com/fw6669998/Thinkphp5-Plugin">Source code and tutorials/源码及详细说明</vendor>
     <description><![CDATA[
       <p>View, Configuration, Routing, Database, Model Intelligent Tips and Jumps , and Model Function return type analysis for ThinkPHP 3.0</p>
-      <p>用于thinkphp3.0的视图,配置,路由,数据库,模型智能提示和跳转,及模型函数(model)返回类型分析</p>
+      <p>用于thinkphp3.0的视图,配置,路由,数据库,模型智能提示和跳转,及模型函数(D)返回类型分析</p>
       <p> </p>
     ]]></description>
     <change-notes><![CDATA[
@@ -36,7 +36,7 @@
                     factoryClass="pers.fw.tplugin.log.MyToolWindowFactory" conditionClass="pers.fw.tplugin.log.ShowLog"/>
     </extensions>
     <extensions defaultExtensionNs="com.jetbrains.php">
-        <typeProvider4 implementation="pers.fw.tplugin.main.MyTypeProvider"/>
+        <typeProvider3 implementation="pers.fw.tplugin.main.MyTypeProvider"/>
     </extensions>
 
 </idea-plugin>

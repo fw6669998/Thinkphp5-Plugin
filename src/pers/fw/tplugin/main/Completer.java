@@ -17,35 +17,38 @@ public class Completer extends CompletionContributor {
 
     public Completer() {
 
+        try {
+            extend(CompletionType.BASIC, PlatformPatterns.psiElement(), new CompletionProvider<CompletionParameters>() {
+                @Override
+                protected void addCompletions(@NotNull CompletionParameters completionParameters, ProcessingContext processingContext, @NotNull CompletionResultSet completionResultSet) {
 
-        extend(CompletionType.BASIC, PlatformPatterns.psiElement(), new CompletionProvider<CompletionParameters>() {
-            @Override
-            protected void addCompletions(@NotNull CompletionParameters completionParameters, ProcessingContext processingContext, @NotNull CompletionResultSet completionResultSet) {
-
-                PsiElement psiElement = completionParameters.getOriginalPosition();
-                if (psiElement == null) {   // || !LaravelProjectComponent.isEnabled(psiElement)) {
-                    return;
-                }
-                CompletionContributorParameter parameter = null;
-                for (GotoCompletionContributor contributor : GotoCompletionUtil.getContributors(psiElement)) {
-                    GotoCompletionProviderInterface formReferenceCompletionContributor = contributor.getProvider(psiElement);
-                    if (formReferenceCompletionContributor != null) {
-                        if (formReferenceCompletionContributor instanceof DbReference.ColumnProvider) { //数据库列重定义前缀
-                            PrefixMatcher prefixMatcher = completionResultSet.getPrefixMatcher();
-                            String rePrefix = Util.rePrefix(prefixMatcher.getPrefix());
-                            completionResultSet.withPrefixMatcher(prefixMatcher.cloneWithPrefix(rePrefix))
-                                    .addAllElements(formReferenceCompletionContributor.getLookupElements());
-                        } else {
-                            completionResultSet.addAllElements(formReferenceCompletionContributor.getLookupElements());
+                    PsiElement psiElement = completionParameters.getOriginalPosition();
+                    if (psiElement == null) {   // || !LaravelProjectComponent.isEnabled(psiElement)) {
+                        return;
+                    }
+                    CompletionContributorParameter parameter = null;
+                    for (GotoCompletionContributor contributor : GotoCompletionUtil.getContributors(psiElement)) {
+                        GotoCompletionProviderInterface formReferenceCompletionContributor = contributor.getProvider(psiElement);
+                        if (formReferenceCompletionContributor != null) {
+                            if (formReferenceCompletionContributor instanceof DbReference.ColumnProvider) { //数据库列重定义前缀
+                                PrefixMatcher prefixMatcher = completionResultSet.getPrefixMatcher();
+                                String rePrefix = Util.rePrefix(prefixMatcher.getPrefix());
+                                completionResultSet.withPrefixMatcher(prefixMatcher.cloneWithPrefix(rePrefix))
+                                        .addAllElements(formReferenceCompletionContributor.getLookupElements());
+                            } else {
+                                completionResultSet.addAllElements(formReferenceCompletionContributor.getLookupElements());
+                            }
+                            if (parameter == null) {
+                                parameter = new CompletionContributorParameter(completionParameters, processingContext, completionResultSet);
+                            }
+                            formReferenceCompletionContributor.getLookupElements(parameter);
                         }
-                        if (parameter == null) {
-                            parameter = new CompletionContributorParameter(completionParameters, processingContext, completionResultSet);
-                        }
-                        formReferenceCompletionContributor.getLookupElements(parameter);
                     }
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            //不弹出错误
+        }
     }
 }
 

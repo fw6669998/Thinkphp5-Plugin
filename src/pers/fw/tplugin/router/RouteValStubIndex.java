@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class RouteValStubIndex extends FileBasedIndexExtension<String, Void> {
 
-    public static final ID<String, Void> KEY = ID.create("fw.router.index");
+    public static final ID<String, Void> KEY = ID.create("fw.thinkphp3.router");
     private final KeyDescriptor<String> myKeyDescriptor = new EnumeratorStringDescriptor();
 
     @NotNull
