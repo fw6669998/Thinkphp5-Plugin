@@ -90,7 +90,9 @@ public class DbTableUtil {
                 return DasUtil.getTables(work.getDelegate());
             } else {
                 if (dataSources.get(0) == null) return null;
-                return DasUtil.getTables(dataSources.get(0).getDelegate());
+                DbDataSource dbDataSource = dataSources.get(0);
+                if(dbDataSource==null)return null;
+                return DasUtil.getTables(dbDataSource.getDelegate());
             }
         }
     }
@@ -128,14 +130,22 @@ public class DbTableUtil {
             Collection<Field> fields = phpClass.getFields();
             for (Field item : fields) {
                 if ("name".equals(item.getName())) {
-                    String name = item.getDefaultValue().getText();
+                    PsiElement defaultValue = item.getDefaultValue();
+                    if(defaultValue==null){
+                        continue;
+                    }
+                    String name = defaultValue.getText();
                     if (name != null && !name.isEmpty() && !"$name".equals(name)) {
                         tables.add(DbTableUtil.getTableByName(project, name));
                         break;
                     }
                 }
                 if ("table".equals(item.getName())) {
-                    String name = item.getDefaultValue().getText();//item.getDefaultValuePresentation();
+                    PsiElement defaultValue = item.getDefaultValue();
+                    if(defaultValue==null){
+                        continue;
+                    }
+                    String name = defaultValue.getText();
                     if (name != null && !name.isEmpty() && !"$table".equals(name)) {
                         name = name.replace("'", "").replace("\"", "");
                         tables.add(name);
@@ -164,7 +174,7 @@ public class DbTableUtil {
         //Model子类
         PhpClass phpClass = Util.getInstanseClass(project, (MethodReference) methodRef);  //获取模型类
         String table = Util.getTableByClass(phpClass, project);
-        if (table != null) {
+        if(table!=null){
             tables.add(table);
         }
 //        if (phpClass != null) {

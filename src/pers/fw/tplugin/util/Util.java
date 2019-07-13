@@ -3,9 +3,6 @@ package pers.fw.tplugin.util;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-import com.intellij.openapi.project.ProjectManager;
-import com.intellij.openapi.vfs.VirtualFileEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.jetbrains.php.PhpIndex;
@@ -101,7 +98,8 @@ Util {
     public static String getCurTpModuleName(PsiElement psiElement) {
         PhpClassImpl phpClass = getPhpClass(psiElement);
         if(phpClass==null)return "xxx";
-        String fqn = phpClass.getFQN();
+        String fqn=phpClass.getFQN();
+        if(fqn==null)return "xxx";
         String[] split = fqn.split("\\\\");
         if (split.length > 2) {
             return split[2];
@@ -141,10 +139,12 @@ Util {
     public static String getApplicationDir(PsiElement psiElement) {
         String application = "application";
         String projectPath = psiElement.getProject().getBasePath();//"D:\\project2\\test";
-        if(projectPath==null)projectPath="";
 //        String currentFilePath = psiElement.getContainingFile().getVirtualFile().getPath(); //"D:\\project2\\test\\application\\index\\controller\\Index.php";
         String currentFilePath = psiElement.getContainingFile().getVirtualFile().getPath(); //"D:\\project2\\test\\project\\application\\index\\controller\\Index.php";
-        String[] arr = currentFilePath.replace(projectPath, "").split("/"); // project,application,index,xxx
+        String[] arr = new String[0]; // project,application,index,xxx
+        if (projectPath != null) {
+            arr = currentFilePath.replace(projectPath, "").split("/");
+        }
         StringBuilder app = new StringBuilder();
 
         for (int i = 0; i < arr.length; i++) {
@@ -221,8 +221,6 @@ Util {
             mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             config = mapper.readValue(str, Config.class);
-        } catch (UnrecognizedPropertyException e1) {
-            System.out.println("配置文件格式不对");
         } catch (Exception e) {
             System.out.println("读取配置失败");
         }

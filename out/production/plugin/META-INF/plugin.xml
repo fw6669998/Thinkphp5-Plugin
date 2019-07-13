@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>pers.fw.tplugin</id>
     <name>Thinkphp5 Plugin</name>
-    <version>1.3.0</version>
+    <version>1.3.5</version>
     <vendor url="https://github.com/fw6669998/Thinkphp5-Plugin">Source code and tutorials/源码及详细说明</vendor>
     <description><![CDATA[
       <p>View, Configuration, Routing, Database, Model Intelligent Tips and Jumps (shortcut keys F3 or f12), and Model Function return type analysis for ThinkPHP 5.0</p>
@@ -31,7 +31,6 @@
         <fileBasedIndex implementation="pers.fw.tplugin.config.ConfigKeyStubIndex"/>
         <fileBasedIndex implementation="pers.fw.tplugin.router.RouteValStubIndex"/>
         <fileBasedIndex implementation="pers.fw.tplugin.model.ModelStubIndex"/>
-        <fileBasedIndex implementation="pers.fw.tplugin.model.ControllerStubIndex"/>
         <defaultLiveTemplatesProvider implementation="pers.fw.tplugin.main.Templater"/>
         <toolWindow id="TpLog" secondary="false" icon="/icons/log.png" anchor="bottom"
                     factoryClass="pers.fw.tplugin.log.MyToolWindowFactory" conditionClass="pers.fw.tplugin.log.ShowLog"/>

@@ -31,9 +31,7 @@
         <fileBasedIndex implementation="pers.fw.tplugin.config.ConfigKeyStubIndex"/>
         <fileBasedIndex implementation="pers.fw.tplugin.router.RouteValStubIndex"/>
         <fileBasedIndex implementation="pers.fw.tplugin.model.ModelStubIndex"/>
-        <fileBasedIndex implementation="pers.fw.tplugin.model.ControllerStubIndex"/>
         <defaultLiveTemplatesProvider implementation="pers.fw.tplugin.main.Templater"/>
-
         <toolWindow id="TpLog" secondary="false" icon="/icons/log.png" anchor="bottom"
                     factoryClass="pers.fw.tplugin.log.MyToolWindowFactory" conditionClass="pers.fw.tplugin.log.ShowLog"/>
     </extensions>
