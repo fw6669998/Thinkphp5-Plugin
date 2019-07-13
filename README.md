@@ -3,7 +3,7 @@ thinkPhp5 plugin
 
 ## 概览
 
-基于[Haehnchen/idea-php-laravel-plugin](https://github.com/Haehnchen/idea-php-laravel-plugin)
+参考[Haehnchen/idea-php-laravel-plugin](https://github.com/Haehnchen/idea-php-laravel-plugin)
 
 用于thinkphp5.0的视图,配置,路由,数据库,模型智能提示和跳转(快捷键Ctrl+B或者Ctrl+click), 及模型函数(model)返回类型分析
 
@@ -76,6 +76,9 @@ thinkPhp5 plugin
 
 ## 常见异常
 如果模型,配置,和路由不能正常提示和跳转, 请点击File -> invalidate caches/restart 
+    
+## thinkphp3版本插件
+在tp3分支
     
 ## 联系方式
 
