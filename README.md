@@ -76,7 +76,7 @@ thinkphp3版本插件,在tp3分支
 ![img](https://github.com/fw6669998/Thinkphp5-Plugin/blob/master/img/tplt.gif)
 
 ## 常见异常
-如果模型,配置,和路由不能正常提示和跳转, 请点击File -> invalidate caches/restart 
+当使用tp5.1的门面类时无法提示和跳转，在文件头部加上类的全限定名 例如：use \think\facade\Route 
     
 ## 联系方式
 
