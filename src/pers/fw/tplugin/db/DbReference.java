@@ -124,6 +124,14 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
     };
 
     private static MethodMatcher.CallToSignature[] with = new MethodMatcher.CallToSignature[]{
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "with"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "withJoin"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "withAvg"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "withCount"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "withMax"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "withMin"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "withSum"),
+
             new MethodMatcher.CallToSignature("\\think\\Model", "with"),
             new MethodMatcher.CallToSignature("\\think\\Model", "withJoin"),
             new MethodMatcher.CallToSignature("\\think\\Model", "withAvg"),
