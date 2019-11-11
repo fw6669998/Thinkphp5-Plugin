@@ -109,6 +109,7 @@ Util {
 
     public static String getTableByClass(PhpClass phpClass, Project project) {
         if (phpClass != null) {
+            boolean isModel = false;
             Collection<Field> fields = phpClass.getFields();
             for (Field item : fields) {
                 if ("name".equals(item.getName())) {
@@ -127,7 +128,16 @@ Util {
                         name = name.replace("'", "").replace("\"", "");
                         return name;
                     }
+                } else if ("queryInstance".equals(item.getName())) { // 通过查询对象确定是否 model
+                    isModel = true;
                 }
+            }
+            if (isModel){
+                String tmp = phpClass.getName().replaceAll("[A-Z]", "_$0").toLowerCase();
+                if (tmp.indexOf("_") == 0){
+                    tmp = tmp.substring(1);
+                }
+                return DbTableUtil.getTableByName(project, tmp);
             }
         }
         return null;

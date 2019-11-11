@@ -53,7 +53,41 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "withField"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "group"),
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "having"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "column"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "withField"),
 //            new MethodMatcher.CallToSignature("\\think\\db\\Query", "value"),
+
+
+            new MethodMatcher.CallToSignature("\\think\\Model", "where"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "group"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "avg"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "count"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "sum"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "max"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "min"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "field"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "order"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "value"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "whereOr"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "whereXor"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "whereNull"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "whereNotNull"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "whereExists"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "whereNotExists"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "whereIn"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "whereNotIn"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "whereLike"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "whereNotLike"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "whereBetween"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "whereNotBetween"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "whereExp"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "whereTime"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "withField"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "group"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "having"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "column"),
+
+            new MethodMatcher.CallToSignature("\\think\\Model", "withField"),
     };
 
     private static MethodMatcher.CallToSignature[] QUERYARR = new MethodMatcher.CallToSignature[]{
@@ -87,6 +121,24 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
 
     private static MethodMatcher.CallToSignature[] join = new MethodMatcher.CallToSignature[]{
             new MethodMatcher.CallToSignature("\\think\\db\\Query", "join"),
+    };
+
+    private static MethodMatcher.CallToSignature[] with = new MethodMatcher.CallToSignature[]{
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "with"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "withJoin"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "withAvg"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "withCount"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "withMax"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "withMin"),
+            new MethodMatcher.CallToSignature("\\think\\db\\Query", "withSum"),
+
+            new MethodMatcher.CallToSignature("\\think\\Model", "with"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "withJoin"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "withAvg"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "withCount"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "withMax"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "withMin"),
+            new MethodMatcher.CallToSignature("\\think\\Model", "withSum"),
     };
 
     //是否进行类型比较
@@ -140,6 +192,9 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                 } else if (PsiElementUtil.isFunctionReference(param, "db", 0) || Util.isHintMethod(param, QUERYNAME, 0, compareClass)) {
                     //表, name
                     return new TableProvider(param, 2);
+                } else if (Util.isHintMethod(param, with, 0, compareClass)) {
+                    //With方法
+                    return new WithProvider(param);
                 } else {
                     //列, 数组里的列
                     PsiElement param1 = null;
@@ -160,6 +215,46 @@ public class DbReference implements GotoCompletionLanguageRegistrar {
                 return null;
             }
         });
+    }
+
+    public static class WithProvider extends GotoCompletionProvider {
+        public WithProvider(PsiElement element) {
+            super(element);
+        }
+
+        @NotNull
+        @Override
+        public Collection<LookupElement> getLookupElements() {
+            final Collection<LookupElement> lookupElements = new ArrayList<>();
+
+            PsiElement paramList = getElement().getParent();
+            if (paramList == null) return lookupElements;
+            PsiElement methodRef = paramList.getParent();
+            if (!(methodRef instanceof MethodReference)) return lookupElements;
+
+            //Model子类
+            PhpClass phpClass = Util.getInstanseClass(getElement().getProject(), (MethodReference) methodRef);  //获取模型类
+            if (phpClass == null) return lookupElements;
+
+            Collection<Method> methods = phpClass.getMethods();
+            for (Method item : methods) {
+                if (item.getParameters().length != 0){
+                    continue;
+                }
+                String str = item.getText();
+                if (str.contains("hasOne") || str.contains("belongsTo") || str.contains("hasMany") || str.contains("hasManyThrough") || str.contains("belongsToMany") || str.contains("morphMany") || str.contains("morphOne") || str.contains("morphTo")) {
+                    lookupElements.add(LookupElementBuilder.create(item.getName())
+                            .withTailText("   ").withTypeText(item.getDocComment() != null ? item.getDocComment().getName() : "")
+                            .withBoldness(true).withIcon(item.getIcon()));
+                }
+            }
+            return lookupElements;
+        }
+
+        @NotNull
+        public Collection<? extends PsiElement> getPsiTargets(@NotNull PsiElement psiElement, int offset, @NotNull Editor editor) {
+            return new ArrayList<>();
+        }
     }
 
     public static class ColumnProvider extends GotoCompletionProvider {
