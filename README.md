@@ -13,7 +13,7 @@ thinkphp3版本插件,在tp3分支
 
 在线安装: 在phpstorm的插件中心(File->Setting->Plugins), 点击Browse repositories搜索thinkphp5 plugin安装
 
-离线安装: 下载release文件或者根目录下的plugin.zip, 在phpstorm的插件中心,点击Install plugin from disk,选择下载文件安装
+离线安装(最新版): 下载release文件或者根目录下的plugin.zip/plugin.jar, 在phpstorm的插件中心,点击Install plugin from disk,选择下载文件安装
 
 ## 使用
 
