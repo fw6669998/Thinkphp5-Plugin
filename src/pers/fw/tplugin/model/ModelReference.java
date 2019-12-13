@@ -108,12 +108,20 @@ public class ModelReference implements GotoCompletionLanguageRegistrar {
             if (StringUtils.isBlank(contents)) {
                 return targets;
             }
-            if (!contents.contains("/")) contents = Util.getCurTpModuleName(getElement()) + "/" + contents;
+
+            //判断是否有模块名
+            String curTpModuleName = Util.getCurTpModuleName(getElement())+"/";
+            String content2="";
+            if(!contents.startsWith(curTpModuleName)){
+                content2=curTpModuleName+contents;
+            }
 
             //忽略大小写
             Collection<String> allKeys = FileBasedIndex.getInstance().getAllKeys(key, getElement().getProject());
 
             contents = Util.getKeyWithCase(allKeys, contents);
+            if(!allKeys.contains(contents))
+                contents = Util.getKeyWithCase(allKeys, content2);
 
             FileBasedIndex.getInstance().getFilesWithKey(key, new HashSet<>(Collections.singletonList(contents)),
                     new Processor<VirtualFile>() {

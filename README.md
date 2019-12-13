@@ -75,8 +75,9 @@ thinkphp3版本插件,在tp3分支
     模板标签配置数据来源: http://www.thinkphp.cn/code/4441.html
 ![img](https://github.com/fw6669998/Thinkphp5-Plugin/blob/master/img/tplt.gif)
 
-## 常见异常
-当使用tp5.1的门面类时无法提示和跳转，在文件头部加上类的全限定名 例如：use \think\facade\Route 
+## 注意事项
+当使用tp5.1的门面类时无法提示和跳转，在文件头部加上类的全限定名 例如：use \think\facade\Route
+更新插件后建议点下 File->invalidate caches/restart 更新下缓存
     
 ## 联系方式
 

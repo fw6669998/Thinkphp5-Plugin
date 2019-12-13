@@ -30,17 +30,28 @@ public class MyTypeProvider implements PhpTypeProvider3 {
                 if (parameterList != null) {
                     PsiElement[] parameters = parameterList.getParameters();
                     if (parameters.length > 0) {
+                        String layer="model";
+                        if(parameters.length>1){
+                            layer = parameters[1].getText().replace("'", "").replace("\"", "");
+                        }
                         String moduleName = "";
                         String text = parameters[0].getText().replace("'", "").replace("\"", "");
                         if (text.contains("/")) {   //跨模块的model
                             String[] split = text.split("/");
                             moduleName = split[0];
+                            text= "";
                             if (split.length < 2) return null;
-                            text = split[1];
+                            boolean flag=false;
+                            for(int i=1;i<split.length;i++){
+                                if(flag)
+                                    text+="\\";
+                                text+=split[i];
+                                flag=true;
+                            }
                         } else {
                             moduleName = Util.getCurTpModuleName(psiElement);
                         }
-                        String clsRef = "\\app\\" + moduleName + "\\model\\" + text;
+                        String clsRef = "\\app\\" + moduleName + "\\"+layer+"\\" + text;
                         PhpType type = PhpType.builder().add(clsRef).build();
                         return type;
                     }
