@@ -1,6 +1,5 @@
 package pers.fw.tplugin.db;
 
-import com.jetbrains.php.lang.psi.elements.Field;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.impl.PhpClassImpl;
@@ -124,35 +123,9 @@ public class DbTableUtil {
     public static void collectionTableByCurFile(PsiElement psiElement, HashSet<String> tables) {
 
         PhpClassImpl phpClass = Util.getPhpClass(psiElement);
-        Project project = psiElement.getProject();
-
-        if (phpClass != null) {
-            Collection<Field> fields = phpClass.getFields();
-            for (Field item : fields) {
-                if ("name".equals(item.getName())) {
-                    PsiElement defaultValue = item.getDefaultValue();
-                    if(defaultValue==null){
-                        continue;
-                    }
-                    String name = defaultValue.getText();
-                    if (name != null && !name.isEmpty() && !"$name".equals(name)) {
-                        tables.add(DbTableUtil.getTableByName(project, name));
-                        break;
-                    }
-                }
-                if ("table".equals(item.getName())) {
-                    PsiElement defaultValue = item.getDefaultValue();
-                    if(defaultValue==null){
-                        continue;
-                    }
-                    String name = defaultValue.getText();
-                    if (name != null && !name.isEmpty() && !"$table".equals(name)) {
-                        name = name.replace("'", "").replace("\"", "");
-                        tables.add(name);
-                        break;
-                    }
-                }
-            }
+        String table=Util.getTableByClass(phpClass, psiElement.getProject());
+        if(table!=null){
+            tables.add(table);
         }
     }
 

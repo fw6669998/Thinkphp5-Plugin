@@ -1,13 +1,9 @@
 package pers.fw.tplugin.db;
 
-import com.intellij.database.model.DasColumn;
-import com.intellij.openapi.project.Project;
-import com.intellij.util.containers.JBIterable;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public class Tables {
 

@@ -13,7 +13,7 @@ thinkphp3版本插件,在tp3分支
 
 在线安装: 在phpstorm的插件中心(File->Setting->Plugins), 点击Browse repositories搜索thinkphp5 plugin安装
 
-离线安装(最新版): 下载release文件或者根目录下的plugin.zip/plugin.jar, 在phpstorm的插件中心,点击Install plugin from disk,选择下载文件安装
+离线安装: 下载release文件或者根目录下的plugin.zip/plugin.jar, 在phpstorm的插件中心,点击Install plugin from disk,选择下载文件安装
 
 ## 使用
 
@@ -79,7 +79,4 @@ thinkphp3版本插件,在tp3分支
 当使用tp5.1的门面类时无法提示和跳转，在文件头部加上类的全限定名 例如：use \think\facade\Route
 
 更新插件后建议点下 File->invalidate caches/restart 更新下缓存
-    
-## 联系方式
 
-邮箱: fw6669998@163.com

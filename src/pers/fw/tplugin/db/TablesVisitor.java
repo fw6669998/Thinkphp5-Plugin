@@ -6,14 +6,12 @@ import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.FunctionReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.impl.VariableImpl;
-import com.jetbrains.php.lang.psi.resolve.types.PhpType;
 import pers.fw.tplugin.beans.ArrayMapVisitor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiRecursiveElementWalkingVisitor;
 import com.jetbrains.php.lang.psi.elements.impl.ParameterListImpl;
 import pers.fw.tplugin.util.MethodMatcher;
 import pers.fw.tplugin.util.PsiElementUtil;
-import pers.fw.tplugin.util.Tool;
 import pers.fw.tplugin.util.Util;
 
 import java.util.Collection;

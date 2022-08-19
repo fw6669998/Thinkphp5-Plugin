@@ -10,15 +10,17 @@
   "dbArrMethod": [
     "test"
   ],
-  //数据库提示字段, res["字段提示"]=100
+  //数据库提示字段, res["数据库字段"]=100
   "dbVar": [
     "res",
-    //示例
-    "map"
+    "map",
+    "where",
+    "data",
+    "this->data"
   ],
 
   //日志开关,不设置默认关闭,该设置重启软件生效
-  "logEnable": true,
+  "logEnable": false,
   //通过前缀筛选日志,//最好从日志文件中复制前缀,如[ sql ] [ SQL ]
   "logPrefix": [
     "[ info ] [ PARAM ]"

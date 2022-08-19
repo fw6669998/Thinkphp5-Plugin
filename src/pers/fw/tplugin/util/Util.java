@@ -123,16 +123,17 @@ Util {
                 } else if ("table".equals(item.getName())) {
                     PsiElement defaultValue = item.getDefaultValue();
                     if(defaultValue==null)continue;
-                    String name = defaultValue.getText();
-                    if (name != null && !name.isEmpty() && !"$table".equals(name)) {
-                        name = name.replace("'", "").replace("\"", "");
-                        return name;
+                    String table = defaultValue.getText();
+                    if (table != null && !table.isEmpty() && !"$table".equals(table)) {
+                        table = table.replace("'", "").replace("\"", "");
+                        return table;
                     }
                 } else if ("queryInstance".equals(item.getName())) { // 通过查询对象确定是否 model
                     isModel = true;
                 }
             }
-            if (isModel){
+//            if (isModel){
+            if (true){  //如果数据表名和当前类类名一样直接提示, 不管是不是模型,多提示也没事
                 String tmp = phpClass.getName().replaceAll("[A-Z]", "_$0").toLowerCase();
                 if (tmp.indexOf("_") == 0){
                     tmp = tmp.substring(1);

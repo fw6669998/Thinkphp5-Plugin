@@ -9,7 +9,6 @@ import com.jetbrains.php.lang.psi.elements.ArrayHashElement;
 import com.jetbrains.php.lang.psi.elements.PhpReturn;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.apache.commons.lang.StringUtils;
-import pers.fw.tplugin.util.Tool;
 
 import java.util.ArrayList;
 import java.util.Collections;
